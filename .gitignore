@@ -1,0 +1,47 @@
+# Never commit corpus data
+rag/sources/
+*.pdf
+*.djvu
+*.txt.bak
+
+# Never commit embeddings or DB dumps
+*.pgdump
+*.sql.gz
+embeddings/
+
+# Never commit secrets
+.env
+.env.local
+*.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+strikerix-env/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large model files
+*.bin
+*.pt
+*.onnx
+
+# Internal project directories (not for public repo)
+character_bible/
+data/
+episodes/
+library/
+outlines/
+pipeline/
+rag/
+scripts/
+visual_tests/
