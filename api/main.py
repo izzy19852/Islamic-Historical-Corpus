@@ -10,6 +10,8 @@ Tiers:
 
 import os
 import hashlib
+import secrets
+import re
 import psycopg2
 import voyageai
 from datetime import date
@@ -44,7 +46,7 @@ and the full classical Islamic canon. Every chunk is era-tagged,
 source-attributed, and chain-strength classified.
 
 **Authentication:** Pass your API key as `X-API-Key` header.
-**Get a key:** https://islamcorpus.dev
+**Get a key:** https://islamiccorpus.com
 
 **Ethical note:** We charge for infrastructure access only.
 The classical scholarship belongs to the scholars.
@@ -115,7 +117,7 @@ def verify_api_key(x_api_key: str = Header(..., alias="X-API-Key")):
     limit = TIER_LIMITS.get(tier, 100)
     if month_count >= limit:
         conn.close()
-        raise HTTPException(429, f"Monthly quota exceeded ({limit} queries). Upgrade at islamcorpus.dev")
+        raise HTTPException(429, f"Monthly quota exceeded ({limit} queries). Upgrade at islamiccorpus.com")
 
     # Increment
     cur.execute("""
@@ -141,6 +143,9 @@ class ResearchRequest(BaseModel):
     event: Optional[str] = None
     era: Optional[str] = "rashidun"
     series: Optional[str] = None
+
+class KeyRequest(BaseModel):
+    email: str
 
 # ── Helpers ───────────────────────────────────────────────────────
 
@@ -226,7 +231,7 @@ def root():
         "version": "1.0.0",
         "docs": "/docs",
         "corpus": "64,000+ chunks | 96+ sources | 1,400 years | 15 eras",
-        "get_key": "https://islamcorpus.dev"
+        "get_key": "https://islamiccorpus.com"
     }
 
 @app.get("/health")
@@ -471,3 +476,42 @@ def list_sources(
                     "authenticated_only": authenticated_only},
         "sources": sources,
     }
+
+
+@app.post("/api/request-key")
+@limiter.limit("5/hour")
+def request_free_key(request: Request, body: KeyRequest):
+    """Generate a free tier API key from the landing page."""
+    email = body.email.strip().lower()
+
+    # Basic email validation
+    if not re.match(r'^[^@]+@[^@]+\.[^@]+$', email):
+        raise HTTPException(400, "Invalid email address")
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    # Check if email already has a key
+    cur.execute("""
+        SELECT key_hash FROM api_keys
+        WHERE name = %s AND active = TRUE
+    """, (f"free:{email}",))
+
+    if cur.fetchone():
+        conn.close()
+        raise HTTPException(409,
+            "An API key already exists for this email. "
+            "Contact hello@islamiccorpus.com to retrieve it.")
+
+    # Generate key
+    raw    = "isk_" + secrets.token_urlsafe(24)
+    hashed = hashlib.sha256(raw.encode()).hexdigest()
+
+    cur.execute("""
+        INSERT INTO api_keys (key_hash, name, tier)
+        VALUES (%s, %s, 'free')
+    """, (hashed, f"free:{email}"))
+    conn.commit()
+    conn.close()
+
+    return {"key": raw, "tier": "free", "limit": 100}

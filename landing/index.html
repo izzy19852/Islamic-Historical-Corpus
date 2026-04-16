@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic Historical Corpus — RAG API</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont,
+                         'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e8e0d4;
+            line-height: 1.6;
+        }
+
+        /* Arabic pattern header */
+        .header-pattern {
+            background: linear-gradient(135deg, #1a0a00 0%, #2d1200 50%, #1a0a00 100%);
+            border-bottom: 1px solid #c9a84c30;
+            padding: 60px 20px 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header-pattern::before {
+            content: '\FDFD';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 300px;
+            opacity: 0.03;
+            color: #c9a84c;
+            pointer-events: none;
+        }
+
+        .logo {
+            font-size: 13px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #c9a84c;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: clamp(28px, 5vw, 48px);
+            font-weight: 300;
+            color: #f5ede0;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .tagline {
+            font-size: 17px;
+            color: #9a8878;
+            max-width: 520px;
+            margin: 0 auto 32px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 600;
+            color: #c9a84c;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6a5a50;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: #c9a84c;
+            color: #0a0a0a;
+            padding: 12px 28px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover { background: #e0be6a; }
+
+        .btn-secondary {
+            border: 1px solid #c9a84c40;
+            color: #c9a84c;
+            padding: 12px 28px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        .btn-secondary:hover { border-color: #c9a84c; }
+
+        /* Main content */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 64px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 400;
+            color: #c9a84c;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        h3 {
+            font-size: 28px;
+            font-weight: 300;
+            color: #f5ede0;
+            margin-bottom: 24px;
+        }
+
+        p { color: #9a8878; margin-bottom: 16px; }
+
+        /* Code block */
+        .code-block {
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            padding: 20px 24px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .code-block .comment { color: #4a4a4a; }
+        .code-block .key { color: #c9a84c; }
+        .code-block .string { color: #7eb88a; }
+        .code-block .url { color: #6aade0; }
+
+        /* Endpoints */
+        .endpoints {
+            display: grid;
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .endpoint {
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 6px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .method {
+            background: #c9a84c20;
+            color: #c9a84c;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-family: monospace;
+            font-weight: 600;
+            white-space: nowrap;
+            margin-top: 2px;
+        }
+
+        .method.post { background: #4c7ac920; color: #6aade0; }
+
+        .endpoint-path {
+            font-family: monospace;
+            font-size: 14px;
+            color: #e8e0d4;
+            margin-bottom: 4px;
+        }
+
+        .endpoint-desc {
+            font-size: 13px;
+            color: #5a4a40;
+        }
+
+        /* Sources table */
+        .sources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .source-card {
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 6px;
+            padding: 16px;
+        }
+
+        .source-name {
+            font-size: 14px;
+            color: #e8e0d4;
+            margin-bottom: 4px;
+        }
+
+        .source-meta {
+            font-size: 12px;
+            color: #4a3a30;
+        }
+
+        .auth-badge {
+            display: inline-block;
+            background: #2a4a2a;
+            color: #7eb88a;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-top: 6px;
+        }
+
+        /* Pricing */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .plan {
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .plan.featured {
+            border-color: #c9a84c40;
+        }
+
+        .plan-name {
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #6a5a50;
+            margin-bottom: 8px;
+        }
+
+        .plan-price {
+            font-size: 32px;
+            font-weight: 300;
+            color: #f5ede0;
+            margin-bottom: 4px;
+        }
+
+        .plan-price span {
+            font-size: 14px;
+            color: #4a3a30;
+        }
+
+        .plan-limit {
+            font-size: 13px;
+            color: #c9a84c;
+            margin-bottom: 16px;
+        }
+
+        .plan-features {
+            list-style: none;
+            font-size: 13px;
+            color: #6a5a50;
+        }
+
+        .plan-features li {
+            padding: 4px 0;
+        }
+
+        .plan-features li::before {
+            content: '— ';
+            color: #3a2a20;
+        }
+
+        /* Ethics */
+        .ethics-block {
+            background: #0d0d0d;
+            border-left: 2px solid #c9a84c40;
+            padding: 24px 28px;
+            border-radius: 0 6px 6px 0;
+            margin: 24px 0;
+        }
+
+        .ethics-block p {
+            font-size: 15px;
+            color: #7a6a60;
+            font-style: italic;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 20px;
+            text-align: center;
+            color: #2a2a2a;
+            font-size: 13px;
+        }
+
+        footer a {
+            color: #4a3a30;
+            text-decoration: none;
+            margin: 0 12px;
+        }
+
+        footer a:hover { color: #c9a84c; }
+
+        /* Get key form */
+        .key-form {
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 8px;
+            padding: 32px;
+            max-width: 480px;
+            margin: 24px auto 0;
+            text-align: center;
+        }
+
+        .key-form p {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .form-row input {
+            flex: 1;
+            background: #0a0a0a;
+            border: 1px solid #2a2a2a;
+            color: #e8e0d4;
+            padding: 10px 14px;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-row input:focus {
+            border-color: #c9a84c40;
+        }
+
+        .form-row button {
+            background: #c9a84c;
+            color: #0a0a0a;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        #key-result {
+            margin-top: 16px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #7eb88a;
+            word-break: break-all;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header-pattern">
+    <div class="logo">Islamic Historical Corpus</div>
+    <h1>1,400 Years of Islamic History<br>as a RAG API</h1>
+    <p class="tagline">
+        71,000+ authenticated chunks across 132 primary sources.
+        Al-Tabari to Ibn Kathir. Query the classical canon.
+    </p>
+
+    <div class="stats">
+        <div class="stat">
+            <span class="stat-number">71K+</span>
+            <span class="stat-label">Chunks</span>
+        </div>
+        <div class="stat">
+            <span class="stat-number">132</span>
+            <span class="stat-label">Sources</span>
+        </div>
+        <div class="stat">
+            <span class="stat-number">15</span>
+            <span class="stat-label">Eras</span>
+        </div>
+        <div class="stat">
+            <span class="stat-number">265</span>
+            <span class="stat-label">Figures</span>
+        </div>
+        <div class="stat">
+            <span class="stat-number">1,400</span>
+            <span class="stat-label">Years</span>
+        </div>
+    </div>
+
+    <div class="cta-group">
+        <a href="#get-key" class="btn-primary">Get Free API Key</a>
+        <a href="/docs" class="btn-secondary">API Docs</a>
+        <a href="https://github.com/izzy19852/Islamic-Historical-Corpus"
+           class="btn-secondary" target="_blank">GitHub</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- Quick start -->
+    <section>
+        <h2>Quick Start</h2>
+        <h3>Query 1,400 years in one request</h3>
+        <div class="code-block">
+<span class="comment"># Semantic search across the full corpus</span>
+curl -X POST https://islamiccorpus.com/query \
+  -H <span class="string">"X-API-Key: your_key"</span> \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -d <span class="string">'{"q": "Khalid ibn Walid Battle of Yarmouk", "n": 5}'</span>
+
+<span class="comment"># Returns: ranked chunks with source, era, chain_strength, score</span>
+<span class="comment"># Top result: Al-Tabari Vol 12 (score: 0.847) — eyewitness chain</span>
+        </div>
+
+        <div class="code-block">
+<span class="comment"># Full research brief for a figure + event</span>
+curl -X POST https://islamiccorpus.com/research \
+  -H <span class="string">"X-API-Key: your_key"</span> \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -d <span class="string">'{"figure": "Saladin", "event": "Fall of Jerusalem", "era": "crusades"}'</span>
+
+<span class="comment"># Returns: primary accounts + character context +</span>
+<span class="comment">#          religious context + pre-flagged source conflicts</span>
+        </div>
+    </section>
+
+    <!-- Endpoints -->
+    <section>
+        <h2>Endpoints</h2>
+        <h3>Four ways to query the corpus</h3>
+        <div class="endpoints">
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <div>
+                    <div class="endpoint-path">/query</div>
+                    <div class="endpoint-desc">
+                        Semantic search. Returns ranked chunks with
+                        source attribution, chain strength, and
+                        conflict flags.
+                    </div>
+                </div>
+            </div>
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <div>
+                    <div class="endpoint-path">/research</div>
+                    <div class="endpoint-desc">
+                        Structured research brief. Multi-query
+                        context packet for a figure + event — primary
+                        accounts, character context, pre-flagged
+                        conflicts. The power endpoint.
+                    </div>
+                </div>
+            </div>
+            <div class="endpoint">
+                <span class="method">GET</span>
+                <div>
+                    <div class="endpoint-path">/figure/{name}</div>
+                    <div class="endpoint-desc">
+                        Knowledge graph entry. Sensitivity tier,
+                        relationships, scholarly debates, lineage,
+                        source coverage count.
+                    </div>
+                </div>
+            </div>
+            <div class="endpoint">
+                <span class="method">GET</span>
+                <div>
+                    <div class="endpoint-path">/sources</div>
+                    <div class="endpoint-desc">
+                        Full source manifest. 132 sources with
+                        chunk counts, authentication tier,
+                        and chain strength.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p style="text-align:center; margin-top: 8px;">
+            <a href="/docs" style="color:#c9a84c; font-size:14px;">
+                Interactive docs at /docs →
+            </a>
+        </p>
+    </section>
+
+    <!-- Sources -->
+    <section>
+        <h2>Sources</h2>
+        <h3>The classical Islamic canon, structured</h3>
+        <div class="sources-grid">
+            <div class="source-card">
+                <div class="source-name">Al-Tabari — Tarikh al-Rusul</div>
+                <div class="source-meta">Rashidun → Abbasid · Vols 10–38</div>
+                <span class="auth-badge">classical_islamic</span>
+            </div>
+            <div class="source-card">
+                <div class="source-name">Ibn Kathir — Al-Bidaya wa'l-Nihaya</div>
+                <div class="source-meta">All eras · Key volumes</div>
+                <span class="auth-badge">classical_islamic</span>
+            </div>
+            <div class="source-card">
+                <div class="source-name">Ibn Sa'd — Tabaqat al-Kabir</div>
+                <div class="source-meta">Rashidun · Vols I–VIII · 265 companions</div>
+                <span class="auth-badge">classical_islamic</span>
+            </div>
+            <div class="source-card">
+                <div class="source-name">Sahih Bukhari + Muslim</div>
+                <div class="source-meta">Hadith · 15,000+ narrations</div>
+                <span class="auth-badge">classical_islamic</span>
+            </div>
+            <div class="source-card">
+                <div class="source-name">Ibn Khaldun — Muqaddimah</div>
+                <div class="source-meta">All eras · 3 volumes</div>
+                <span class="auth-badge">classical_islamic</span>
+            </div>
+            <div class="source-card">
+                <div class="source-name">Al-Masudi — Muruj al-Dhahab</div>
+                <div class="source-meta">Abbasid · Geography + court culture</div>
+                <span class="auth-badge">classical_islamic</span>
+            </div>
+            <div class="source-card">
+                <div class="source-name">Ibn al-Athir — Al-Kamil</div>
+                <div class="source-meta">Crusades + Mongol · Complete history</div>
+                <span class="auth-badge">classical_islamic</span>
+            </div>
+            <div class="source-card">
+                <div class="source-name">+ 125 more sources</div>
+                <div class="source-meta">
+                    Sira · Hadith · Ottoman · Mughal ·
+                    Africa · Andalusia · Southeast Asia
+                </div>
+                <span class="auth-badge">GET /sources</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section>
+        <h2>Access</h2>
+        <h3>Pay for infrastructure, not scholarship</h3>
+        <div class="pricing-grid">
+            <div class="plan">
+                <div class="plan-name">Free</div>
+                <div class="plan-price">$0</div>
+                <div class="plan-limit">100 queries / month</div>
+                <ul class="plan-features">
+                    <li>All 4 endpoints</li>
+                    <li>Full source attribution</li>
+                    <li>Students & researchers</li>
+                </ul>
+            </div>
+            <div class="plan featured">
+                <div class="plan-name">Developer</div>
+                <div class="plan-price">$15 <span>/ month</span></div>
+                <div class="plan-limit">5,000 queries / month</div>
+                <ul class="plan-features">
+                    <li>All 4 endpoints</li>
+                    <li>Priority support</li>
+                    <li>Apps & integrations</li>
+                </ul>
+            </div>
+            <div class="plan">
+                <div class="plan-name">Institutional</div>
+                <div class="plan-price">$75 <span>/ month</span></div>
+                <div class="plan-limit">Unlimited queries</div>
+                <ul class="plan-features">
+                    <li>All 4 endpoints</li>
+                    <li>Universities & publishers</li>
+                    <li>Ed-tech platforms</li>
+                </ul>
+            </div>
+        </div>
+        <p style="text-align:center; font-size:13px; color:#3a2a20; margin-top:8px;">
+            Cannot afford access? Contact us — we will work something out.
+        </p>
+    </section>
+
+    <!-- Get key -->
+    <section id="get-key">
+        <h2>Get Started</h2>
+        <h3>Free API key — instant access</h3>
+        <div class="key-form">
+            <p>Enter your email for a free tier key (100 queries/month)</p>
+            <div class="form-row">
+                <input type="email" id="email-input"
+                       placeholder="you@example.com" />
+                <button onclick="requestKey()">Get Key</button>
+            </div>
+            <div id="key-result"></div>
+        </div>
+    </section>
+
+    <!-- Ethics -->
+    <section>
+        <h2>Ethics</h2>
+        <h3>Infrastructure costs. Scholarship is free.</h3>
+        <div class="ethics-block">
+            <p>
+                The words of Al-Tabari, Ibn Kathir, and Imam Bukhari
+                belong to the scholars and to Islamic civilization.
+                We built the infrastructure that makes them queryable
+                at scale. That infrastructure has a nominal cost.
+                The scholarship itself remains freely available at
+                its original sources.
+            </p>
+        </div>
+        <p>
+            All ingested sources are public domain or open access.
+            Modern copyrighted translations are never redistributed.
+            The knowledge graph metadata is original work,
+            released under CC-BY.
+            Pipeline code is MIT licensed on
+            <a href="https://github.com/izzy19852/Islamic-Historical-Corpus"
+               style="color:#c9a84c;">GitHub</a>.
+        </p>
+    </section>
+
+</div>
+
+<footer>
+    <div>
+        <a href="/docs">API Docs</a>
+        <a href="https://github.com/izzy19852/Islamic-Historical-Corpus">GitHub</a>
+        <a href="mailto:hello@islamiccorpus.com">Contact</a>
+    </div>
+    <p style="margin-top: 16px;">
+        Islamic Historical Corpus · islamiccorpus.com
+    </p>
+</footer>
+
+<script>
+async function requestKey() {
+    const email = document.getElementById('email-input').value.trim();
+    const result = document.getElementById('key-result');
+
+    if (!email || !email.includes('@')) {
+        result.style.display = 'block';
+        result.style.color = '#c97a4c';
+        result.textContent = 'Please enter a valid email address';
+        return;
+    }
+
+    result.style.display = 'block';
+    result.style.color = '#6a9a7a';
+    result.textContent = 'Generating your key...';
+
+    try {
+        const resp = await fetch('/api/request-key', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        const data = await resp.json();
+
+        if (data.key) {
+            result.style.color = '#7eb88a';
+            result.innerHTML =
+                'Your key: <strong>' + data.key + '</strong><br>' +
+                '<small style="color:#4a5a4a">Save this — shown once only</small>';
+        } else {
+            result.style.color = '#c97a4c';
+            result.textContent = data.detail || 'Error generating key';
+        }
+    } catch(e) {
+        result.style.color = '#c97a4c';
+        result.textContent = 'Server error — try again shortly';
+    }
+}
+
+// Allow Enter key on email input
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('email-input')
+        .addEventListener('keydown', e => {
+            if (e.key === 'Enter') requestKey();
+        });
+});
+</script>
+
+</body>
+</html>

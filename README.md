@@ -59,19 +59,19 @@ Bulugh al-Maram
 
 ### Option 1: Use the API (no setup required)
 ```bash
-curl -X POST https://islamcorpus.dev/query \
+curl -X POST https://islamiccorpus.com/query \
   -H "X-API-Key: your_key_here" \
   -H "Content-Type: application/json" \
   -d '{"q": "Khalid ibn Walid Battle of Yarmouk", "n": 5}'
 ```
-Get a free API key at **islamcorpus.dev**
+Get a free API key at **islamiccorpus.com**
 
 ### Option 2: Run it yourself
 
 ```bash
 # Prerequisites: Python 3.10+, PostgreSQL 14+ with pgvector
 
-git clone https://github.com/YOUR_USERNAME/islamic-historical-corpus
+git clone https://github.com/izzy19852/islamic-historical-corpus
 cd islamic-historical-corpus
 
 # Install dependencies
@@ -157,5 +157,5 @@ If you use this in research:
 ```
 Islamic Historical Corpus (2025).
 Structured Islamic Historical Knowledge Base.
-https://github.com/YOUR_USERNAME/islamic-historical-corpus
+https://github.com/izzy19852/islamic-historical-corpus
 ```
