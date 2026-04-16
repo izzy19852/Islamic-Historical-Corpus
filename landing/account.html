@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>My Account — Islamic Historical Corpus</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont,
+                         'Segoe UI', sans-serif;
+            background: #f4f8f5;
+            color: #0e1a12;
+            min-height: 100vh;
+        }
+
+        /* ── Nav ──────────────────────────────────── */
+        nav {
+            background: #0a1a0e;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #2e8b57;
+            position: relative;
+        }
+
+        .nav-logo {
+            color: #5cbf80;
+            font-size: 13px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .nav-links a {
+            color: #6a8a74;
+            text-decoration: none;
+            margin-left: 24px;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: #5cbf80; }
+        .nav-links a.active { color: #5cbf80; }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            z-index: 101;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #5cbf80;
+            margin: 5px 0;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.open span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.open span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.open span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        @media (max-width: 640px) {
+            nav { padding: 14px 20px; }
+
+            .hamburger { display: block; }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #0a1a0e;
+                border-bottom: 2px solid #2e8b57;
+                flex-direction: column;
+                padding: 16px 0;
+                z-index: 100;
+            }
+
+            .nav-links.open { display: flex; }
+
+            .nav-links a {
+                margin: 0;
+                padding: 12px 24px;
+                width: 100%;
+                border-bottom: 1px solid #1a2a1e;
+            }
+
+            .nav-links a:last-child { border-bottom: none; }
+        }
+
+        /* ── Page header ─────────────────────────── */
+        .page-header {
+            background: linear-gradient(135deg,
+                        #0a1a0e, #0e2814);
+            padding: 40px 32px;
+            text-align: center;
+            border-bottom: 3px solid #2e8b57;
+        }
+
+        .page-header h1 {
+            color: #fff;
+            font-weight: 300;
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #9ec4aa;
+            font-size: 15px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* ── Lookup form ─────────────────────────── */
+        .lookup-card {
+            background: #fff;
+            border: 1px solid #c8dccf;
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px #0000000a;
+        }
+
+        .lookup-card h2 {
+            font-size: 18px;
+            font-weight: 400;
+            color: #0e1a12;
+            margin-bottom: 8px;
+        }
+
+        .lookup-card p {
+            font-size: 14px;
+            color: #4a6a52;
+            margin-bottom: 20px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .input-row { flex-direction: column; }
+        }
+
+        .email-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #b8d0c0;
+            border-radius: 4px;
+            background: #f4f8f5;
+            color: #0e1a12;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .email-input:focus { border-color: #2e8b57; }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #2e8b57;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover { background: #3aa368; }
+
+        .btn-primary:disabled {
+            background: #c8dccf;
+            color: #6a8a74;
+            cursor: not-allowed;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #2e8b57;
+            color: #2e8b57;
+        }
+
+        .btn-outline:hover {
+            background: #2e8b5710;
+        }
+
+        .btn-danger {
+            background: transparent;
+            border: 1px solid #cc4444;
+            color: #cc4444;
+            font-size: 13px;
+        }
+
+        .btn-danger:hover {
+            background: #cc444410;
+        }
+
+        /* ── Account card ────────────────────────── */
+        .account-card {
+            background: #fff;
+            border: 1px solid #c8dccf;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px #0000000a;
+            display: none;
+        }
+
+        .account-header {
+            background: #0a1a0e;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .account-email {
+            color: #d0e8d8;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .tier-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tier-free         { background:#1a3a22;color:#5cbf80; }
+        .tier-developer    { background:#1a3a6a;color:#6aade0; }
+        .tier-institutional{ background:#1a4a1a;color:#7eb88a; }
+
+        .account-body { padding: 24px; }
+
+        /* ── Usage meter ─────────────────────────── */
+        .usage-section {
+            margin-bottom: 24px;
+        }
+
+        .usage-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #4a6a52;
+            margin-bottom: 8px;
+        }
+
+        .usage-bar-bg {
+            background: #e8f0ea;
+            border-radius: 4px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .usage-bar-fill {
+            background: #2e8b57;
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .usage-bar-fill.warning { background: #e08030; }
+        .usage-bar-fill.full    { background: #cc4444; }
+
+        .usage-unlimited {
+            font-size: 13px;
+            color: #2e8b57;
+            font-weight: 600;
+        }
+
+        /* ── Stats row ───────────────────────────── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 480px) {
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stat-box {
+            background: #f4f8f5;
+            border: 1px solid #c8dccf;
+            border-radius: 6px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .stat-box-n {
+            font-size: 24px;
+            font-weight: 300;
+            color: #2e8b57;
+            display: block;
+        }
+
+        .stat-box-l {
+            font-size: 11px;
+            color: #6a8a74;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        /* ── Actions ─────────────────────────────── */
+        .actions {
+            border-top: 1px solid #d0e0d4;
+            padding-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* ── Messages ────────────────────────────── */
+        .msg {
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .msg-success {
+            background: #e8f4e8;
+            border: 1px solid #b8d8b8;
+            color: #2a5a2a;
+        }
+
+        .msg-error {
+            background: #fef0e8;
+            border: 1px solid #e8c0a0;
+            color: #8a3a10;
+        }
+
+        .msg-info {
+            background: #e8eef8;
+            border: 1px solid #a8c0e0;
+            color: #1a3a6a;
+        }
+
+        /* ── Cancel confirm ──────────────────────── */
+        .cancel-confirm {
+            background: #fff8f8;
+            border: 1px solid #e8c0c0;
+            border-radius: 6px;
+            padding: 16px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .cancel-confirm p {
+            font-size: 13px;
+            color: #6a2a2a;
+            margin-bottom: 12px;
+        }
+
+        .cancel-confirm .btn-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* ── Spinner ─────────────────────────────── */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #c8dccf;
+            border-top-color: #2e8b57;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Divider ─────────────────────────────── */
+        .divider {
+            text-align: center;
+            color: #a0b8a8;
+            font-size: 13px;
+            margin: 24px 0;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: #d0e0d4;
+        }
+
+        .divider::before { left: 0; }
+        .divider::after  { right: 0; }
+
+        /* ── Upgrade CTA ─────────────────────────── */
+        .upgrade-cta {
+            background: #eef6f0;
+            border: 1px solid #2e8b5740;
+            border-radius: 8px;
+            padding: 20px 24px;
+            text-align: center;
+            margin-top: 24px;
+            display: none;
+        }
+
+        .upgrade-cta p {
+            font-size: 14px;
+            color: #3a5a42;
+            margin-bottom: 12px;
+        }
+
+        /* ── Footer ──────────────────────────────── */
+        footer {
+            background: #0a1a0e;
+            border-top: 1px solid #1a2a1e;
+            padding: 24px;
+            text-align: center;
+            color: #4a6a52;
+            font-size: 13px;
+            margin-top: 60px;
+        }
+
+        footer a {
+            color: #6a8a74;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.2s;
+        }
+
+        footer a:hover { color: #5cbf80; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="nav-logo">Islamic Historical Corpus</a>
+    <button class="hamburger" id="hamburger"
+            onclick="toggleMenu()" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <div class="nav-links" id="nav-links">
+        <a href="/">Home</a>
+        <a href="/sources">Sources</a>
+        <a href="/docs">API Docs</a>
+        <a href="https://github.com/izzy19852/Islamic-Historical-Corpus"
+           target="_blank">GitHub</a>
+        <a href="/account" class="active">My Account</a>
+    </div>
+</nav>
+
+<div class="page-header">
+    <h1>My Account</h1>
+    <p>View usage, retrieve your API key,
+       or manage your subscription</p>
+</div>
+
+<div class="container">
+
+    <!-- Email lookup -->
+    <div class="lookup-card">
+        <h2>Look Up Your Account</h2>
+        <p>Enter the email address you used to sign up.</p>
+        <div class="input-row">
+            <input type="email"
+                   class="email-input"
+                   id="lookup-email"
+                   placeholder="you@example.com"
+                   onkeydown="if(event.key==='Enter')
+                               lookupAccount()" />
+            <button class="btn btn-primary"
+                    id="lookup-btn"
+                    onclick="lookupAccount()">
+                Look Up
+            </button>
+        </div>
+        <div class="msg msg-error" id="lookup-error"></div>
+    </div>
+
+    <!-- Account details (shown after lookup) -->
+    <div class="account-card" id="account-card">
+
+        <div class="account-header">
+            <span class="account-email"
+                  id="acct-email"></span>
+            <span class="tier-badge"
+                  id="acct-tier-badge"></span>
+        </div>
+
+        <div class="account-body">
+
+            <!-- Usage meter -->
+            <div class="usage-section">
+                <div class="usage-label">
+                    <span>This month's usage</span>
+                    <span id="usage-text"></span>
+                </div>
+                <div class="usage-bar-bg"
+                     id="usage-bar-container">
+                    <div class="usage-bar-fill"
+                         id="usage-bar"
+                         style="width:0%"></div>
+                </div>
+                <div class="usage-unlimited"
+                     id="usage-unlimited"
+                     style="display:none">
+                    Unlimited queries
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-box">
+                    <span class="stat-box-n"
+                          id="stat-month"></span>
+                    <div class="stat-box-l">
+                        This Month
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-box-n"
+                          id="stat-total"></span>
+                    <div class="stat-box-l">
+                        All Time
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-box-n"
+                          id="stat-since"></span>
+                    <div class="stat-box-l">
+                        Member Since
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="actions">
+                <div class="action-group">
+                    <button class="btn btn-primary"
+                            onclick="resendKey()">
+                        Re-send API Key
+                    </button>
+                    <a href="/docs" target="_blank">
+                        <button class="btn btn-outline">
+                            API Docs
+                        </button>
+                    </a>
+                </div>
+                <button class="btn btn-danger"
+                        onclick="showCancelConfirm()">
+                    Cancel Account
+                </button>
+            </div>
+
+            <!-- Messages -->
+            <div class="msg msg-success"
+                 id="action-success"></div>
+            <div class="msg msg-error"
+                 id="action-error"></div>
+            <div class="msg msg-info"
+                 id="action-info"></div>
+
+            <!-- Cancel confirmation -->
+            <div class="cancel-confirm"
+                 id="cancel-confirm">
+                <p>
+                    <strong>Are you sure?</strong>
+                    Your API key will be deactivated
+                    immediately. If you have a paid
+                    subscription, you will also need
+                    to cancel it with Stripe to stop
+                    being charged.
+                </p>
+                <div class="btn-row">
+                    <button class="btn btn-danger"
+                            onclick="confirmCancel()">
+                        Yes, Cancel My Account
+                    </button>
+                    <button class="btn btn-outline"
+                            onclick="hideCancelConfirm()">
+                        Keep My Account
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Upgrade CTA for free users -->
+    <div class="upgrade-cta" id="upgrade-cta">
+        <p>
+            Running low on queries?
+            Upgrade to Developer for
+            5,000 queries/month.
+        </p>
+        <button class="btn btn-primary"
+                onclick="startCheckout('developer')">
+            Upgrade to Developer — $15/month
+        </button>
+    </div>
+
+    <div class="divider">or</div>
+
+    <!-- New signup -->
+    <div class="lookup-card" style="text-align:center">
+        <h2 style="margin-bottom:8px">
+            New Here?
+        </h2>
+        <p style="margin-bottom:20px">
+            Get a free API key instantly —
+            100 queries/month, no credit card.
+        </p>
+        <div class="input-row"
+             style="max-width:360px;margin:0 auto">
+            <input type="email"
+                   class="email-input"
+                   id="signup-email"
+                   placeholder="you@example.com"
+                   onkeydown="if(event.key==='Enter')
+                               signupFree()" />
+            <button class="btn btn-primary"
+                    onclick="signupFree()">
+                Get Free Key
+            </button>
+        </div>
+        <div class="msg" id="signup-msg"
+             style="max-width:360px;margin:12px auto 0">
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <div>
+        <a href="/">Home</a>
+        <a href="/sources">Sources</a>
+        <a href="/docs">API Docs</a>
+        <a href="mailto:hello@islamiccorpus.com">
+            Contact
+        </a>
+    </div>
+    <p style="margin-top:12px">
+        Islamic Historical Corpus · islamiccorpus.com
+    </p>
+</footer>
+
+<script>
+const API = 'https://islamiccorpus.com';
+let currentEmail = '';
+let currentTier  = '';
+
+// ── Hamburger menu ────────────────────────────────────────
+function toggleMenu() {
+    document.getElementById('hamburger')
+        .classList.toggle('open');
+    document.getElementById('nav-links')
+        .classList.toggle('open');
+}
+
+// ── Lookup ─────────────────────────────────────────────────
+async function lookupAccount() {
+    const email = document.getElementById(
+        'lookup-email').value.trim();
+    if (!email) return;
+
+    const btn = document.getElementById('lookup-btn');
+    btn.innerHTML =
+        '<span class="spinner"></span>Looking up...';
+    btn.disabled = true;
+    hideMsg('lookup-error');
+
+    try {
+        const resp = await fetch(
+            `${API}/api/account/lookup`, {
+            method:  'POST',
+            headers: {'Content-Type':'application/json'},
+            body:    JSON.stringify({ email })
+        });
+        const data = await resp.json();
+
+        if (!resp.ok) {
+            showMsg('lookup-error',
+                data.detail || 'Account not found',
+                'error');
+            return;
+        }
+
+        currentEmail = email;
+        currentTier  = data.tier;
+        displayAccount(data);
+
+    } catch(e) {
+        showMsg('lookup-error',
+            'Network error — please try again',
+            'error');
+    } finally {
+        btn.innerHTML = 'Look Up';
+        btn.disabled = false;
+    }
+}
+
+function displayAccount(data) {
+    const card = document.getElementById('account-card');
+    card.style.display = 'block';
+    card.scrollIntoView({ behavior: 'smooth' });
+
+    document.getElementById('acct-email')
+        .textContent = data.email;
+
+    const badge = document.getElementById(
+        'acct-tier-badge');
+    badge.textContent = data.tier;
+    badge.className =
+        `tier-badge tier-${data.tier}`;
+
+    document.getElementById('stat-month')
+        .textContent =
+        data.month_queries.toLocaleString();
+    document.getElementById('stat-total')
+        .textContent =
+        data.total_queries.toLocaleString();
+    document.getElementById('stat-since')
+        .textContent = data.member_since;
+
+    if (data.month_limit >= 999999) {
+        document.getElementById(
+            'usage-bar-container').style.display
+            = 'none';
+        document.getElementById(
+            'usage-unlimited').style.display
+            = 'block';
+        document.getElementById('usage-text')
+            .textContent = '';
+    } else {
+        const pct = Math.min(data.percent_used, 100);
+        const bar = document.getElementById(
+            'usage-bar');
+        bar.style.width = pct + '%';
+        bar.className = 'usage-bar-fill' +
+            (pct >= 100 ? ' full' :
+             pct >= 80  ? ' warning' : '');
+        document.getElementById('usage-text')
+            .textContent =
+            `${data.month_queries.toLocaleString()}`+
+            ` / ${data.month_limit.toLocaleString()}`;
+    }
+
+    const cta = document.getElementById('upgrade-cta');
+    if (data.tier === 'free' &&
+        data.percent_used >= 50) {
+        cta.style.display = 'block';
+    }
+}
+
+// ── Re-send key ────────────────────────────────────────────
+async function resendKey() {
+    if (!currentEmail) return;
+
+    if (!confirm(
+        'This will generate a NEW API key.\n' +
+        'Your old key will stop working immediately.\n\n'+
+        'Continue?')) return;
+
+    showMsg('action-info',
+        'Generating new key and sending email...',
+        'info');
+
+    try {
+        const resp = await fetch(
+            `${API}/api/account/resend-key`, {
+            method:  'POST',
+            headers: {'Content-Type':'application/json'},
+            body:    JSON.stringify(
+                         { email: currentEmail })
+        });
+        const data = await resp.json();
+
+        if (resp.ok) {
+            showMsg('action-success',
+                'New API key sent to ' +
+                currentEmail +
+                '. Check your inbox.',
+                'success');
+            hideMsg('action-info');
+        } else {
+            showMsg('action-error',
+                data.detail || 'Error sending key',
+                'error');
+            hideMsg('action-info');
+        }
+    } catch(e) {
+        showMsg('action-error',
+            'Network error — try again',
+            'error');
+        hideMsg('action-info');
+    }
+}
+
+// ── Cancel ─────────────────────────────────────────────────
+function showCancelConfirm() {
+    document.getElementById('cancel-confirm')
+        .style.display = 'block';
+}
+
+function hideCancelConfirm() {
+    document.getElementById('cancel-confirm')
+        .style.display = 'none';
+}
+
+async function confirmCancel() {
+    if (!currentEmail) return;
+
+    try {
+        const resp = await fetch(
+            `${API}/api/account/cancel`, {
+            method:  'POST',
+            headers: {'Content-Type':'application/json'},
+            body:    JSON.stringify(
+                         { email: currentEmail })
+        });
+        const data = await resp.json();
+
+        if (resp.ok) {
+            document.getElementById('account-card')
+                .style.display = 'none';
+            hideCancelConfirm();
+            showMsg('lookup-error',
+                'Account cancelled. ' +
+                'Confirmation sent to ' +
+                currentEmail,
+                'success');
+        } else {
+            showMsg('action-error',
+                data.detail || 'Cancellation failed',
+                'error');
+        }
+    } catch(e) {
+        showMsg('action-error',
+            'Network error — try again', 'error');
+    }
+}
+
+// ── Free signup ────────────────────────────────────────────
+async function signupFree() {
+    const email = document.getElementById(
+        'signup-email').value.trim();
+    if (!email) return;
+
+    const msg = document.getElementById('signup-msg');
+    msg.style.display  = 'block';
+    msg.className      = 'msg msg-info';
+    msg.textContent    = 'Generating your key...';
+
+    try {
+        const resp = await fetch(
+            `${API}/api/request-key`, {
+            method:  'POST',
+            headers: {'Content-Type':'application/json'},
+            body:    JSON.stringify({ email })
+        });
+        const data = await resp.json();
+
+        if (resp.ok && data.key) {
+            msg.className   = 'msg msg-success';
+            msg.innerHTML   =
+                'Key sent to <strong>' +
+                email + '</strong>.<br>' +
+                '<small>Check your inbox ' +
+                '(and spam folder).</small>';
+        } else {
+            msg.className   = 'msg msg-error';
+            msg.textContent =
+                data.detail ||
+                'Error — try again';
+        }
+    } catch(e) {
+        msg.className   = 'msg msg-error';
+        msg.textContent = 'Network error';
+    }
+}
+
+// ── Checkout (upgrade) ─────────────────────────────────────
+async function startCheckout(tier) {
+    const email = currentEmail ||
+        prompt('Enter your email:');
+    if (!email) return;
+
+    try {
+        const resp = await fetch(
+            `${API}/api/checkout`, {
+            method:  'POST',
+            headers: {'Content-Type':'application/json'},
+            body:    JSON.stringify({ email, tier })
+        });
+        const data = await resp.json();
+        if (data.checkout_url) {
+            window.location.href = data.checkout_url;
+        }
+    } catch(e) {
+        alert('Error — please try again');
+    }
+}
+
+// ── Helpers ────────────────────────────────────────────────
+function showMsg(id, text, type) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent  = text;
+    el.className    = `msg msg-${type}`;
+    el.style.display= 'block';
+}
+
+function hideMsg(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+}
+
+// Pre-fill email from URL param
+const urlEmail = new URLSearchParams(
+    window.location.search).get('email');
+if (urlEmail) {
+    document.getElementById('lookup-email')
+        .value = urlEmail;
+    lookupAccount();
+}
+</script>
+
+</body>
+</html>

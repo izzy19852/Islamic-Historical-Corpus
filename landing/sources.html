@@ -21,6 +21,7 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid #2e8b57;
+            position: relative;
         }
 
         .nav-logo {
@@ -30,6 +31,12 @@
             text-transform: uppercase;
             text-decoration: none;
             font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0;
         }
 
         .nav-links a {
@@ -42,6 +49,60 @@
 
         .nav-links a:hover,
         .nav-links a.active { color: #5cbf80; }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            z-index: 101;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #5cbf80;
+            margin: 5px 0;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.open span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.open span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.open span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        @media (max-width: 640px) {
+            nav { padding: 14px 20px; }
+            .hamburger { display: block; }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #0a1a0e;
+                border-bottom: 2px solid #2e8b57;
+                flex-direction: column;
+                padding: 16px 0;
+                z-index: 100;
+            }
+            .nav-links.open { display: flex; }
+            .nav-links a {
+                margin: 0;
+                padding: 12px 24px;
+                width: 100%;
+                border-bottom: 1px solid #1a2a1e;
+            }
+            .nav-links a:last-child { border-bottom: none; }
+        }
 
         .hero {
             background: linear-gradient(135deg, #0a1a0e, #0e2814);
@@ -375,17 +436,25 @@
 
 <nav>
     <a href="/" class="nav-logo">Islamic Historical Corpus</a>
-    <div class="nav-links">
+    <button class="hamburger" id="hamburger"
+            onclick="document.getElementById('hamburger').classList.toggle('open');document.getElementById('nav-links').classList.toggle('open')"
+            aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <div class="nav-links" id="nav-links">
         <a href="/">Home</a>
         <a href="/sources" class="active">Sources</a>
         <a href="/docs">API Docs</a>
         <a href="https://github.com/izzy19852/Islamic-Historical-Corpus"
            target="_blank">GitHub</a>
+        <a href="/account">My Account</a>
     </div>
 </nav>
 
 <div class="hero">
-    <h1>132 Sources. 1,400 Years. One API.</h1>
+    <h1>216 Sources. 1,400 Years. One API.</h1>
     <p>Every source authenticated, era-tagged, and
        chain-strength classified.</p>
     <div class="stats-bar">
@@ -553,7 +622,7 @@ let currentSearch = '';
 
 async function loadSources() {
     try {
-        const resp = await fetch(`${API_BASE}/sources`, {
+        const resp = await fetch(`${API_BASE}/api/sources`, {
             headers: { 'X-API-Key': PUBLIC_KEY }
         });
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);

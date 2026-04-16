@@ -1,5 +1,6 @@
 # Never commit corpus data
 rag/sources/
+sources/
 *.pdf
 *.djvu
 *.txt.bak

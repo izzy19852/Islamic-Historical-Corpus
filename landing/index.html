@@ -406,29 +406,140 @@
         }
 
         footer a:hover { color: #5cbf80; }
+
+        /* ── Nav ──────────────────────────────────── */
+        nav {
+            background: #0a1a0e;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #2e8b57;
+            position: relative;
+            z-index: 50;
+        }
+
+        .nav-logo {
+            color: #5cbf80;
+            font-size: 13px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .nav-links a {
+            color: #6a8a74;
+            text-decoration: none;
+            margin-left: 24px;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active { color: #5cbf80; }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            z-index: 101;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #5cbf80;
+            margin: 5px 0;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.open span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.open span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.open span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        @media (max-width: 640px) {
+            nav { padding: 14px 20px; }
+            .hamburger { display: block; }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #0a1a0e;
+                border-bottom: 2px solid #2e8b57;
+                flex-direction: column;
+                padding: 16px 0;
+                z-index: 100;
+            }
+            .nav-links.open { display: flex; }
+            .nav-links a {
+                margin: 0;
+                padding: 12px 24px;
+                width: 100%;
+                border-bottom: 1px solid #1a2a1e;
+            }
+            .nav-links a:last-child { border-bottom: none; }
+        }
     </style>
 </head>
 <body>
+
+<nav>
+    <a href="/" class="nav-logo">Islamic Historical Corpus</a>
+    <button class="hamburger" id="hamburger"
+            onclick="document.getElementById('hamburger').classList.toggle('open');document.getElementById('nav-links').classList.toggle('open')"
+            aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <div class="nav-links" id="nav-links">
+        <a href="/" class="active">Home</a>
+        <a href="/sources">Sources</a>
+        <a href="/docs">API Docs</a>
+        <a href="https://github.com/izzy19852/Islamic-Historical-Corpus"
+           target="_blank">GitHub</a>
+        <a href="/account">My Account</a>
+    </div>
+</nav>
 
 <div class="header-pattern">
     <div class="logo">Islamic Historical Corpus</div>
     <h1>1,400 Years of Islamic History<br>as a RAG API</h1>
     <p class="tagline">
-        71,000+ authenticated chunks across 132 primary sources.
+        128,000+ authenticated chunks across 216 primary sources.
         Al-Tabari to Ibn Kathir. Query the classical canon.
     </p>
 
     <div class="stats">
         <div class="stat">
-            <span class="stat-number">71K+</span>
+            <span class="stat-number">128K+</span>
             <span class="stat-label">Chunks</span>
         </div>
         <div class="stat">
-            <span class="stat-number">132</span>
+            <span class="stat-number">216</span>
             <span class="stat-label">Sources</span>
         </div>
         <div class="stat">
-            <span class="stat-number">15</span>
+            <span class="stat-number">22</span>
             <span class="stat-label">Eras</span>
         </div>
         <div class="stat">
@@ -444,6 +555,8 @@
     <div class="cta-group">
         <a href="#get-key" class="btn-primary">Get Free API Key</a>
         <a href="/docs" class="btn-secondary">API Docs</a>
+        <a href="/chat" class="btn-primary">Try the Chat</a>
+        <a href="/account" class="btn-secondary">My Account</a>
         <a href="https://github.com/izzy19852/Islamic-Historical-Corpus"
            class="btn-secondary" target="_blank">GitHub</a>
     </div>
@@ -611,6 +724,15 @@ curl -X POST https://islamiccorpus.com/research \
                     <li>Priority support</li>
                     <li>Apps & integrations</li>
                 </ul>
+                <button id="btn-developer"
+                        onclick="startCheckout('developer')"
+                        style="margin-top:20px;width:100%;
+                               background:#2e8b57;color:#ffffff;
+                               border:none;padding:10px;
+                               border-radius:4px;font-weight:700;
+                               font-size:14px;cursor:pointer;">
+                    Get Started
+                </button>
             </div>
             <div class="plan">
                 <div class="plan-name">Institutional</div>
@@ -621,6 +743,16 @@ curl -X POST https://islamiccorpus.com/research \
                     <li>Universities & publishers</li>
                     <li>Ed-tech platforms</li>
                 </ul>
+                <button id="btn-institutional"
+                        onclick="startCheckout('institutional')"
+                        style="margin-top:20px;width:100%;
+                               background:#0a1a0e;color:#5cbf80;
+                               border:1px solid #2e8b57;
+                               padding:10px;border-radius:4px;
+                               font-weight:700;font-size:14px;
+                               cursor:pointer;">
+                    Get Started
+                </button>
             </div>
         </div>
         <p style="text-align:center; font-size:13px; color:#6a8a74; margin-top:8px;">
@@ -728,6 +860,60 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === 'Enter') requestKey();
         });
 });
+
+async function startCheckout(tier) {
+    const email = prompt(
+        'Enter your email address to continue:'
+    );
+    if (!email || !email.includes('@')) return;
+
+    const btn = document.getElementById('btn-' + tier);
+    if (btn) {
+        btn.textContent = 'Redirecting...';
+        btn.disabled = true;
+    }
+
+    try {
+        const resp = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ email, tier })
+        });
+        const data = await resp.json();
+
+        if (data.checkout_url) {
+            window.location.href = data.checkout_url;
+        } else {
+            alert('Error: ' + (data.detail || 'Unknown error'));
+            if (btn) {
+                btn.textContent = 'Get Started';
+                btn.disabled = false;
+            }
+        }
+    } catch(e) {
+        alert('Network error — please try again');
+        if (btn) {
+            btn.textContent = 'Get Started';
+            btn.disabled = false;
+        }
+    }
+}
+
+// Show success message if returning from Stripe
+const params = new URLSearchParams(window.location.search);
+if (params.get('checkout') === 'success') {
+    const tier = params.get('tier') || 'developer';
+    alert(
+        'Payment successful!\n\n' +
+        'Your API key is being generated and will ' +
+        'arrive in your email within 60 seconds.\n\n' +
+        'Check your inbox (and spam folder).'
+    );
+    // Clean URL
+    window.history.replaceState(
+        {}, '', window.location.pathname
+    );
+}
 </script>
 
 </body>

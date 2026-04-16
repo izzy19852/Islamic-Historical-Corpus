@@ -1,0 +1,104 @@
+[
+  {
+    "topic": "Ali's right to the caliphate after the Prophet",
+    "figure": "Ali ibn Abi Talib",
+    "event": "Death of the Prophet",
+    "position_a": "Ali was designated by the Prophet at Ghadir Khumm and should have been first caliph (Shia view)",
+    "position_b": "The companions chose Abu Bakr through shura/consultation, which was legitimate (Sunni view)",
+    "key_scholars": [
+      "Al-Tabari",
+      "Ibn Hisham",
+      "Ibn Sa'd"
+    ],
+    "script_instruction": "PRESENT BOTH with equal weight. Acknowledge this as the foundational Sunni-Shia divergence. Do not take sides."
+  },
+  {
+    "topic": "Was Baybars justified in killing Qutuz?",
+    "figure": "Baybars",
+    "event": "Assassination of Qutuz",
+    "position_a": "Baybars was promised Aleppo as reward for Ain Jalut; Qutuz reneged; betrayal justified response",
+    "position_b": "Nothing justifies assassination of a sultan who just saved Islamic civilization from Mongols",
+    "key_scholars": [
+      "Al-Maqrizi",
+      "Ibn Taghribirdi"
+    ],
+    "script_instruction": "PRESENT BOTH. The audience should feel the moral weight. This is the slave_who_became_king theme at its darkest."
+  },
+  {
+    "topic": "Husayn's decision to go to Karbala",
+    "figure": "Husayn ibn Ali",
+    "event": "Battle of Karbala",
+    "position_a": "Husayn was invited by Kufa and had legitimate expectations of support that were betrayed",
+    "position_b": "Husayn knew the odds and chose martyrdom deliberately as a statement against injustice",
+    "key_scholars": [
+      "Al-Tabari",
+      "Abu Mikhnaf"
+    ],
+    "script_instruction": "PRESENT BOTH Sunni and Shia accounts. Never resolve. This is the most sensitive topic in the series."
+  },
+  {
+    "topic": "Did Khalid murder Malik ibn Nuwayra?",
+    "figure": "Khalid ibn Walid",
+    "event": "Ridda Wars",
+    "position_a": "Khalid executed Malik as an apostate and married his wife — improper and potentially criminal",
+    "position_b": "Malik had withheld zakat and resisted; execution was within wartime authority. Marriage was after waiting period.",
+    "key_scholars": [
+      "Al-Tabari",
+      "Ibn Sa'd"
+    ],
+    "script_instruction": "PRESENT BOTH accounts. Abu Bakr's rebuke is well-attested. Umar's fury is documented. Let the facts speak."
+  },
+  {
+    "topic": "Reason for Khalid's dismissal by Umar",
+    "figure": "Khalid ibn Walid",
+    "event": "Dismissal of Khalid",
+    "position_a": "Umar dismissed Khalid over the blood money incident and unauthorized distribution of wealth",
+    "position_b": "Umar feared the army worshipped Khalid rather than God — removal was about principle, not personal grudge",
+    "key_scholars": [
+      "Al-Tabari",
+      "Al-Baladhuri",
+      "Ibn Sa'd",
+      "Al-Waqidi"
+    ],
+    "script_instruction": "PRESENT BOTH. Do NOT resolve. Let the audience sit with the ambiguity."
+  },
+  {
+    "topic": "Was Muawiyah a legitimate ruler or a rebel?",
+    "figure": "Muawiyah ibn Abi Sufyan",
+    "event": "Battle of Siffin",
+    "position_a": "Muawiyah was a rebel (baghi) against the legitimate caliph Ali",
+    "position_b": "Muawiyah was exercising ijtihad in demanding justice for Uthman's blood before giving bayah",
+    "key_scholars": [
+      "Al-Tabari",
+      "Al-Baladhuri",
+      "Ibn Khaldun"
+    ],
+    "script_instruction": "PRESENT BOTH. Note that even scholars who call Muawiyah's position wrong acknowledge his political genius."
+  },
+  {
+    "topic": "Saladin's treatment of Crusader prisoners",
+    "figure": "Saladin",
+    "event": "Reconquest of Jerusalem",
+    "position_a": "Saladin showed unprecedented mercy, fulfilling Islamic principles of war",
+    "position_b": "Saladin's mercy was also strategic — ransom revenue and propaganda value against Crusader brutality",
+    "key_scholars": [
+      "Baha al-Din",
+      "Ibn al-Athir",
+      "William of Tyre"
+    ],
+    "script_instruction": "Both can be true simultaneously. Present mercy as genuine AND strategic."
+  },
+  {
+    "topic": "Wahshi's redemption at Yamama",
+    "figure": "Wahshi ibn Harb",
+    "event": "Battle of Yamama",
+    "position_a": "Wahshi genuinely converted and sought redemption by killing Musaylima — the parallel with Hamza is meaningful",
+    "position_b": "Wahshi was a skilled killer used instrumentally by both sides — reading redemption into it is later narrative construction",
+    "key_scholars": [
+      "Ibn Hisham",
+      "Al-Tabari",
+      "Ibn Sa'd"
+    ],
+    "script_instruction": "PRESENT BOTH. The audience should feel the weight of both readings. The same spear, two kills, 10 years apart — let the parallel speak."
+  }
+]
