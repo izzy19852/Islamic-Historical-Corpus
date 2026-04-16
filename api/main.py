@@ -481,29 +481,19 @@ def list_sources(
 @app.post("/api/request-key")
 @limiter.limit("5/hour")
 def request_free_key(request: Request, body: KeyRequest):
-    """Generate a free tier API key from the landing page."""
+    """Generate a free tier API key. One key per email — requesting again replaces the old one."""
     email = body.email.strip().lower()
 
-    # Basic email validation
     if not re.match(r'^[^@]+@[^@]+\.[^@]+$', email):
         raise HTTPException(400, "Invalid email address")
 
     conn = get_db()
     cur = conn.cursor()
 
-    # Check if email already has a key
-    cur.execute("""
-        SELECT key_hash FROM api_keys
-        WHERE name = %s AND active = TRUE
-    """, (f"free:{email}",))
+    # Delete any existing key for this email
+    cur.execute("DELETE FROM api_keys WHERE name = %s", (f"free:{email}",))
 
-    if cur.fetchone():
-        conn.close()
-        raise HTTPException(409,
-            "An API key already exists for this email. "
-            "Contact hello@islamiccorpus.com to retrieve it.")
-
-    # Generate key
+    # Generate new key
     raw    = "isk_" + secrets.token_urlsafe(24)
     hashed = hashlib.sha256(raw.encode()).hexdigest()
 
