@@ -48,7 +48,7 @@ PUBLISH (YouTube + Shorts extraction)
 | Component | Status | Detail |
 |---|---|---|
 | GCP VM | ✅ | Postgres + pgvector, us-east1-d |
-| RAG Corpus | ✅ | 64,402 chunks, 118 sources, 15 eras |
+| RAG Corpus | ✅ | 128,356 chunks, 216 sources, 22 eras |
 | Knowledge Graph | ✅ | 27 tables (see DB inventory below) |
 | Figures | ✅ | 735 in DB, all with sensitivity tiers |
 | Character Bibles (MD) | ✅ | 762 markdown files across 4 era folders |
@@ -64,9 +64,9 @@ PUBLISH (YouTube + Shorts extraction)
 | Table | Rows | Status |
 |---|---|---|
 | figures | 735 | Fully populated |
-| documents (chunks) | 64,402 | All ingested |
+| documents (chunks) | 128,356 | All ingested |
 | chunk_metadata | 24,220 | 37% linked |
-| sources | 118 | Complete |
+| sources | 216 | Complete |
 | events | 36 | Seeded |
 | figure_themes | 87 | Partial |
 | figure_motivations | 23 | Partial |

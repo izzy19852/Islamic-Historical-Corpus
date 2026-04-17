@@ -3,7 +3,7 @@
 The world's first structured, classified, AI-ready Islamic
 historical knowledge base.
 
-**71,000+ chunks | 132 sources | 15 eras | 1,400 years**
+**128,356 chunks | 216 sources | 22 eras | 1,400 years**
 
 Every chunk is era-tagged, source-attributed, and
 chain-strength classified against the Islamic scholarly
@@ -34,7 +34,7 @@ Nasai · Ibn Majah · Nawawi 40 · Riyad as-Salihin ·
 Bulugh al-Maram
 
 ### Knowledge Graph
-- **265 figures** — sensitivity tier, dramatic function,
+- **738 figures** — sensitivity tier, dramatic function,
   era, known relationships, scholarly debates
 - **32+ events** — year, era, causal chains, contested readings
 - **Lineage chains** — biological, ideological, military patron

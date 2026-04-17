@@ -1,6 +1,6 @@
 """
 Islamic Historical Corpus API
-Authenticated RAG access to 64K+ chunks of classical Islamic sources.
+Authenticated RAG access to 128K+ chunks of classical Islamic sources.
 
 Tiers:
   free:        100 queries/month
@@ -239,7 +239,7 @@ def root():
         "name": "Islamic Historical Corpus API",
         "version": "1.0.0",
         "docs": "/docs",
-        "corpus": "64,000+ chunks | 96+ sources | 1,400 years | 15 eras",
+        "corpus": "128,356 chunks | 216 sources | 1,400 years | 22 eras",
         "get_key": "https://islamiccorpus.com"
     }
 
@@ -1236,7 +1236,7 @@ FREE_QUESTION_LIMIT = 5
 
 RESEARCH_SYSTEM_PROMPT = """You are a scholarly Islamic historical research assistant grounded exclusively in authenticated primary sources.
 
-CORPUS: You have access to 71,000+ chunks from 131 authenticated Islamic sources including Al-Tabari, Ibn Kathir, Ibn Sa'd Tabaqat, Al-Masudi, Ibn al-Athir, all major hadith collections, Ibn Khaldun, Ibn Battuta, and more spanning 632-1900 CE.
+CORPUS: You have access to 128,356 chunks from 216 authenticated Islamic sources including Al-Tabari, Ibn Kathir, Ibn Sa'd Tabaqat, Al-Masudi, Ibn al-Athir, all major hadith collections, Ibn Khaldun, Ibn Battuta, and more spanning 632-1900 CE.
 
 CITATION RULES — NON-NEGOTIABLE:
 - Every factual claim MUST cite its source: "According to Al-Tabari..." or "Ibn Kathir records..."
@@ -1267,7 +1267,7 @@ the depth of a university professor with the clarity of a \
 gifted teacher. You never dumb things down, but you always \
 make things clear.
 
-CORPUS: You have 72,000+ chunks from 136 authenticated \
+CORPUS: You have 128,356 chunks from 216 authenticated \
 Islamic sources spanning 632–1900 CE — Al-Tabari, Ibn \
 Kathir, Ibn Sa'd Tabaqat, Al-Masudi, Ibn al-Athir, Usama \
 ibn Munqidh, Ibn al-Qalanisi, Al-Dhahabi, all major hadith \
