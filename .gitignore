@@ -47,3 +47,10 @@ rag/
 scripts/
 visual_tests/
 docs/islam_stories_series_architecture.md
+
+# Proprietary knowledge graph — not for public release
+knowledge_graph/
+huggingface_dataset/debates.json
+huggingface_dataset/events.json
+huggingface_dataset/figures.json
+huggingface_dataset/lineage.json
