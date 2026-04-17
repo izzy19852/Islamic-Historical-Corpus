@@ -9,36 +9,31 @@ language:
 tags:
   - islamic-history
   - rag
-  - knowledge-graph
   - hadith
   - arabic
   - digital-humanities
   - historical
   - religion
-pretty_name: Islamic Historical Corpus — Knowledge Graph
+pretty_name: Islamic Historical Corpus — Source Manifest
 size_categories:
-  - 1K<n<10K
+  - n<1K
 ---
 
-# Islamic Historical Corpus — Knowledge Graph Dataset
+# Islamic Historical Corpus — Source Manifest
 
-The structured knowledge graph layer of the
+The public source manifest for the
 **Islamic Historical Corpus** — the world's first
 classified, AI-ready Islamic historical knowledge base.
 
 ## What This Dataset Contains
 
-This dataset is the **knowledge graph metadata only** —
-original structured work created on top of authenticated
-Islamic primary sources. No copyrighted translation text
-is included.
+This dataset is the **public source manifest only** —
+a catalog of the 216 primary sources ingested into the
+corpus, with authentication tiers and chunk counts.
+No copyrighted translation text is included.
 
 | File | Records | Description |
 |---|---|---|
-| `figures.json` | 738 | Historical figures with era, sensitivity tier, relationships, source coverage |
-| `events.json` | 36 | Key events with year, era, causal chains, chunk counts |
-| `debates.json` | 8 | Scholarly debates — both positions, sources, script guidance |
-| `lineage.json` | 416 | Figure lineage chains — biological, military, intellectual |
 | `sources_manifest.json` | 216 | Full corpus manifest with authentication tiers |
 
 ## The Full Corpus
@@ -90,32 +85,6 @@ Bulugh al-Maram
 
 ### + 190 more sources across 22 eras
 
-## Knowledge Graph Structure
-
-### Figures (738 entries)
-Each figure includes:
-- `sensitivity_tier` — S/A/B/C (theological sensitivity)
-- `known_for` — key historical contribution
-- `dramatic_question` — narrative tension
-- `era` — historical period
-- `relationships` — allies, rivals, lineage
-- `chunk_count` — how many corpus chunks reference them
-- `source_count` — how many sources cover them
-
-### Sensitivity Tiers
-| Tier | Meaning |
-|---|---|
-| S | The Prophet (PBUH) — never depicted |
-| A | Rightly-guided Caliphs — scholarly care required |
-| B | Major companions — full depiction with citation |
-| C | Historical figures — standard depiction |
-
-### Scholarly Debates
-Each debate includes:
-- `position_a` and `position_b` — both scholarly views
-- `key_scholars` — scholars associated with debate
-- `script_instruction` — guidance for content creators
-
 ## Use Cases
 
 - **Islamic NLP research** — entity recognition,
@@ -155,7 +124,7 @@ This dataset is released under CC-BY 4.0.
 The classical Islamic texts themselves belong to
 their authors and to Islamic civilization. We charge
 only for infrastructure access to the full corpus API —
-not for the scholarship. The knowledge graph metadata
+not for the scholarship. The source manifest
 (this dataset) is free.
 
 See: https://islamiccorpus.com/#ethics
@@ -163,14 +132,14 @@ See: https://islamiccorpus.com/#ethics
 ## Citation
 
 ```bibtex
-@dataset{islamic_historical_corpus_2025,
+@dataset{islamic_historical_corpus_2026,
   title     = {Islamic Historical Corpus —
-               Knowledge Graph Dataset},
+               Source Manifest},
   author    = {Islamic Historical Corpus},
-  year      = {2025},
+  year      = {2026},
   url       = {https://huggingface.co/datasets/
                izzy19852/islamic-historical-corpus},
-  note      = {Knowledge graph metadata for 128K+
+  note      = {Public source manifest for the 128K+
                chunk Islamic historical RAG corpus.
                Full corpus API at islamiccorpus.com}
 }
