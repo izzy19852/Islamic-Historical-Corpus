@@ -1,10 +1,11 @@
 # Islamic Historical Corpus
 
 > 🕌 **Don't want to run this yourself?**
-> The full corpus is available as a hosted API at
+> The full corpus is live at
 > **[islamiccorpus.com](https://islamiccorpus.com)**
-> — free tier available, no setup required.
+> — free tier, no setup required.
 > [Get an API key →](https://islamiccorpus.com/#get-key)
+> | [Try the chat →](https://islamiccorpus.com/chat)
 
 ---
 
@@ -12,7 +13,7 @@
 The world's first structured, classified, AI-ready Islamic
 historical knowledge base.
 
-**128,356 chunks | 216 sources | 22 eras | 1,400 years**
+**133,789+ chunks | 238 sources | 22 eras | 1,400 years**
 
 Every chunk is era-tagged, source-attributed, and
 chain-strength classified against the Islamic scholarly
@@ -43,7 +44,7 @@ Nasai · Ibn Majah · Nawawi 40 · Riyad as-Salihin ·
 Bulugh al-Maram
 
 ### Knowledge Graph
-- **738 figures** — sensitivity tier, dramatic function,
+- **1839 figures** — sensitivity tier, dramatic function,
   era, known relationships, scholarly debates
 - **32+ events** — year, era, causal chains, contested readings
 - **Lineage chains** — biological, ideological, military patron

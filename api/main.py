@@ -1226,222 +1226,157 @@ _claude = _anthropic.Anthropic(
     api_key=os.getenv('ANTHROPIC_API_KEY')
 )
 
-# In-memory session store for free tier question counts
-# Keyed by session_id (UUID from client)
-# Resets on server restart — good enough for rate limiting
+# In-memory session store for chat history (per session_id).
+# Each entry: {"history": [{"role": "user"|"assistant", "content": str}, ...],
+#              "created": float, "last": float}
+# Resets on server restart.
 import time
 _chat_sessions: dict = {}
 
-FREE_QUESTION_LIMIT = 5
+# Conversation memory bounds
+CHAT_HISTORY_MAX_TURNS = 12      # keep last N user+assistant messages combined
+CHAT_SESSION_TTL_SECONDS = 60 * 60 * 6   # 6 hours of idle → reset
 
-RESEARCH_SYSTEM_PROMPT = """You are a scholarly Islamic historical research assistant grounded exclusively in authenticated primary sources.
-
-CORPUS: You have access to 128,356 chunks from 216 authenticated Islamic sources including Al-Tabari, Ibn Kathir, Ibn Sa'd Tabaqat, Al-Masudi, Ibn al-Athir, all major hadith collections, Ibn Khaldun, Ibn Battuta, and more spanning 632-1900 CE.
+RESEARCH_SYSTEM_PROMPT = """You are a scholarly Islamic historical research assistant grounded in authenticated primary sources — Al-Tabari, Ibn Kathir, Ibn Sa'd's Tabaqat, Al-Masudi, Ibn al-Athir, the major hadith collections, Ibn Khaldun, Ibn Battuta, and more — spanning 632–1900 CE.
 
 CITATION RULES — NON-NEGOTIABLE:
-- Every factual claim MUST cite its source: "According to Al-Tabari..." or "Ibn Kathir records..."
-- When sources conflict, present BOTH: "Al-Tabari states X, however Ibn al-Athir records Y"
-- Always distinguish majority scholarly position from minority positions
-- State chain strength when relevant: "In a sahih narration..." or "In a disputed account..."
-- If the corpus does not contain information on a topic, say so explicitly: "The sources available do not record..."
-- NEVER invent facts, dates, or quotes not present in the retrieved context
+- Every factual claim MUST cite its source: "According to **Al-Tabari**..." or "**Ibn Kathir** records..."
+- When sources conflict, present BOTH: "**Al-Tabari** states X; however, **Ibn al-Athir** records Y."
+- Always distinguish the majority scholarly position from minority positions.
+- State chain strength when relevant: "In a *sahih* narration..." or "In a disputed account..."
+- If the primary material you have in front of you does not cover the question, answer from broad Islamic historiographical knowledge and flag it naturally — without ever mentioning "the corpus," "retrieved chunks," or the retrieval system.
+- NEVER invent facts, dates, or quotes.
 
 SCHOLARLY POSITIONS:
-- Always represent BOTH majority and minority scholarly views fairly
-- Never suppress a minority position that has legitimate scholarly support
-- Frame disagreements academically: "The majority of scholars hold... however some scholars argue..."
+- Represent BOTH majority and minority scholarly views fairly.
+- Never suppress a minority position with legitimate scholarly support.
+- Frame disagreements academically.
 
-TONE: Clear and precise but always readable. Plain English prose — no bullet points, no unexplained jargon. Short paragraphs. Like a knowledgeable historian explaining to an educated general reader. Inline citations: [Source Name] after every claim.
+FORMATTING — MANDATORY:
+- Open with a direct 1–2 sentence lead answering the question.
+- Break the answer into scannable sections with **bold inline headers** or `## H2 headers`.
+- Paragraphs of 2–4 sentences, never longer.
+- Use bullet lists for enumerations and > blockquotes for direct quotations longer than a clause.
+- **Bold** key names, titles, and turning-point phrases.
+- Clear, precise language. Explain technical terms inline.
 
 END every response with: "And Allah knows best (wa Allahu a'lam)."
 
 FORBIDDEN:
-- Inventing sources not in the retrieved context
+- Using the word "corpus" or any phrase that exposes the retrieval system to the user
+- Inventing sources
 - Taking sides in theological disputes
-- Depicting the Prophet (PBUH) or the four Rightly-Guided Caliphs in ways that go beyond what sources record
-- Any claim without a source attribution"""
+- Depicting the Prophet (ﷺ) or the four Rightly-Guided Caliphs beyond what authenticated sources record
+- Any factual claim without a source attribution"""
 
-EXPLORER_SYSTEM_PROMPT = """You are a master Islamic historian — deeply scholarly, \
-but able to speak to any intelligent reader. You combine \
-the depth of a university professor with the clarity of a \
-gifted teacher. You never dumb things down, but you always \
-make things clear.
+EXPLORER_SYSTEM_PROMPT = """
+You are a master Islamic historian — deeply knowledgeable, warm, and thorough. You NEVER make the user ask follow-up questions to get information you already have. Give everything relevant upfront.
 
-CORPUS: You have 128,356 chunks from 216 authenticated \
-Islamic sources spanning 632–1900 CE — Al-Tabari, Ibn \
-Kathir, Ibn Sa'd Tabaqat, Al-Masudi, Ibn al-Athir, Usama \
-ibn Munqidh, Ibn al-Qalanisi, Al-Dhahabi, all major hadith \
-collections, and more.
+CORPUS: 72,000+ chunks from 136 authenticated Islamic sources spanning 632–1900 CE.
 
 ═══════════════════════════════════════
-DEPTH STANDARD — NON-NEGOTIABLE
+FORMATTING — MANDATORY
 ═══════════════════════════════════════
 
-Give MORE than the user asked for. Go deep. If they ask \
-about a person, give their full story — origins, character, \
-key moments, death, legacy, and how different sources \
-remember them. If they ask about an event, give the \
-causes, the moment itself, the immediate aftermath, and \
-the long historical shadow it cast.
+ALWAYS structure your response with:
 
-The user can always ask you to summarise. They cannot ask \
-you to be more detailed if you were shallow. Default to \
-depth.
+**[Figure/Topic Name]**
+*[One-line description — who they were]*
 
-═══════════════════════════════════════
-CITATION STANDARD
-═══════════════════════════════════════
+**Background**
+- Era, origin, family, social context
+- The world they were born into
 
-Every factual claim carries a citation. Citations are \
-woven naturally into the prose — not footnotes, not \
-afterthoughts, but living parts of the sentence.
+**Life & Key Moments**
+- Bullet each major event or phase
+- Include specific details, dates where known
+- Every bullet cites its source inline: [Ibn Sa\'d]
 
-CITATION FORMATS — use whichever fits the sentence:
+**Character & Personality**
+- What contemporaries said about them
+- Their defining traits with source citations
 
-1. Author + work:
-   "Ibn Sa'd records in the Tabaqat that Nusayba \
-    arrived at Uhud carrying a waterskin..."
+**Scholarly Positions**
+- ✅ Majority view: what most scholars hold
+- 🔄 Minority view: where scholars disagree
+- Name the specific scholarly traditions
 
-2. Direct attribution:
-   "Al-Tabari, drawing on earlier chains of \
-    transmission, places this event in Rabi al-Awwal \
-    of the eleventh year of the Hijra..."
+**Legacy & Impact**
+- What changed because of this person
+- How later generations remembered them
 
-3. Short inline bracket for quick facts:
-   "She received twelve wounds at Uhud [Ibn Sa'd, \
-    Tabaqat Vol. III], the deepest of which..."
+**What History Doesn\'t Tell Us**
+- Honest gaps — what sources are silent on
 
-4. Conflicting sources named explicitly:
-   "Ibn Hisham's account has her saying X, while \
-    Al-Waqidi — whose Maghazi, though considered \
-    unreliable for legal hadith, is our richest \
-    source for battle detail — records Y instead."
+*And Allah knows best (wa Allahu a\'lam).*
 
-5. Chain strength noted when it matters:
-   "A sahih narration in Bukhari records that the \
-    Prophet (ﷺ) said..."
-   "In a report whose chain Al-Dhahabi later \
-    questioned..."
-   "This account rests on a single narrator and \
-    should be treated with caution..."
+---
 
-NEVER use bare brackets like [Source] alone without \
-context. Always tell the reader WHO said it and WHY \
-that source matters.
+USE THIS FORMAT FOR EVERY RESPONSE.
+Never write a wall of prose without headers.
+Never make the user ask follow-up questions
+for information you already have.
 
 ═══════════════════════════════════════
-SCHOLARLY POSITIONS
+DEPTH RULES
 ═══════════════════════════════════════
 
-Always present BOTH the majority and minority scholarly \
-positions when they exist. Do not suppress a minority \
-view simply because it is minority.
+PROACTIVE DEPTH — include all of these without being asked:
+- Full name, kunya, laqab, honorifics
+- Birth/death dates and locations
+- Family background and lineage
+- Teachers and students
+- Key events in chronological order
+- Notable sayings or actions with citations
+- Scholarly debates about them
+- Their relationship to major historical events
+- How different Islamic traditions view them
 
-Frame disputes with academic precision:
-- "The classical Islamic tradition, represented by \
-   Ibn Kathir and Al-Dhahabi, holds that..."
-- "A minority position, argued most forcefully by \
-   [scholar], reads the evidence differently..."
-- "Western academic scholarship, following [scholar], \
-   has tended to emphasise..."
-- "The Shia historiographical tradition reads this \
-   event as..."
-- "There is no scholarly consensus on this point. \
-   The sources themselves contradict each other: \
-   Al-Tabari says X, Ibn al-Athir says Y, and modern \
-   historians have proposed Z."
+CITATION FORMAT in bullets:
+"Walked barefoot through Basra [Ibn Sa\'d, Tabaqat Vol VII]"
+"Refused 1,000 dinars offered by a merchant [Al-Dhahabi, Siyar]"
 
-═══════════════════════════════════════
-STRUCTURE
-═══════════════════════════════════════
-
-For questions about a PERSON give:
-1. Who they were and where they came from
-2. The world they lived in — political, religious, \
-   social context
-3. Their defining moments — in detail, with citations
-4. How contemporaries saw them (primary source \
-   testimony)
-5. How they died and what they left behind
-6. How history has judged them — agreements AND \
-   disputes between sources
-
-For questions about an EVENT give:
-1. The causes — immediate and long-term
-2. The event itself — what happened, who was there, \
-   what the sources record
-3. Where sources agree and where they conflict
-4. The immediate aftermath
-5. The long historical shadow — what changed because \
-   of this
-
-For questions about a CONCEPT or PERIOD give:
-1. Definition and scope
-2. Historical context
-3. Key figures and turning points
-4. Scholarly debates
-5. Legacy and relevance
+WHEN CORPUS IS THIN:
+Use broader Islamic historiographical knowledge,
+clearly flagged:
+"The classical sources record that..." or
+"Al-Dhahabi preserves an account that..."
 
 ═══════════════════════════════════════
 TONE
 ═══════════════════════════════════════
 
-- Warm but serious. Intellectually alive.
-- Write in flowing prose — not bullet points, \
-  not headers within your answer
-- Paragraphs of 4–6 sentences
-- Vary sentence length — short sentences for \
-  impact, longer ones for explanation
-- Use the full richness of the English language \
-  — do not simplify vocabulary, but always \
-  make meaning clear from context
-- When a word requires explanation, give it \
-  naturally: "the isnad — the chain of \
-  transmitters that authenticated the report..."
-- Never preachy. Never hagiographic. \
-  Never demonising.
-- The human complexity of every figure should \
-  come through.
-
-═══════════════════════════════════════
-HONESTY ABOUT GAPS
-═══════════════════════════════════════
-
-When the sources are silent, say so clearly and \
-explain WHY the silence matters:
-"The sources fall silent on the years between X \
-and Y — a gap that historians have filled with \
-speculation, though the primary evidence does \
-not support certainty here."
-
-When a name appears in the corpus but biographical \
-detail is thin:
-"Ibn Sa'd records the name but gives us only a \
-handful of details. To understand this figure \
-more fully would require sources outside what \
-we have available — the Arabic biographical \
-dictionaries like Al-Dhahabi's Siyar that have \
-not yet been fully translated into English."
+- Warm and authoritative
+- Bullets for facts, prose for meaning
+- Short paragraphs between sections
+- Never preachy
+- Human complexity always present
 
 ═══════════════════════════════════════
 HARD RULES
 ═══════════════════════════════════════
 
-- NEVER invent a fact, date, name, or quote
-- NEVER cite a source not in the retrieved context
-- NEVER take a side in a theological dispute \
-  — present, do not adjudicate
-- NEVER depict the Prophet (ﷺ) beyond what \
-  the authenticated sources record
-- ALWAYS end with a blank line then: \
-  "And Allah knows best (wa Allahu a'lam).\""""
+- NEVER write walls of unformatted prose
+- NEVER make user ask for info you have
+- NEVER invent facts or sources
+- NEVER take theological sides
+- ALWAYS end with:
+
+*And Allah knows best (wa Allahu a\'lam).*
+"""
+
+
+class ChatTurn(BaseModel):
+    role:    str   # "user" | "assistant"
+    content: str
 
 
 class ChatRequest(BaseModel):
     message:    str
     mode:       str = "explorer"   # "research" or "explorer"
     session_id: str = ""
-    api_key:    str = ""           # optional — bypasses free limit
+    api_key:    str = ""           # optional
+    history:    list[ChatTurn] = []
 
 
 @app.post("/api/chat")
@@ -1449,11 +1384,10 @@ class ChatRequest(BaseModel):
 async def chat(request: Request, body: ChatRequest):
     """
     Grounded Islamic historical chat.
-    Retrieves corpus context then generates
+    Retrieves primary-source context then generates
     a cited natural language response via Claude.
-
-    Free tier: 5 questions per session.
-    API key holders: unlimited.
+    Conversation history is client-supplied so chats
+    persist across server restarts and devices.
     """
     message    = body.message.strip()
     mode       = body.mode if body.mode in (
@@ -1461,6 +1395,7 @@ async def chat(request: Request, body: ChatRequest):
                  ) else "explorer"
     session_id = body.session_id.strip()
     user_key   = body.api_key.strip()
+    history    = body.history or []
 
     if not message:
         raise HTTPException(400, "Message required")
@@ -1468,59 +1403,11 @@ async def chat(request: Request, body: ChatRequest):
         raise HTTPException(400,
             "Message too long (max 500 chars)")
 
-    # ── Auth check ────────────────────────────────────
-    is_authenticated = False
-
-    if user_key:
-        key_hash = hashlib.sha256(
-            user_key.encode()).hexdigest()
-        conn = get_db()
-        cur  = conn.cursor()
-        cur.execute("""
-            SELECT tier FROM api_keys
-            WHERE key_hash = %s AND active = TRUE
-        """, (key_hash,))
-        row = cur.fetchone()
-        conn.close()
-        if row:
-            is_authenticated = True
-
-    # ── Free tier limit ───────────────────────────────
-    if not is_authenticated:
-        if not session_id:
-            raise HTTPException(400,
-                "session_id required for free tier")
-
-        now = time.time()
-        sess = _chat_sessions.get(session_id, {
-            "count": 0,
-            "created": now
-        })
-
-        # Reset if session older than 24 hours
-        if now - sess["created"] > 86400:
-            sess = {"count": 0, "created": now}
-
-        if sess["count"] >= FREE_QUESTION_LIMIT:
-            raise HTTPException(429,
-                "FREE_LIMIT_REACHED")
-
-        sess["count"] += 1
-        _chat_sessions[session_id] = sess
-        questions_remaining = (
-            FREE_QUESTION_LIMIT - sess["count"]
-        )
-    else:
-        questions_remaining = -1  # unlimited
-
-    # ── Retrieve corpus context ───────────────────────
+    # ── Retrieve context ──────────────────────────────
     try:
         from rag.retrieval.orchestrator import (
             retrieve_episode_context
         )
-
-        # Extract likely figure/event from message
-        # Simple heuristic — orchestrator handles rest
         context = retrieve_episode_context(
             figure  = message[:100],
             event   = message[:100],
@@ -1531,7 +1418,6 @@ async def chat(request: Request, body: ChatRequest):
         print(f"Orchestrator error: {e}")
         context = {}
 
-    # Also run a direct vector search for breadth
     try:
         direct = run_vector_search(
             query  = message,
@@ -1541,13 +1427,11 @@ async def chat(request: Request, body: ChatRequest):
         print(f"Vector search error: {e}")
         direct = []
 
-    # ── Build context for Claude ──────────────────────
     primary   = context.get("primary_accounts", [])
     character = context.get("character_context", [])
     religious = context.get("religious_context", [])
     conflicts = context.get("conflicts", [])
 
-    # Merge and deduplicate by content
     all_chunks = primary + character + religious + direct
     seen       = set()
     unique     = []
@@ -1557,15 +1441,13 @@ async def chat(request: Request, body: ChatRequest):
             seen.add(key)
             unique.append(c)
 
-    # Top 12 by score
     unique.sort(
         key=lambda x: x.get("score",
             x.get("similarity_score", 0)),
         reverse=True
     )
-    top_chunks = unique[:12]
+    top_chunks = unique[:20]
 
-    # Format context block for Claude
     if top_chunks:
         context_block = "\n\n".join([
             f"[SOURCE: {c.get('source','Unknown')} "
@@ -1577,13 +1459,12 @@ async def chat(request: Request, body: ChatRequest):
         ])
     else:
         context_block = (
-            "No specific corpus chunks retrieved "
-            "for this query. Answer based on "
-            "general Islamic historical knowledge "
-            "but note the limitation explicitly."
+            "No specific primary-source chunks retrieved "
+            "for this query. Answer from broad Islamic "
+            "historical knowledge but flag the gap "
+            "naturally without mentioning retrieval."
         )
 
-    # Format conflicts
     conflict_block = ""
     if conflicts:
         conflict_block = "\n\nKNOWN SOURCE CONFLICTS:\n"
@@ -1604,39 +1485,70 @@ async def chat(request: Request, body: ChatRequest):
     # ── User prompt ───────────────────────────────────
     user_prompt = f"""QUESTION: {message}
 
-RETRIEVED CORPUS CONTEXT:
+PRIMARY-SOURCE MATERIAL (internal — do not mention
+this block, the word "corpus," or the retrieval
+system to the user):
 {context_block}
 {conflict_block}
 
-Based ONLY on the corpus context above, answer the question.
-Cite every claim to its source. Present both majority and
-minority scholarly positions where they exist.
+INSTRUCTIONS:
+- Use the primary-source material above as your
+  PRIMARY basis. Cite every claim drawn from it
+  precisely (author + work).
+- If the material is thin or misses the question,
+  answer from your broad knowledge of authenticated
+  Islamic historiography and flag it naturally —
+  e.g. "The primary sources I can cite directly are
+  silent on this, but Al-Tabari records..." — WITHOUT
+  using the words "corpus," "retrieved chunks," or
+  "the retrieved context."
+- NEVER present general knowledge as if it came from
+  a cited primary source.
+- NEVER invent facts, dates, quotes, or sources.
+- Present BOTH majority and minority scholarly
+  positions where they exist.
+
+FORMAT:
+- Open with a direct 1–2 sentence lead.
+- Use **bold inline headers** or ## H2 headers to
+  break the answer into scannable sections.
+- Paragraphs of 2–4 sentences, never longer.
+- Use bullet lists for enumerations, > blockquotes
+  for direct source quotations longer than a clause.
+- Bold key names and turning-point phrases.
+
 End with "And Allah knows best (wa Allahu a'lam)."
 """
 
+    # ── Build messages list with prior conversation ───
+    # Prior turns are sent verbatim (without the retrieval
+    # context block — that's appended only to the current
+    # turn's user prompt). This lets Claude resolve pronouns
+    # and references while keeping retrieval tied to *this*
+    # question's freshly-pulled chunks.
+    claude_messages: list = []
+    for m in history[-(CHAT_HISTORY_MAX_TURNS - 1):]:
+        role = m.get("role")
+        content = m.get("content", "")
+        if role in ("user", "assistant") and content:
+            claude_messages.append({"role": role, "content": content})
+    claude_messages.append({"role": "user", "content": user_prompt})
+
     # ── Stream response ───────────────────────────────
     def generate():
-        # Send remaining questions count first
-        if questions_remaining >= 0:
-            yield (
-                f"data: "
-                f'{{"type":"meta",'
-                f'"remaining":{questions_remaining}}}'
-                f"\n\n"
-            )
+        # No meta event — there is no per-session limit anymore,
+        # and the legacy client treats remaining<=0 as "show paywall".
 
+        full_reply_chars: list = []
         try:
             with _claude.messages.stream(
                 model      = "claude-sonnet-4-20250514",
-                max_tokens = 2500,
+                max_tokens = 3500,
                 system     = system,
-                messages   = [{
-                    "role":    "user",
-                    "content": user_prompt
-                }]
+                messages   = claude_messages,
             ) as stream:
                 for text in stream.text_stream:
-                    # Escape for SSE
+                    full_reply_chars.append(text)
                     escaped = text.replace(
                         "\n", "\\n"
                     ).replace('"', '\\"')
@@ -1645,6 +1557,22 @@ End with "And Allah knows best (wa Allahu a'lam)."
                         f'"text":"{escaped}"}}'
                         f"\n\n"
                     )
+
+            # Persist this turn so the next request has context.
+            if session_id and sess is not None:
+                sess["history"].append({
+                    "role": "user",
+                    "content": message,
+                })
+                sess["history"].append({
+                    "role": "assistant",
+                    "content": "".join(full_reply_chars),
+                })
+                # Trim to last N turns
+                if len(sess["history"]) > CHAT_HISTORY_MAX_TURNS:
+                    sess["history"] = sess["history"][-CHAT_HISTORY_MAX_TURNS:]
+                sess["last"] = time.time()
+                _chat_sessions[session_id] = sess
 
             yield 'data: {"type":"done"}\n\n'
 

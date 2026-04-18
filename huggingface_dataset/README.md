@@ -38,8 +38,8 @@ No copyrighted translation text is included.
 
 ## The Full Corpus
 
-The underlying corpus contains **128,000+ chunks** (24M+ words) across
-**216 sources** spanning **1,400 years** of Islamic history
+The underlying corpus contains **133,789+ chunks** (24M+ words) across
+**238+ sources** spanning **1,400 years** of Islamic history
 (632–1900 CE).
 
 Every chunk is:
@@ -96,9 +96,42 @@ Bulugh al-Maram
 - **Content creation** — authenticated source grounding
   for Islamic history content
 
-## API Access
+## 🔌 Live API — No Setup Required
 
-The full corpus (128K+ chunks) is queryable via RAG API:
+The full corpus is queryable right now at:
+
+**[islamiccorpus.com](https://islamiccorpus.com)**
+
+```bash
+# Get a free key at islamiccorpus.com
+# then query instantly:
+
+curl -X POST https://islamiccorpus.com/query \
+  -H "X-API-Key: your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"q": "Khalid ibn Walid Battle of Yarmouk", "n": 5}'
+
+# Or use the research endpoint for structured context:
+curl -X POST https://islamiccorpus.com/research \
+  -H "X-API-Key: your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"figure": "Saladin", "event": "Fall of Jerusalem", "era": "crusades"}'
+```
+
+### Pricing
+| Tier | Queries/month | Price |
+|---|---|---|
+| Free | 100 | $0 |
+| Developer | 5,000 | $15/mo |
+| Institutional | Unlimited | $75/mo |
+
+### Try the Chat Interface
+Ask questions in natural language at
+**[islamiccorpus.com/chat](https://islamiccorpus.com/chat)**
+— grounded in authenticated Islamic sources,
+every answer cited.
+
+### Python
 
 ```python
 import requests
@@ -106,16 +139,12 @@ import requests
 resp = requests.post(
     "https://islamiccorpus.com/query",
     headers={"X-API-Key": "your_key"},
-    json={"q": "Khalid ibn Walid Battle of Yarmouk",
-          "n": 5}
+    json={"q": "Khalid ibn Walid Battle of Yarmouk", "n": 5},
 )
 results = resp.json()
 # Returns ranked chunks with source, era,
 # chain_strength, similarity score
 ```
-
-Free tier: 100 queries/month
-Get a key: **https://islamiccorpus.com**
 
 ## Ethical Framework
 

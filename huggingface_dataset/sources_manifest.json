@@ -1,28 +1,33 @@
 {
   "summary": {
-    "total_sources": 216,
-    "total_chunks": 128356,
-    "total_words": 24007281,
+    "total_chunks": 133789,
+    "total_sources": 238,
+    "total_figures": 1839,
+    "classical_islamic_chunks": 9910,
     "eras_covered": 22,
+    "last_updated": "2026-04-18",
+    "api": "https://islamiccorpus.com",
+    "chat": "https://islamiccorpus.com/chat",
+    "github": "https://github.com/izzy19852/Islamic-Historical-Corpus",
     "chunks_by_era": {
       "rashidun": 87031,
       "abbasid": 7147,
       "south_asia": 6762,
       "medieval": 4910,
+      "later_islamic": 4367,
       "crusades": 3845,
+      "southeast_asia": 3554,
       "andalusia": 2833,
-      "later_islamic": 2157,
       "umayyad": 2077,
       "mongol": 1857,
       "ottoman": 1548,
       "africa": 1406,
+      "china": 1245,
       "resistance_colonial": 1234,
-      "southeast_asia": 1098,
       "pre-islamic": 926,
       "persia_safavid": 828,
       "central_asia": 648,
       "timurid": 586,
-      "china": 478,
       "multi-era": 452,
       "modern": 398,
       "seljuk": 100,
@@ -34,1297 +39,2143 @@
       "source": "Mishkat al-Masabih (Al-Khatib Al-Tabrizi)",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 8854
+      "chunks": 8854,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Jami' al-Tirmidhi (Imam Abu Isa Muhammad ibn Isa al-Tirmidhi)",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 8064
+      "chunks": 8064,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Sahih al-Bukhari",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 7597
+      "chunks": 7597,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Sahih Muslim",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 7383
+      "chunks": 7383,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Sunan an-Nasai",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 5679
+      "chunks": 5679,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Sunan Abu Dawud",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 5276
+      "chunks": 5276,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Sunan Abi Dawud (Imam Sulayman ibn al-Ash'ath Abu Dawud al-Sijistani)",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 5248
+      "chunks": 5248,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Sunan Ibn Majah",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 4344
+      "chunks": 4344,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Muwatta Malik (Imam Malik ibn Anas)",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 3946
+      "chunks": 3946,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Jami at-Tirmidhi",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 3924
+      "chunks": 3924,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Musnad Ahmad ibn Hanbal (Imam Ahmad ibn Hanbal)",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 2712
+      "chunks": 2712,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Sunan al-Nasa'i (Imam Ahmad ibn Shu'ayb al-Nasa'i)",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 2688
+      "chunks": 2688,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Adab Al-Mufrad (Imam Muhammad ibn Ismail al-Bukhari)",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 2570
+      "chunks": 2570,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Riyad as-Salihin",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 1896
+      "chunks": 1896,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Muwatta Imam Malik",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 1838
+      "chunks": 1838,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Bulugh al-Maram",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 1738
-    },
-    {
-      "source": "Holy Quran (Yusuf Ali translation)",
-      "source_type": "quran",
-      "era": "rashidun",
-      "chunks": 1288
-    },
-    {
-      "source": "Holy Quran (Pickthall translation)",
-      "source_type": "quran",
-      "era": "rashidun",
-      "chunks": 1288
+      "chunks": 1738,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Holy Quran (Abdel Haleem translation)",
       "source_type": "quran",
       "era": "rashidun",
-      "chunks": 1288
+      "chunks": 1288,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Holy Quran (Yusuf Ali translation)",
+      "source_type": "quran",
+      "era": "rashidun",
+      "chunks": 1288,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Holy Quran (Pickthall translation)",
+      "source_type": "quran",
+      "era": "rashidun",
+      "chunks": 1288,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Eskandar Beg Monshi, History of Shah Abbas the Great (Savory translation)",
       "source_type": "primary_persian",
       "era": "later_islamic",
-      "chunks": 1159
+      "chunks": 1159,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Firdausi, Shahnameh (The Persian Book of Kings)",
       "source_type": "literary",
       "era": "pre-islamic",
-      "chunks": 926
+      "chunks": 926,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Ishaq/Guillaume, The Life of Muhammad: Earliest biography, campaigns, companions",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 897
+      "chunks": 897,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Baburnama: Memoirs of Babur, founder of Mughal Empire 1483-1530",
       "source_type": "primary_arabic",
       "era": "south_asia",
-      "chunks": 866
+      "chunks": 866,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Waqidi, Kitab al-Maghazi (Faizer translation 2011)",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 846
+      "chunks": 846,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Minhaj-i-Siraj Juzjani, Tabaqat-i-Nasiri (History of Delhi Sultanate)",
       "source_type": "primary_arabic",
       "era": "south_asia",
-      "chunks": 833
+      "chunks": 833,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Only contemporary history of Delhi Sultanate 1260 CE"
     },
     {
       "source": "Al-Maqqari, Nafh al-Tib (History of Andalusia — Gayangos translation)",
       "source_type": "primary_arabic",
       "era": "andalusia",
-      "chunks": 807
+      "chunks": 807,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Extended Andalusian history and culture"
     },
     {
       "source": "Shama'il Muhammadiyah (Imam Tirmidhi)",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 800
+      "chunks": 800,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Maqqari, History of Mohammedan Dynasties in Spain Vol 2",
       "source_type": "primary_arabic",
       "era": "andalusia",
-      "chunks": 764
+      "chunks": 764,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Khallikan, Wafayat al-Ayan Vol 3 (Biographical Dictionary)",
       "source_type": "biography",
       "era": "medieval",
-      "chunks": 757
+      "chunks": 757,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Maqqari, History of Mohammedan Dynasties in Spain Vol 1",
       "source_type": "primary_arabic",
       "era": "andalusia",
-      "chunks": 747
+      "chunks": 747,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Khallikan, Wafayat al-Ayan Vol 1 (Biographical Dictionary)",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 738
+      "chunks": 738,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "865 biographies of scholars, rulers, poets across Islamic civilization"
     },
     {
       "source": "Abul Fazl, Ain-i-Akbari Vol 1 (Mughal administrative record)",
       "source_type": "primary_arabic",
       "era": "south_asia",
-      "chunks": 730
+      "chunks": 730,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Khallikan, Wafayat al-Ayan Vol 2 (Biographical Dictionary)",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 709
+      "chunks": 709,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "865 biographies of scholars, rulers, poets across Islamic civilization"
     },
     {
       "source": "Ferishta, History of Hindustan Vol 1 (Briggs translation)",
       "source_type": "primary_arabic",
       "era": "south_asia",
-      "chunks": 697
+      "chunks": 697,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Rise of Mahomedan power in India"
+    },
+    {
+      "source": "Iskandar Beg Munshi, History of Shah Abbas the Great Vol 2 (DLI scan, OCR)",
+      "source_type": "primary_persian",
+      "era": "later_islamic",
+      "chunks": 674,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Suyuti, Tarikh al-Khulafa (History of the Caliphs)",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 648
+      "chunks": 648,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Definitive reference for all caliphs 632-1517 CE"
     },
     {
       "source": "Firishta, History of the Rise of Mahomedan Power in India Vol 1",
       "source_type": "primary_arabic",
       "era": "south_asia",
-      "chunks": 636
+      "chunks": 636,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ferishta, History of Hindustan Vol 3 (Briggs translation)",
       "source_type": "primary_arabic",
       "era": "south_asia",
-      "chunks": 632
+      "chunks": 632,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Extended Mughal and Deccan sultanate history"
     },
     {
       "source": "Abul Fazl, Akbarnama Vol 1 (official Mughal history)",
       "source_type": "primary_arabic",
       "era": "south_asia",
-      "chunks": 590
+      "chunks": 590,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Kathir, Al-Bidaya wa'l-Nihaya — Book of the End",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 578
+      "chunks": 578,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn al-Qalanisi, The Damascus Chronicle of the Crusades",
       "source_type": "primary_arabic",
       "era": "crusades",
-      "chunks": 577
+      "chunks": 577,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Only Islamic eyewitness account of the First Crusade"
+    },
+    {
+      "source": "Iskandar Beg Munshi, Tarikh-i Alam Ara-yi Abbasi (Persian text, OCR)",
+      "source_type": "primary_persian",
+      "era": "later_islamic",
+      "chunks": 533,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Abd al-Barr, Al-Isti'ab fi Ma'rifat al-Ashab (Arabic)",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 497
+      "chunks": 497,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Yule, Cathay and the Way Thither Vol 1 (1866) — medieval accounts of China",
       "source_type": "scholarly_western",
       "era": "china",
-      "chunks": 470
+      "chunks": 470,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Abul Fazl, Akbarnama Vol 2",
       "source_type": "primary_arabic",
       "era": "south_asia",
-      "chunks": 469
+      "chunks": 469,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Raffles, History of Java Vol 1 (1817)",
       "source_type": "scholarly_western",
       "era": "southeast_asia",
-      "chunks": 466
+      "chunks": 466,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Marsden, History of Sumatra (1783)",
+      "source_type": "scholarly_western",
+      "era": "southeast_asia",
+      "chunks": 449,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": "Aceh sultanate, Islamic law, Sufi orders in Sumatra"
     },
     {
       "source": "Evliya Celebi Narrative of Travels 17th century: Ottoman Empire",
       "source_type": "primary_arabic",
       "era": "ottoman",
-      "chunks": 441
+      "chunks": 441,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Baha al-Din ibn Shaddad, The Life of Saladin",
       "source_type": "primary_arabic",
       "era": "crusades",
-      "chunks": 437
+      "chunks": 437,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Saladin's biographer — eyewitness account of his campaigns"
     },
     {
       "source": "Imam Nawawi, Riyad al-Salihin (Gardens of the Righteous)",
       "source_type": "primary_arabic",
       "era": "crusades",
-      "chunks": 427
+      "chunks": 427,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "UNESCO History of Civilizations of Central Asia Vol 4",
       "source_type": "scholarly_western",
       "era": "central_asia",
-      "chunks": 421
+      "chunks": 421,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Edward Granville Browne, A Literary History of Persia",
       "source_type": "secondary",
       "era": "multi-era",
-      "chunks": 420
+      "chunks": 420,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Sykes, History of Persia Vol 2 (1915)",
       "source_type": "scholarly_western",
       "era": "persia_safavid",
-      "chunks": 418
+      "chunks": 418,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Sa'd, Tabaqat Vol III: Companions of Badr (Bewley)",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 414
+      "chunks": 414,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Sykes, History of Persia Vol 1 (1915)",
       "source_type": "scholarly_western",
       "era": "persia_safavid",
-      "chunks": 410
+      "chunks": 410,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "John F. Baddeley, The Russian Conquest of the Caucasus",
       "source_type": "secondary",
       "era": "modern",
-      "chunks": 398
+      "chunks": 398,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Mawardi, Al-Ahkam al-Sultaniyya (The Ordinances of Government)",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 385
+      "chunks": 385,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Definitive Islamic political theory — Abbasid caliphate"
     },
     {
       "source": "Tarikh al-Sudan (Abd al-Rahman al-Sadi, 17th century West African chronicle)",
       "source_type": "primary_arabic",
       "era": "africa",
-      "chunks": 371
+      "chunks": 371,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Sa'd, Tabaqat Vols 1-2: Prophet Era (Haq/Ghazanfar)",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 365
+      "chunks": 365,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Baddeley, The Russian Conquest of the Caucasus (1908)",
       "source_type": "scholarly_western",
       "era": "resistance_colonial",
-      "chunks": 354
+      "chunks": 354,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Hamdullah Mustawfi, Nuzhat al-Qulub (Geographical Part)",
       "source_type": "geographical",
       "era": "mongol",
-      "chunks": 353
+      "chunks": 353,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ata-Malik Juvaini, Tarikh-i-Jahan-Gusha (History of the World Conqueror)",
       "source_type": "historical",
       "era": "mongol",
-      "chunks": 350
+      "chunks": 350,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Hourani, Arabic Thought in the Liberal Age 1798-1939",
       "source_type": "scholarly_western",
       "era": "resistance_colonial",
-      "chunks": 346
+      "chunks": 346,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Yule, Cathay and the Way Thither Vol 1 (1866)",
+      "source_type": "scholarly_western",
+      "era": "china",
+      "chunks": 334,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": "Ibn Battuta + medieval travelers on China — essential context"
     },
     {
       "source": "Snouck Hurgronje, The Achehnese Vol 1 (1906) — Aceh War Dutch scholar",
       "source_type": "scholarly_western",
       "era": "southeast_asia",
-      "chunks": 334
+      "chunks": 334,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ferishta, History of Hindustan Vol 2 (Briggs translation)",
       "source_type": "primary_arabic",
       "era": "south_asia",
-      "chunks": 331
+      "chunks": 331,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Extended Mughal and Deccan sultanate history"
     },
     {
       "source": "Ata-Malik Juvaini, Tarikh-i-Jahan-Gusha Vol II",
       "source_type": "historical",
       "era": "mongol",
-      "chunks": 331
+      "chunks": 331,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ferishta, History of Hindustan Vol 4 (Briggs translation)",
       "source_type": "primary_arabic",
       "era": "south_asia",
-      "chunks": 329
+      "chunks": 329,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Extended Mughal and Deccan sultanate history"
     },
     {
       "source": "Kritovoulos, History of Mehmed the Conqueror (eyewitness account, 1467)",
       "source_type": "primary_greek",
       "era": "ottoman",
-      "chunks": 326
+      "chunks": 326,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Carl F. Petry, The Mamluk Sultanate: A History (Cambridge UP, 2022)",
       "source_type": "scholarly_western",
       "era": "crusades",
-      "chunks": 322
+      "chunks": 322,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Sa'd, Tabaqat Vol II: Men of Madina Pt 2 (Bewley)",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 319
+      "chunks": 319,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Kathir, Al-Bidaya wa'l-Nihaya — Miracles and Merits",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 318
+      "chunks": 318,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Pires, Suma Oriental (1512-1515) — Malay Archipelago",
+      "source_type": "primary_arabic",
+      "era": "southeast_asia",
+      "chunks": 314,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": "Portuguese eyewitness 1512 — Malacca sultanate at its peak, Muslim rulers, trade routes"
+    },
+    {
+      "source": "Sejarah Melayu — Malay Annals (Brown translation, Raffles MS 18)",
+      "source_type": "primary_arabic",
+      "era": "southeast_asia",
+      "chunks": 310,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": "Primary Islamic chronicle of Malay civilization — origin of Malacca sultanate"
     },
     {
       "source": "Firishta, History of the Rise of Mahomedan Power in India Vol 2",
       "source_type": "primary_arabic",
       "era": "south_asia",
-      "chunks": 307
+      "chunks": 307,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ahmed Ibn Arabshah, Tamerlane or Timur the Great Amir",
       "source_type": "historical",
       "era": "timurid",
-      "chunks": 303
+      "chunks": 303,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Lea, The Moriscos of Spain (1901)",
       "source_type": "scholarly_western",
       "era": "andalusia",
-      "chunks": 299
+      "chunks": 299,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 30: Abbasid Caliphate in Equilibrium, Harun al-Rashid",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 297
-    },
-    {
-      "source": "Al-Maqrizi, A History of the Ayyubid Sultans of Egypt",
-      "source_type": "primary_arabic",
-      "era": "crusades",
-      "chunks": 295
+      "chunks": 297,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Mirkhwand, Rauzat-us-Safa (Garden of Purity)",
       "source_type": "primary_persian",
       "era": "later_islamic",
-      "chunks": 295
+      "chunks": 295,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Al-Maqrizi, A History of the Ayyubid Sultans of Egypt",
+      "source_type": "primary_arabic",
+      "era": "crusades",
+      "chunks": 295,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Definitive history of Ayyubid dynasty — Saladin's heirs"
     },
     {
       "source": "Rashid al-Din, Jami al-Tawarikh — Successors of Genghis Khan",
       "source_type": "primary_arabic",
       "era": "mongol",
-      "chunks": 293
+      "chunks": 293,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Persian court historian — Mongol history from inside the Ilkhanate"
+    },
+    {
+      "source": "Crawfurd, History of the Indian Archipelago (1820)",
+      "source_type": "scholarly_western",
+      "era": "southeast_asia",
+      "chunks": 293,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": "Systematic survey of Malay-Indonesian Islamic world"
     },
     {
       "source": "Al-Tabari Vol 28: Abbasid Authority Affirmed 750-763 CE",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 292
+      "chunks": 292,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Baladhuri, Futuh al-Buldan (Origins of the Islamic State)",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 290
+      "chunks": 290,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Kathir, Al-Bidaya wa'l-Nihaya — Early Days",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 290
+      "chunks": 290,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Khaldun, History of the Berbers Vol 1",
       "source_type": "primary_arabic",
       "era": "africa",
-      "chunks": 287
+      "chunks": 287,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Swettenham, British Malaya (1906)",
+      "source_type": "scholarly_western",
+      "era": "southeast_asia",
+      "chunks": 286,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": "Colonial account — rich on pre-colonial Malay Islamic states"
     },
     {
       "source": "Beatson, War with Tippoo Sultaun (1800)",
       "source_type": "scholarly_western",
       "era": "south_asia",
-      "chunks": 286
+      "chunks": 286,
+      "authentication": "",
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn al-Tiqtaqa, Al-Fakhri fi al-Adab al-Sultaniyya (Political History of Islamic Dynasties)",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 281
+      "chunks": 281,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Sweeping political history from Rashidun to Mongol era"
     },
     {
       "source": "Al-Masudi, Muruj al-Dhahab (Meadows of Gold)",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 278
+      "chunks": 278,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Yaqut al-Hamawi, Irshad al-Arib (Dictionary of Learned Men) Vol 6",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 277
+      "chunks": 277,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Sa'd, Tabaqat Vol VI: Scholars of Kufa (Bewley)",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 272
-    },
-    {
-      "source": "Krijestorac, First Nationalism Then Identity: Bosnian Muslims (2022)",
-      "source_type": "scholarly_western",
-      "era": "ottoman",
-      "chunks": 272
+      "chunks": 272,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 19 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 272
+      "chunks": 272,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Krijestorac, First Nationalism Then Identity: Bosnian Muslims (2022)",
+      "source_type": "scholarly_western",
+      "era": "ottoman",
+      "chunks": 272,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 11: Challenge to the Empires 633-635 CE",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 271
+      "chunks": 271,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Battuta, Travels Vols 1-2 (Hakluyt Society)",
       "source_type": "primary_arabic",
       "era": "africa",
-      "chunks": 270
+      "chunks": 270,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Ibn Battuta travels — Africa, Mali, East Africa"
+    },
+    {
+      "source": "Ibn Battuta, Travels Vol 2 (Gibb translation)",
+      "source_type": "primary_arabic",
+      "era": "southeast_asia",
+      "chunks": 270,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": "Ibn Battuta — Southeast Asia and China travels, primary Islamic source"
     },
     {
       "source": "Ibn Abd al-Hakam, Futuh Misr (Conquest of Egypt)",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 264
+      "chunks": 264,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Eyewitness account of Islamic conquest of Egypt — unique primary source"
     },
     {
       "source": "Ibn Battuta Travels in the Near East, Asia and Africa 1325-1354",
       "source_type": "primary_arabic",
       "era": "mongol",
-      "chunks": 257
+      "chunks": 257,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari, Tarikh al-Rusul wa al-Muluk (History of Prophets and Kings)",
       "source_type": "historical",
       "era": "abbasid",
-      "chunks": 256
+      "chunks": 256,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Minorsky, Tadhkirat al-Muluk (Manual of Safavid Administration)",
       "source_type": "scholarly_western",
       "era": "later_islamic",
-      "chunks": 253
+      "chunks": 253,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 26: Waning of the Umayyad Caliphate 738-744 CE",
       "source_type": "primary_arabic",
       "era": "umayyad",
-      "chunks": 250
+      "chunks": 250,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 3 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 249
+      "chunks": 249,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Yaqubi, Tarikh al-Yaqubi (History of al-Yaqubi)",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 247
+      "chunks": 247,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Alternative Islamic history — essential for Shia historiographical perspective"
     },
     {
       "source": "Ibn Hisham Sira: Biography of the Prophet, early companions, battles",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 246
+      "chunks": 246,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Usama ibn Munqidh, Kitab al-I'tibar (Memoirs of an Arab-Syrian Gentleman)",
       "source_type": "primary_arabic",
       "era": "crusades",
-      "chunks": 242
+      "chunks": 242,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Unique Muslim knight memoir, eyewitness Crusader era"
     },
     {
       "source": "Usman dan Fodio, Collected Writings (10 treatises, English trans.)",
       "source_type": "primary_arabic",
       "era": "africa",
-      "chunks": 241
-    },
-    {
-      "source": "Al-Tabari Vol 15: Crisis of the Early Caliphate, Uthman",
-      "source_type": "primary_arabic",
-      "era": "rashidun",
-      "chunks": 238
+      "chunks": 241,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 13 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 238
+      "chunks": 238,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
-      "source": "Bournoutian, Two Chronicles on the History of Karabagh",
-      "source_type": "primary_historical",
-      "era": "later_islamic",
-      "chunks": 237
+      "source": "Al-Tabari Vol 15: Crisis of the Early Caliphate, Uthman",
+      "source_type": "primary_arabic",
+      "era": "rashidun",
+      "chunks": 238,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Beyond Timbuktu: An Intellectual History of Muslim West Africa",
       "source_type": "scholarly_western",
       "era": "africa",
-      "chunks": 237
+      "chunks": 237,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
-      "source": "Ibn Sa'd, Tabaqat Vol I: Men of Madina Pt 1 (Bewley)",
-      "source_type": "primary_arabic",
-      "era": "rashidun",
-      "chunks": 237
+      "source": "Bournoutian, Two Chronicles on the History of Karabagh",
+      "source_type": "primary_historical",
+      "era": "later_islamic",
+      "chunks": 237,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Rashid al-Din Fazlullah, Introduction to the History of the Mongols",
       "source_type": "historical",
       "era": "mongol",
-      "chunks": 237
+      "chunks": 237,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Ibn Sa'd, Tabaqat Vol I: Men of Madina Pt 1 (Bewley)",
+      "source_type": "primary_arabic",
+      "era": "rashidun",
+      "chunks": 237,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 12 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 233
+      "chunks": 233,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Jubayr, Rihla — Wright/de Goeje critical edition (preface, glossary, index)",
       "source_type": "primary_arabic",
       "era": "crusades",
-      "chunks": 232
+      "chunks": 232,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Iqbal, The Reconstruction of Religious Thought in Islam",
       "source_type": "primary_arabic",
       "era": "resistance_colonial",
-      "chunks": 230
+      "chunks": 230,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 19: Caliphate of Yazid, Karbala 680 CE",
       "source_type": "primary_arabic",
       "era": "umayyad",
-      "chunks": 228
+      "chunks": 228,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 4 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 228
+      "chunks": 228,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Jubayr, Rihla — Wright/de Goeje critical edition (Arabic text, OCR)",
       "source_type": "primary_arabic",
       "era": "crusades",
-      "chunks": 227
+      "chunks": 227,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 21: Victory of the Marwanids 685-693 CE",
       "source_type": "primary_arabic",
       "era": "umayyad",
-      "chunks": 227
+      "chunks": 227,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 17: First Civil War, Ali Caliphate, Fitna",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 227
+      "chunks": 227,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Rumi, Masnavi-i Ma'navi Vol 1 (Whinfield translation)",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 226
-    },
-    {
-      "source": "Al-Tabari Vol 31: War Between Brothers 809-813 CE",
-      "source_type": "primary_arabic",
-      "era": "abbasid",
-      "chunks": 224
+      "chunks": 226,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 29: Al-Mansur and al-Mahdi 763-786 CE",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 224
+      "chunks": 224,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Al-Tabari Vol 31: War Between Brothers 809-813 CE",
+      "source_type": "primary_arabic",
+      "era": "abbasid",
+      "chunks": 224,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 8 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 223
+      "chunks": 223,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 12: Battle of Qadisiyyah, Conquest of Syria 635-637 CE",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 222
+      "chunks": 222,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 11 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 221
+      "chunks": 221,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Sa'd, Tabaqat Vol VII: Men of Madina Basra/Baghdad (Bewley)",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 221
+      "chunks": 221,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Sa'd, Tabaqat Vol VIII: Women of Madina (Bewley)",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 219
+      "chunks": 219,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Broomhall, Islam in China (1910)",
+      "source_type": "scholarly_western",
+      "era": "china",
+      "chunks": 219,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": "Dedicated English history of Chinese Muslims — Hui, Yunnan, Gansu"
     },
     {
       "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 7 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 216
+      "chunks": 216,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 14 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 216
+      "chunks": 216,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 33: Storm and Stress, al-Mutasim 833-842 CE",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 215
+      "chunks": 215,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Saeki, The Nestorian Monument in China (1916)",
+      "source_type": "scholarly_western",
+      "era": "china",
+      "chunks": 214,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": "Abrahamic faiths in Tang dynasty China — context for Islamic arrival"
     },
     {
       "source": "Al-Tabari Vol 13: Conquest of Iraq and Egypt, Umar Caliphate",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 213
+      "chunks": 213,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 5 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 210
+      "chunks": 210,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 20: Collapse of Sufyanid Authority, Marwanids 683-685 CE",
       "source_type": "primary_arabic",
       "era": "umayyad",
-      "chunks": 209
-    },
-    {
-      "source": "Al-Tabari Vol 32: Reunification of the Abbasid Caliphate 813-833 CE",
-      "source_type": "primary_arabic",
-      "era": "abbasid",
-      "chunks": 207
+      "chunks": 209,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Afnan, Avicenna: His Life and Works (1958)",
       "source_type": "scholarly_western",
       "era": "abbasid",
-      "chunks": 207
+      "chunks": 207,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Al-Tabari Vol 32: Reunification of the Abbasid Caliphate 813-833 CE",
+      "source_type": "primary_arabic",
+      "era": "abbasid",
+      "chunks": 207,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Snouck Hurgronje, The Achehnese Vol 1 (1906)",
       "source_type": "scholarly_western",
       "era": "southeast_asia",
-      "chunks": 206
-    },
-    {
-      "source": "Al-Tabari Vol 27: Abbasid Revolution 743-750 CE",
-      "source_type": "primary_arabic",
-      "era": "umayyad",
-      "chunks": 205
+      "chunks": 206,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Life of Saladin: eyewitness accounts from Baha ad-Din ibn Shaddad and Imad ad-Din",
       "source_type": "primary_arabic",
       "era": "crusades",
-      "chunks": 205
+      "chunks": 205,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
-      "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 6 (Arabic)",
-      "source_type": "chronicle",
-      "era": "medieval",
-      "chunks": 203
+      "source": "Al-Tabari Vol 27: Abbasid Revolution 743-750 CE",
+      "source_type": "primary_arabic",
+      "era": "umayyad",
+      "chunks": 205,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 38: Return of the Caliphate to Baghdad 892-902 CE",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 203
+      "chunks": 203,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 6 (Arabic)",
+      "source_type": "chronicle",
+      "era": "medieval",
+      "chunks": 203,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Isfandiyar, History of Tabaristan",
       "source_type": "historical",
       "era": "abbasid",
-      "chunks": 202
+      "chunks": 202,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 22: Marwanid Restoration 693-701 CE",
       "source_type": "primary_arabic",
       "era": "umayyad",
-      "chunks": 201
+      "chunks": 201,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 23: Zenith of the Marwanid House 701-715 CE",
       "source_type": "primary_arabic",
       "era": "umayyad",
-      "chunks": 201
-    },
-    {
-      "source": "Al-Tabari Vol 34: Incipient Decline, al-Wathiq and al-Mutawakkil",
-      "source_type": "primary_arabic",
-      "era": "abbasid",
-      "chunks": 200
+      "chunks": 201,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 36: Revolt of the Zanj 869-879 CE",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 200
+      "chunks": 200,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Al-Tabari Vol 34: Incipient Decline, al-Wathiq and al-Mutawakkil",
+      "source_type": "primary_arabic",
+      "era": "abbasid",
+      "chunks": 200,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Churchill, The Life of Abdel-Kader (1867)",
       "source_type": "scholarly_western",
       "era": "resistance_colonial",
-      "chunks": 198
+      "chunks": 198,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ruy Gonzalez de Clavijo, Embassy to Tamerlane 1403-1406",
       "source_type": "historical",
       "era": "timurid",
-      "chunks": 195
-    },
-    {
-      "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 15 (Arabic)",
-      "source_type": "chronicle",
-      "era": "medieval",
-      "chunks": 193
+      "chunks": 195,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 17 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 193
+      "chunks": 193,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
-      "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 1 (Arabic)",
+      "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 15 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 192
-    },
-    {
-      "source": "Al-Tabari Vol 25: End of Expansion, Caliphate of Hisham 724-738 CE",
-      "source_type": "primary_arabic",
-      "era": "umayyad",
-      "chunks": 192
+      "chunks": 193,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 10: Conquest of Arabia, Riddah Wars 632-633 CE",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 192
+      "chunks": 192,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Al-Tabari Vol 25: End of Expansion, Caliphate of Hisham 724-738 CE",
+      "source_type": "primary_arabic",
+      "era": "umayyad",
+      "chunks": 192,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 1 (Arabic)",
+      "source_type": "chronicle",
+      "era": "medieval",
+      "chunks": 192,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Barbosa, Description of the Coasts of East Africa and Malabar (1516)",
+      "source_type": "primary_arabic",
+      "era": "southeast_asia",
+      "chunks": 192,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": "Portuguese eyewitness — Muslim merchants and ports across Indian Ocean 1516"
+    },
+    {
+      "source": "Winstedt, A History of Malaya (1935)",
+      "source_type": "scholarly_western",
+      "era": "southeast_asia",
+      "chunks": 191,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": "Standard reference — Malay Islamic sultanates, courts, spread of Islam"
     },
     {
       "source": "Al-Tabari Vol 18: Between Civil Wars, Muawiyah 661-680 CE",
       "source_type": "primary_arabic",
       "era": "umayyad",
-      "chunks": 188
+      "chunks": 188,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Muhammad Tahir al-Qarakhi, Chronicle of Dagestani Resistance (Russian, OCR)",
+      "source_type": "primary_historical",
+      "era": "later_islamic",
+      "chunks": 188,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Harold Lamb, Tamerlane the Earth Shaker",
       "source_type": "scholarly_western",
       "era": "later_islamic",
-      "chunks": 186
+      "chunks": 186,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Azami, Studies in Early Hadith Literature",
       "source_type": "scholarly_western",
       "era": "rashidun",
-      "chunks": 184
+      "chunks": 184,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Hazm, The Ring of the Dove (Cordoba 11th century)",
       "source_type": "primary_arabic",
       "era": "andalusia",
-      "chunks": 182
+      "chunks": 182,
+      "authentication": "classical_islamic",
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Burnes, Travels into Bukhara (1834) — British envoy eyewitness",
       "source_type": "scholarly_western",
       "era": "central_asia",
-      "chunks": 181
+      "chunks": 181,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 16 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 180
+      "chunks": 180,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 16: Community Divided, Uthman and Ali 657 CE",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 180
+      "chunks": 180,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Fadlan, Risala (Mission to the Volga Bulgars 921 CE)",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 178
+      "chunks": 178,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Eyewitness account of Volga Bulgars and Vikings 921 CE"
     },
     {
       "source": "Amir Khusrau, Khazainul Futuh (Treasury of Victories)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 177
+      "chunks": 177,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 24: Empire in Transition, Caliphates of Sulayman, Umar, Yazid",
       "source_type": "primary_arabic",
       "era": "umayyad",
-      "chunks": 176
+      "chunks": 176,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Ruy Gonzalez de Clavijo, Narrative of Embassy to Timour (Markham translation, OCR)",
+      "source_type": "primary_historical",
+      "era": "later_islamic",
+      "chunks": 176,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Kritovoulos, History of Mehmed the Conqueror (eyewitness 1467)",
       "source_type": "primary_arabic",
       "era": "ottoman",
-      "chunks": 169
+      "chunks": 169,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Wassaf al-Hazrat, Tarikh-e Wassaf (Farsi text, OCR)",
+      "source_type": "primary_persian",
+      "era": "later_islamic",
+      "chunks": 164,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Tabari Vol 14: Conquest of Iran 641-643 CE",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 163
+      "chunks": 163,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 10 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 161
+      "chunks": 161,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Islamic States in Java 1500-1700 (OAPEN)",
+      "source_type": "scholarly_western",
+      "era": "southeast_asia",
+      "chunks": 151,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": "Academic — Demak and Mataram Islamic sultanates"
+    },
+    {
+      "source": "Ibn Arabshah, Zindagani-ye Shigift-avar-e Timur (Farsi translation, OCR)",
+      "source_type": "primary_persian",
+      "era": "later_islamic",
+      "chunks": 148,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Rashid al-Din Fazlullah, Jami al-Tawarikh Vol 2 (Persian text, OCR)",
+      "source_type": "primary_persian",
+      "era": "later_islamic",
+      "chunks": 140,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Asakir, Ta'rikh Dimashq (History of Damascus)",
       "source_type": "scholarly_western",
       "era": "crusades",
-      "chunks": 139
+      "chunks": 139,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Scholarly study of Ibn Asakir's monumental Damascus history"
     },
     {
       "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 18 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 139
+      "chunks": 139,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Dhahabi, The Illustrious Women of Islam",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 138
+      "chunks": 138,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Biographical dictionary of notable Muslim women"
     },
     {
       "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 9 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 135
+      "chunks": 135,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Formation of the Bosniak Nation (METU thesis 2014)",
       "source_type": "scholarly_western",
       "era": "ottoman",
-      "chunks": 132
-    },
-    {
-      "source": "Al-Biruni, Kitab al-Hind (Alberuni's India)",
-      "source_type": "primary_arabic",
-      "era": "abbasid",
-      "chunks": 128
+      "chunks": 132,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Khallikan, Wafayat al-Ayan Vol 4 (Biographical Dictionary)",
       "source_type": "biography",
       "era": "medieval",
-      "chunks": 128
+      "chunks": 128,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Al-Biruni, Kitab al-Hind (Alberuni's India)",
+      "source_type": "primary_arabic",
+      "era": "abbasid",
+      "chunks": 128,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Systematic study of Indian civilization by Islamic polymath"
     },
     {
       "source": "Wittek, The Rise of the Ottoman Empire (1938)",
       "source_type": "scholarly_western",
       "era": "ottoman",
-      "chunks": 119
+      "chunks": 119,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Hajar Casqalani :: Ibn Ḥaǧar al-ʿAsqalānī :: Šihāb al-Dīn Abū al-Faḍl Aḥmad b. ʿAlī b. Muḥammad b. Ḥaǧar al-ʿAsqalānī, al-Šāfiʿī, Fath Bari (OpenITI Corpus) [sampled]",
       "source_type": "primary_arabic",
       "era": "crusades",
-      "chunks": 111
+      "chunks": 111,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Casakir :: Ibn ʿAsākir :: Abū al-Qāsim ʿAlī b. al-Ḥasan b. Hibaŧ Allāh b. ʿAbd Allāh al-Šāfiʿī, Tārīḫ madīnaŧ  Dimašq wa ḏikr faḍlihā wa tasmiyaŧ man ḥallahā¶    min al-amāṯil aw iǧtāza bi-nawāḥīhā min wāridīhā wa ahlihā (OpenITI Corpus) [sampled]",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 106
-    },
-    {
-      "source": "Abu Ishaq Thaclabi :: Abū Isḥāq al-Ṯaʿlabī :: Abū Isḥāq al-Ṯaʿlabī al-Naysabūrī Aḥmad b. Muḥammad b. Ibrāhīm al-Ṯaʿlabī al-Naysabūrī, al-Kašf wa-l-bayān :: Tafsīr al-Ṯaʿlabī (OpenITI Corpus) [sampled]",
-      "source_type": "primary_arabic",
-      "era": "abbasid",
-      "chunks": 105
+      "chunks": 106,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Khatib Baghdadi :: al-Ḫaṭīb al-Baġdādī :: Abū Bakr Aḥmad b. ʿAlī b. Ṯābit b. Aḥmad b. Mahdī al-Šāfiʿī, al-Baġdādī, Tārīḫ Madīnat al-Salām :: Tārīḫ Baġdād (OpenITI Corpus) [sampled]",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 105
+      "chunks": 105,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Abu Ishaq Thaclabi :: Abū Isḥāq al-Ṯaʿlabī :: Abū Isḥāq al-Ṯaʿlabī al-Naysabūrī Aḥmad b. Muḥammad b. Ibrāhīm al-Ṯaʿlabī al-Naysabūrī, al-Kašf wa-l-bayān :: Tafsīr al-Ṯaʿlabī (OpenITI Corpus) [sampled]",
+      "source_type": "primary_arabic",
+      "era": "abbasid",
+      "chunks": 105,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Dhahabi :: al-Ḏahabī :: Šams al-dīn Abū ʿAbd Allãh Muḥammad b. Aḥmad b. ʿUṯmān b. Qāymāẓ b. ʿAbd Allãh al-Turkumānī, al-Fāriqī, al-Dimašqī, al-Šāfiʿī, al-Muʾarriḫ, al-Ḥāfiẓ, al-Ḏahabī, Tarikh Islam (OpenITI Corpus) [sampled]",
       "source_type": "primary_arabic",
       "era": "crusades",
-      "chunks": 103
+      "chunks": 103,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Nizami Ganjavi, Leyla and Majnun",
       "source_type": "literary",
       "era": "seljuk",
-      "chunks": 100
+      "chunks": 100,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Mizzi :: al-Mizzī :: Ǧamāl al-dīn Abū al-Ḥaǧǧāǧ Yūsuf b. al-Zakī ʿAbd al-Raḥmán b. Yūsuf al-Kalbī al-Quḍāʿī al-Mizzī, Tahḏīb al-kamāl fī asmāʾ al-riǧāl (OpenITI Corpus) [sampled]",
       "source_type": "primary_arabic",
       "era": "crusades",
-      "chunks": 100
+      "chunks": 100,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Dhahabi :: al-Ḏahabī :: Šams al-dīn Abū ʿAbd Allãh Muḥammad b. Aḥmad b. ʿUṯmān b. Qāymāẓ b. ʿAbd Allãh al-Turkumānī, al-Fāriqī, al-Dimašqī, al-Šāfiʿī, al-Muʾarriḫ, al-Ḥāfiẓ, al-Ḏahabī, Siyar aʿlām al-nubalāʾ (OpenITI Corpus) [sampled]",
       "source_type": "primary_arabic",
       "era": "crusades",
-      "chunks": 99
+      "chunks": 99,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Ibn Arabshah, Ajaib al-Maqdur fi Akhbar Timur (Arabic text, OCR)",
+      "source_type": "primary_arabic",
+      "era": "later_islamic",
+      "chunks": 93,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "The Making of Islamic Heritage (OAPEN open access)",
       "source_type": "scholarly_western",
       "era": "southeast_asia",
-      "chunks": 92
+      "chunks": 92,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Muhsin Amin Camili, Acyan Shica (OpenITI Corpus) [sampled]",
       "source_type": "primary_arabic",
       "era": "ottoman",
-      "chunks": 89
+      "chunks": 89,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Khwandamir, Qanun-i-Humayuni",
       "source_type": "historical",
       "era": "timurid",
-      "chunks": 88
+      "chunks": 88,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Badr Din Cayni :: Badr al-Dīn al-ʿAynī :: Badr al-Dīn Abū Muḥammad Maḥmūd b. Aḥmad b. Mūsá b. Aḥmad al-ʿAynī, al-Ḥanafī, Cumdat Qari (OpenITI Corpus) [sampled]",
       "source_type": "primary_arabic",
       "era": "crusades",
-      "chunks": 87
+      "chunks": 87,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "The Bahri and Circassian Mamluks (Cambridge History of Egypt)",
       "source_type": "scholarly_western",
       "era": "crusades",
-      "chunks": 83
+      "chunks": 83,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn al-Athir, Al-Kamil fi'l-Tarikh (Chronicle of the Crusading Period)",
       "source_type": "primary_arabic",
       "era": "crusades",
-      "chunks": 82
+      "chunks": 82,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
+    },
+    {
+      "source": "Nizami Ganjavi, Khamsa (Persian text, OCR)",
+      "source_type": "primary_persian",
+      "era": "later_islamic",
+      "chunks": 72,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Amir Khusrau, Khazainul Futuh (Habib translation, Delhi)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 68
+      "chunks": 68,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Gohlman, The Life of Ibn Sina (Avicenna)",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 65
+      "chunks": 65,
+      "authentication": "classical_islamic",
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Azraqi, Akhbar Makkah (History of Mecca, Vol 1)",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 64
+      "chunks": 64,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn al-Jawzi, Al-Muntazam fi Tarikh al-Muluk Vol 2 (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 64
+      "chunks": 64,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Tipu Sultan: Compiled scholarly articles and biographical sources",
       "source_type": "scholarly_western",
       "era": "south_asia",
-      "chunks": 56
+      "chunks": 56,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Hunter, The Indian Musalmans (1871) — colonial perspective",
       "source_type": "scholarly_western",
       "era": "resistance_colonial",
-      "chunks": 55
+      "chunks": 55,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Nawawi 40 Hadith",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 42
+      "chunks": 42,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Hadith Qudsi",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 40
+      "chunks": 40,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Hujjat Allah al-Balighah (Dehlawi)",
       "source_type": "hadith",
       "era": "rashidun",
-      "chunks": 37
+      "chunks": 37,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Jubayr, The Travels of Ibn Jubayr (Broadhurst 1952)",
       "source_type": "primary_arabic",
       "era": "crusades",
-      "chunks": 36
+      "chunks": 36,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Eyewitness 1183-85 CE — Saladin era Levant, Hajj, Baghdad"
     },
     {
       "source": "Ibn Hazm, The Ring of the Dove (Tawq al-Hamamah, 11th century Cordoba)",
       "source_type": "primary_arabic",
       "era": "andalusia",
-      "chunks": 34
+      "chunks": 34,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Jubayr, Rihla (The Travels of Ibn Jubayr)",
       "source_type": "primary_arabic",
       "era": "crusades",
-      "chunks": 32
+      "chunks": 32,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Yemelianova, Muslims of Central Asia — Chapter 1 (Edinburgh UP)",
       "source_type": "scholarly_western",
       "era": "central_asia",
-      "chunks": 29
+      "chunks": 29,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Jamaluddin al-Ghumuqi, Naqshbandi Treatise (al-Adab al-Mardiyya)",
       "source_type": "primary_islamic",
       "era": "later_islamic",
-      "chunks": 26
+      "chunks": 26,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Dangor, Africa's Islamic Heritage: Muslim Regimes in East Africa",
       "source_type": "scholarly_western",
       "era": "east_africa",
-      "chunks": 24
+      "chunks": 24,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Ghazali, Deliverance from Error (al-Munqidh min al-Dalal)",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 24
+      "chunks": 24,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Omar al-Mukhtar: Libya resistance and Italian colonialism (compiled articles supplement)",
       "source_type": "scholarly_western",
       "era": "resistance_colonial",
-      "chunks": 23
+      "chunks": 23,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Nasir Khusraw, Safarnama (Book of Travels 1047 CE)",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 22
+      "chunks": 22,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Eyewitness Jerusalem and Fatimid Cairo 1047 CE"
+    },
+    {
+      "source": "Wassaf al-Hazrat, Tajziyat al-Amsar wa Tazjiyat al-Asar (manuscript, OCR)",
+      "source_type": "primary_persian",
+      "era": "later_islamic",
+      "chunks": 22,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Baybars: Scholarly articles on Mamluk Sultan (Elbendary + MDPI)",
       "source_type": "scholarly_western",
       "era": "mongol",
-      "chunks": 20
+      "chunks": 20,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Percy Sykes, A History of Persia Vol II",
       "source_type": "secondary",
       "era": "multi-era",
-      "chunks": 19
+      "chunks": 19,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Baybars I: Mamluk Sultan compiled biographical sources",
       "source_type": "scholarly_western",
       "era": "mongol",
-      "chunks": 16
+      "chunks": 16,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Muslim Heritage — Samarkand as Center of Islamic Civilization",
       "source_type": "scholarly_western",
       "era": "central_asia",
-      "chunks": 14
+      "chunks": 14,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Suyuti, Husn al-Muhadara fi Tarikh Misr wal-Qahira (Arabic)",
       "source_type": "chronicle",
       "era": "medieval",
-      "chunks": 14
+      "chunks": 14,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Percy Sykes, A History of Persia Vol I",
       "source_type": "secondary",
       "era": "multi-era",
-      "chunks": 13
+      "chunks": 13,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Abu Nu'aym al-Isfahani, Hilyat al-Awliya (Arabic)",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 13
+      "chunks": 13,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Robinson, The Islamization of Africa — Swahili Coast chapter",
       "source_type": "scholarly_western",
       "era": "east_africa",
-      "chunks": 11
+      "chunks": 11,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Diatta, Islam and Slave Revolts in the Caribbean (2023)",
       "source_type": "scholarly_western",
       "era": "resistance_colonial",
-      "chunks": 10
+      "chunks": 10,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "CaribbeanMuslims.com — History of Muslims in Trinidad",
       "source_type": "scholarly_western",
       "era": "resistance_colonial",
-      "chunks": 10
+      "chunks": 10,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "The Ayyubid Dynasty Under Saladin: Elite Power Consolidation Through Military Charisma and Jihad Legitimacy (1171-1250 CE)",
       "source_type": "scholarly_western",
       "era": "crusades",
-      "chunks": 9
+      "chunks": 9,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Morris Rossabi, Islam in China (Asian Studies overview)",
       "source_type": "scholarly_western",
       "era": "china",
-      "chunks": 8
+      "chunks": 8,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Al-Dhahabi, Al-Kaba'ir (The Major Sins)",
       "source_type": "primary_arabic",
       "era": "abbasid",
-      "chunks": 7
+      "chunks": 7,
+      "authentication": "classical_islamic",
+      "scholar_tier": "tier_1",
+      "note": "Classical Islamic legal-ethical scholarship"
     },
     {
       "source": "CaribbeanMuslims.com — Hidden History of Muslims in the Caribbean",
       "source_type": "scholarly_western",
       "era": "resistance_colonial",
-      "chunks": 6
+      "chunks": 6,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya)",
       "source_type": "primary_arabic",
       "era": "rashidun",
-      "chunks": 4
+      "chunks": 4,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "UNESCO Silk Road: Timurid States in the 15th-16th centuries",
       "source_type": "scholarly_western",
       "era": "central_asia",
-      "chunks": 3
+      "chunks": 3,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Omar al-Mukhtar: Italian colonialism and Libyan resistance (compiled articles)",
       "source_type": "scholarly_western",
       "era": "resistance_colonial",
-      "chunks": 2
+      "chunks": 2,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     },
     {
       "source": "Ruy Gonzalez de Clavijo, Narrative of the Embassy to the Court of Timour (Markham translation)",
       "source_type": "primary_historical",
       "era": "later_islamic",
-      "chunks": 1
+      "chunks": 1,
+      "authentication": null,
+      "scholar_tier": null,
+      "note": null
     }
   ]
 }
