@@ -242,14 +242,34 @@ CLASSICAL_SOURCES = [
         "translator": "D.S. Richards", "reliability": "scholarly",
         "language": "english", "category": "classical",
     },
-    # Abu Nu'aym (Arabic)
-    {
-        "identifiers": ["HilyatulAwliya"],
-        "short_name": "abu-nuaym-hilya",
-        "source": "Abu Nu'aym al-Isfahani, Hilyat al-Awliya (Arabic)",
-        "source_type": "primary_arabic", "era": "rashidun",
-        "language": "arabic", "category": "classical",
-    },
+    # Abu Nu'aym, Hilyat al-Awliya (Arabic, 11 volumes, Tesseract OCR)
+    *[
+        {
+            "identifiers": ["HilyatAwliya"],
+            "filename_hint": f"Hilyat_Awliya{vol:02d}_djvu.txt",
+            "short_name": f"abu-nuaym-hilya-v{vol:02d}",
+            "source": f"Abu Nu'aym al-Isfahani, Hilyat al-Awliya' wa Tabaqat al-Asfiya (Arabic, Vol {vol})",
+            "source_type": "primary_arabic", "era": "rashidun",
+            "language": "arabic", "category": "classical",
+        }
+        for vol in range(0, 11)
+    ],
+    # Al-Qushayri, Al-Risala (Knysh English translation, 2 volumes)
+    *[
+        {
+            "identifiers": ["EpistleOnSufismAlRisalaAlQushayriyyaFiIlmAlTasawwuf1"],
+            "filename_hint": hint,
+            "short_name": f"qushayri-risala-knysh-v{i+1}",
+            "source": f"Al-Qushayri, Al-Risala al-Qushayriyya (Knysh English translation, Vol {i+1})",
+            "source_type": "primary_arabic", "era": "abbasid",
+            "translator": "Alexander D. Knysh", "reliability": "scholarly",
+            "language": "english", "category": "classical",
+        }
+        for i, hint in enumerate([
+            "Epistle on Sufism - al Risala al Qushayriyya fi Ilm al Tasawwuf 1_djvu.txt",
+            "Epistle on Sufism - al Risala al Qushayriyya fi Ilm al Tasawwuf 2_djvu.txt",
+        ])
+    ],
     # Ibn Abd al-Barr (Arabic)
     {
         "identifiers": ["alistiabfimarifa02ibnauoft"],
