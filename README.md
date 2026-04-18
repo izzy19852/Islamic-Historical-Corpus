@@ -1,5 +1,14 @@
 # Islamic Historical Corpus
 
+> 🕌 **Don't want to run this yourself?**
+> The full corpus is available as a hosted API at
+> **[islamiccorpus.com](https://islamiccorpus.com)**
+> — free tier available, no setup required.
+> [Get an API key →](https://islamiccorpus.com/#get-key)
+
+---
+
+
 The world's first structured, classified, AI-ready Islamic
 historical knowledge base.
 
