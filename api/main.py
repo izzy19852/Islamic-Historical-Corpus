@@ -602,7 +602,23 @@ async def stripe_webhook(request: Request):
         email    = session.get('customer_email') or \
                    session.get('metadata', {}).get('email', '')
         tier     = session.get('metadata', {}).get('tier', 'developer')
+
+        # Detect tier from price ID as fallback
+        try:
+            line_items = stripe.checkout.Session.list_line_items(session['id'])
+            price_id = line_items.data[0].price.id if line_items.data else None
+            if price_id:
+                if price_id == os.getenv('STRIPE_RESEARCHER_PRICE_ID'):
+                    tier = 'researcher'
+                elif price_id == os.getenv('STRIPE_DEVELOPER_PRICE_ID'):
+                    tier = 'developer'
+                elif price_id == os.getenv('STRIPE_INSTITUTIONAL_PRICE_ID'):
+                    tier = 'institutional'
+        except Exception as e:
+            print(f"Price ID lookup error: {e}")
+
         tier_map = {
+            'researcher':    'researcher',
             'developer':     'developer',
             'institutional': 'institutional',
         }
@@ -1217,6 +1233,54 @@ def cancel_account(request: Request,
     }
 
 
+
+# ── Tier configuration ────────────────────────────────
+TIER_CONFIG = {
+    "free": {"model":"claude-haiku-4-5-20251001","chat_limit":50,"api_limit":100,"max_tokens":1500,"label":"Free"},
+    "researcher": {"model":"claude-haiku-4-5-20251001","chat_limit":500,"api_limit":5000,"max_tokens":2000,"label":"Researcher"},
+    "developer": {"model":"claude-haiku-4-5-20251001","chat_limit":2000,"api_limit":20000,"max_tokens":2000,"label":"Developer"},
+    "institutional": {"model":"claude-sonnet-4-20250514","chat_limit":5000,"api_limit":-1,"max_tokens":3500,"label":"Institutional"},
+}
+
+def get_tier_config(api_key_record: dict) -> dict:
+    if not api_key_record:
+        return TIER_CONFIG["free"]
+    tier = api_key_record.get("tier", "free").lower()
+    return TIER_CONFIG.get(tier, TIER_CONFIG["free"])
+
+def check_monthly_limit(api_key: str, limit: int, endpoint: str = "chat"):
+    if limit == -1:
+        return True, 0
+    conn = get_db()
+    cur  = conn.cursor()
+    try:
+        cur.execute("""
+            SELECT COUNT(*) FROM api_usage
+            WHERE api_key = %s AND endpoint = %s
+            AND created_at >= date_trunc('month', NOW())
+        """, (api_key, endpoint))
+        count = cur.fetchone()[0]
+        conn.close()
+        return count < limit, count
+    except:
+        conn.close()
+        return True, 0
+
+def log_usage(api_key: str, endpoint: str, model: str, tokens_in: int = 0, tokens_out: int = 0):
+    try:
+        conn = get_db()
+        cur  = conn.cursor()
+        cur.execute("""
+            INSERT INTO api_usage (api_key, endpoint, model, tokens_in, tokens_out)
+            VALUES (%s,%s,%s,%s,%s)
+        """, (api_key, endpoint, model, tokens_in, tokens_out))
+        conn.commit()
+        conn.close()
+    except:
+        pass
+
+
+
 # ── Chat endpoint ─────────────────────────────────────────────
 
 import anthropic as _anthropic
@@ -1403,6 +1467,36 @@ async def chat(request: Request, body: ChatRequest):
         raise HTTPException(400,
             "Message too long (max 500 chars)")
 
+    # ── Tier lookup ──────────────────────────────────
+    key_record = None
+    if user_key:
+        try:
+            import hashlib as _hashlib
+            khash = _hashlib.sha256(user_key.encode()).hexdigest()
+            conn_t = get_db()
+            cur_t  = conn_t.cursor()
+            cur_t.execute("""
+                SELECT key_hash, tier, name, active
+                FROM api_keys
+                WHERE key_hash = %s AND active = TRUE
+            """, (khash,))
+            row = cur_t.fetchone()
+            if row:
+                key_record = {"key":row[0],"tier":row[1],"email":row[2],"is_active":row[3]}
+            conn_t.close()
+        except Exception as e:
+            print(f"Tier lookup error: {e}")
+
+    tier_cfg = get_tier_config(key_record)
+
+    if user_key:
+        allowed, count = check_monthly_limit(user_key, tier_cfg["chat_limit"], "chat")
+        if not allowed:
+            raise HTTPException(
+                status_code=429,
+                detail={"error":"Monthly limit reached","tier":tier_cfg["label"],"limit":tier_cfg["chat_limit"],"count":count,"upgrade":"islamiccorpus.com/#pricing"}
+            )
+
     # ── Retrieve context ──────────────────────────────
     try:
         from rag.retrieval.orchestrator import (
@@ -1528,8 +1622,8 @@ End with "And Allah knows best (wa Allahu a'lam)."
     # question's freshly-pulled chunks.
     claude_messages: list = []
     for m in history[-(CHAT_HISTORY_MAX_TURNS - 1):]:
-        role = m.get("role")
-        content = m.get("content", "")
+        role = m.role
+        content = m.content or ""
         if role in ("user", "assistant") and content:
             claude_messages.append({"role": role, "content": content})
     claude_messages.append({"role": "user", "content": user_prompt})
@@ -1542,8 +1636,8 @@ End with "And Allah knows best (wa Allahu a'lam)."
         full_reply_chars: list = []
         try:
             with _claude.messages.stream(
-                model      = "claude-sonnet-4-20250514",
-                max_tokens = 3500,
+                model      = tier_cfg["model"],
+                max_tokens = tier_cfg["max_tokens"],
                 system     = system,
                 messages   = claude_messages,
             ) as stream:
@@ -1558,22 +1652,8 @@ End with "And Allah knows best (wa Allahu a'lam)."
                         f"\n\n"
                     )
 
-            # Persist this turn so the next request has context.
-            if session_id and sess is not None:
-                sess["history"].append({
-                    "role": "user",
-                    "content": message,
-                })
-                sess["history"].append({
-                    "role": "assistant",
-                    "content": "".join(full_reply_chars),
-                })
-                # Trim to last N turns
-                if len(sess["history"]) > CHAT_HISTORY_MAX_TURNS:
-                    sess["history"] = sess["history"][-CHAT_HISTORY_MAX_TURNS:]
-                sess["last"] = time.time()
-                _chat_sessions[session_id] = sess
-
+            # Conversation history is client-supplied via body.history,
+            # so no server-side session persistence is needed.
             yield 'data: {"type":"done"}\n\n'
 
         except Exception as e:

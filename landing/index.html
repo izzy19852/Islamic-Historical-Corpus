@@ -1178,53 +1178,7 @@ curl -X POST https://islamiccorpus.com/research \
     </div>
 </section>
 
-<!-- ═══ PRICING ═══════════════════════════════════════ -->
-<section class="pricing-section">
-    <div class="container">
-        <div style="text-align:center; max-width: 640px; margin: 0 auto 64px;">
-            <span class="eyebrow">Access</span>
-            <h2 class="section-title">Pay for infrastructure, not scholarship.</h2>
-            <p style="font-size: 17px; color: var(--ink-soft);">The words of Al-Tabari and Imam Bukhari are free. The servers, embeddings, and graph aren't.</p>
-        </div>
-
-        <div class="pricing-grid">
-            <div class="plan">
-                <div class="plan-name">Free</div>
-                <div class="plan-price">$0</div>
-                <div class="plan-limit">100 queries / month</div>
-                <ul class="plan-features">
-                    <li>All 4 endpoints</li>
-                    <li>Full source attribution</li>
-                    <li>Students &amp; researchers</li>
-                </ul>
-                <a href="#get-key" class="btn btn-ghost">Get free key</a>
-            </div>
-            <div class="plan featured">
-                <div class="plan-name">Developer</div>
-                <div class="plan-price">$15<span class="per"> / mo</span></div>
-                <div class="plan-limit">5,000 queries / month</div>
-                <ul class="plan-features">
-                    <li>All 4 endpoints</li>
-                    <li>Priority support</li>
-                    <li>Apps &amp; integrations</li>
-                </ul>
-                <button id="btn-developer" class="btn btn-green" onclick="startCheckout('developer')">Get started</button>
-            </div>
-            <div class="plan">
-                <div class="plan-name">Institutional</div>
-                <div class="plan-price">$75<span class="per"> / mo</span></div>
-                <div class="plan-limit">Unlimited queries</div>
-                <ul class="plan-features">
-                    <li>All 4 endpoints</li>
-                    <li>Universities &amp; publishers</li>
-                    <li>Ed-tech platforms</li>
-                </ul>
-                <button id="btn-institutional" class="btn btn-primary" onclick="startCheckout('institutional')">Get started</button>
-            </div>
-        </div>
-        <p class="pricing-foot">Cannot afford access? <a href="mailto:hello@islamiccorpus.com" style="color: var(--green-d); font-weight: 600;">Contact us</a> — we'll work something out.</p>
-    </div>
-</section>
+<!-- Old pricing section removed — see <!-- PRICING SECTION --> below -->
 
 <!-- ═══ GET KEY ═══════════════════════════════════════ -->
 <section id="get-key">
@@ -1409,5 +1363,64 @@ if (params.get('checkout') === 'success') {
 }
 </script>
 
+<!-- PRICING SECTION -->
+<section id="pricing" style="padding:80px 40px;text-align:center;background:#0a0603">
+    <h2 style="color:#c9a84c;font-size:28px;margin-bottom:12px">Pricing</h2>
+    <p style="color:#8a7a60;margin-bottom:48px;max-width:500px;margin-left:auto;margin-right:auto">
+        Every tier includes access to the full 130,000+ chunk corpus. Free tier requires no credit card.
+    </p>
+    <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;max-width:1000px;margin:0 auto">
+        <div style="background:#110b05;border:1px solid #3a2a15;border-radius:8px;padding:32px 28px;width:220px">
+            <div style="color:#8a7a60;font-size:13px;letter-spacing:2px;margin-bottom:16px">FREE</div>
+            <div style="color:#e8e0d0;font-size:36px;font-weight:700;margin-bottom:4px">$0</div>
+            <div style="color:#6a5a40;font-size:12px;margin-bottom:24px">forever</div>
+            <ul style="list-style:none;padding:0;text-align:left;color:#8a7a60;font-size:13px;line-height:2">
+                <li>✓ 50 chat queries/month</li>
+                <li>✓ 100 API queries/month</li>
+                <li>✓ Full corpus access</li>
+                <li>✓ No credit card</li>
+            </ul>
+            <a href="/api/request-key" style="display:block;margin-top:24px;padding:10px;border:1px solid #3a2a15;border-radius:4px;color:#c9a84c;text-decoration:none;font-size:13px">Get Free Key</a>
+        </div>
+        <div style="background:#110b05;border:1px solid #3a2a15;border-radius:8px;padding:32px 28px;width:220px">
+            <div style="color:#8a7a60;font-size:13px;letter-spacing:2px;margin-bottom:16px">RESEARCHER</div>
+            <div style="color:#e8e0d0;font-size:36px;font-weight:700;margin-bottom:4px">$19</div>
+            <div style="color:#6a5a40;font-size:12px;margin-bottom:24px">per month</div>
+            <ul style="list-style:none;padding:0;text-align:left;color:#8a7a60;font-size:13px;line-height:2">
+                <li>✓ 500 chat queries/month</li>
+                <li>✓ 5,000 API queries/month</li>
+                <li>✓ Full corpus access</li>
+                <li>✓ Email support</li>
+            </ul>
+            <button onclick="checkout('price_1TNQ8hHl7vtwwE0JUpBNHoB3','researcher')" style="display:block;width:100%;margin-top:24px;padding:10px;background:#c9a84c;border:none;border-radius:4px;color:#0a0603;font-size:13px;font-weight:600;cursor:pointer">Subscribe</button>
+        </div>
+        <div style="background:#110b05;border:2px solid #c9a84c;border-radius:8px;padding:32px 28px;width:220px;position:relative">
+            <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#c9a84c;color:#0a0603;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px">MOST POPULAR</div>
+            <div style="color:#c9a84c;font-size:13px;letter-spacing:2px;margin-bottom:16px">DEVELOPER</div>
+            <div style="color:#e8e0d0;font-size:36px;font-weight:700;margin-bottom:4px">$49</div>
+            <div style="color:#6a5a40;font-size:12px;margin-bottom:24px">per month</div>
+            <ul style="list-style:none;padding:0;text-align:left;color:#8a7a60;font-size:13px;line-height:2">
+                <li>✓ 2,000 chat queries/month</li>
+                <li>✓ 20,000 API queries/month</li>
+                <li>✓ Full corpus access</li>
+                <li>✓ Priority support</li>
+            </ul>
+            <button onclick="checkout('price_1TNQ8iHl7vtwwE0JqEu5dVBV','developer')" style="display:block;width:100%;margin-top:24px;padding:10px;background:#c9a84c;border:none;border-radius:4px;color:#0a0603;font-size:13px;font-weight:600;cursor:pointer">Subscribe</button>
+        </div>
+        <div style="background:#110b05;border:1px solid #3a2a15;border-radius:8px;padding:32px 28px;width:220px">
+            <div style="color:#8a7a60;font-size:13px;letter-spacing:2px;margin-bottom:16px">INSTITUTIONAL</div>
+            <div style="color:#e8e0d0;font-size:36px;font-weight:700;margin-bottom:4px">$149</div>
+            <div style="color:#6a5a40;font-size:12px;margin-bottom:24px">per month</div>
+            <ul style="list-style:none;padding:0;text-align:left;color:#8a7a60;font-size:13px;line-height:2">
+                <li>✓ 5,000 chat queries</li>
+                <li>✓ Unlimited API queries</li>
+                <li>✓ Claude Sonnet (best model)</li>
+                <li>✓ Dedicated support</li>
+                <li>✓ Usage dashboard</li>
+            </ul>
+            <button onclick="checkout('price_1TNQ8iHl7vtwwE0J1KDNrIKv','institutional')" style="display:block;width:100%;margin-top:24px;padding:10px;background:#c9a84c;border:none;border-radius:4px;color:#0a0603;font-size:13px;font-weight:600;cursor:pointer">Subscribe</button>
+        </div>
+    </div>
+</section>
 </body>
 </html>
