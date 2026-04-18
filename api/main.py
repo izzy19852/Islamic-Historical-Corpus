@@ -22,7 +22,7 @@ from dotenv import load_dotenv
 
 from fastapi import FastAPI, HTTPException, Header, Query, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, HTMLResponse
 from pydantic import BaseModel
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
@@ -33,6 +33,37 @@ import sys
 sys.path.insert(0, os.path.expanduser('~/islam-stories'))
 
 load_dotenv(os.path.expanduser('~/islam-stories/.env'))
+
+try:
+    from rag.embeddings.query import query_rag as _hybrid_query_rag
+except Exception as _hybrid_err:
+    _hybrid_query_rag = None
+    print(f"Hybrid RRF unavailable, falling back to vector-only: {_hybrid_err}")
+
+_ERA_KEYWORDS = {
+    "africa":         ["mansa musa", "mali", "timbuktu", "songhai",
+                       "ghana empire", "sundiata", "askia"],
+    "crusades":       ["saladin", "crusade", "hattin", "jerusalem 1187",
+                       "richard", "baybars"],
+    "mongol":         ["mongol", "hulagu", "ain jalut", "genghis",
+                       "ilkhanate"],
+    "ottoman":        ["ottoman", "suleiman", "mehmed", "constantinople",
+                       "janissary"],
+    "andalusia":      ["andalusia", "cordoba", "granada", "ibn rushd",
+                       "averroes", "reconquista"],
+    "abbasid":        ["abbasid", "harun", "mamun", "house of wisdom",
+                       "baghdad caliphate"],
+    "south_asia":     ["mughal", "akbar", "babur", "delhi sultanate",
+                       "tipu sultan"],
+    "southeast_asia": ["malacca", "java", "aceh", "malay", "indonesia"],
+}
+
+def _detect_era(text: str) -> Optional[str]:
+    tl = text.lower()
+    for era, kws in _ERA_KEYWORDS.items():
+        if any(k in tl for k in kws):
+            return era
+    return None
 
 stripe.api_key      = os.getenv('STRIPE_SECRET_KEY')
 resend.api_key      = os.getenv('RESEND_API_KEY')
@@ -233,15 +264,93 @@ def run_vector_search(query: str, era=None, source_type=None,
 
 # ── Endpoints ─────────────────────────────────────────────────────
 
-@app.get("/", include_in_schema=False)
-def root():
+@app.get("/api/info", include_in_schema=False)
+def api_info():
     return {
         "name": "Islamic Historical Corpus API",
         "version": "1.0.0",
         "docs": "/docs",
-        "corpus": "128,356 chunks | 216 sources | 1,400 years | 22 eras",
-        "get_key": "https://islamiccorpus.com"
+        "get_key": "https://islamiccorpus.com",
     }
+
+
+_INDEX_PATH = os.path.expanduser("~/islam-stories/landing/index.html")
+_INDEX_STAT_RE = re.compile(
+    r'(?P<open><[^>]*data-stat="(?P<key>\w+)"[^>]*>)(?P<val>[^<]*)(?P<close></[^>]+>)'
+)
+
+@app.get("/", include_in_schema=False)
+def home():
+    """Server-render the landing page with live stats injected."""
+    stats = get_stats()
+    formatted = {
+        "sources":  f"{stats['sources']:,}",
+        "passages": _format_passages(stats["passages"]),
+        "figures":  f"{stats['figures']:,}",
+        "eras":     f"{stats['eras']:,}",
+    }
+    try:
+        with open(_INDEX_PATH, "r", encoding="utf-8") as f:
+            html = f.read()
+    except FileNotFoundError:
+        raise HTTPException(500, "Landing template missing")
+
+    def repl(m):
+        key = m.group("key")
+        val = formatted.get(key, m.group("val"))
+        return f'{m.group("open")}{val}{m.group("close")}'
+
+    return HTMLResponse(_INDEX_STAT_RE.sub(repl, html))
+
+
+def _format_passages(n: int) -> str:
+    if n >= 1_000_000:
+        s = f"{n / 1_000_000:.1f}".rstrip("0").rstrip(".")
+        return f"{s}M+"
+    if n >= 1_000:
+        return f"{n // 1_000}K+"
+    return f"{n:,}"
+
+_STATS_CACHE: dict = {"data": None, "expires": 0.0}
+_STATS_TTL = 300  # 5 minutes
+
+@app.get("/stats")
+def get_stats():
+    """
+    Live corpus statistics for the homepage.
+    Cached for 5 minutes to keep load off the DB.
+    """
+    import time as _time
+    now = _time.time()
+    if _STATS_CACHE["data"] and _STATS_CACHE["expires"] > now:
+        return _STATS_CACHE["data"]
+
+    conn = get_db()
+    cur  = conn.cursor()
+    cur.execute("""
+        SELECT
+          (SELECT COUNT(DISTINCT source)           FROM documents)                     AS sources,
+          (SELECT COUNT(*)                         FROM documents)                     AS passages,
+          (SELECT COUNT(*)                         FROM figures)                       AS figures,
+          (SELECT COUNT(DISTINCT era)              FROM documents WHERE era IS NOT NULL) AS eras,
+          (SELECT MAX(created_at)                  FROM documents)                     AS last_updated
+    """)
+    row = cur.fetchone()
+    conn.close()
+
+    sources, passages, figures, eras, last_updated = row
+    payload = {
+        "sources":       sources or 0,
+        "passages":      passages or 0,
+        "figures":       figures or 0,
+        "eras":          eras or 0,
+        "years_covered": 1400,  # editorial constant — 1,400 years of Islam
+        "last_updated":  last_updated.isoformat() if last_updated else None,
+    }
+    _STATS_CACHE["data"]    = payload
+    _STATS_CACHE["expires"] = now + _STATS_TTL
+    return payload
+
 
 @app.get("/health")
 def health():
@@ -1334,99 +1443,102 @@ FORBIDDEN:
 - Any factual claim without a source attribution"""
 
 EXPLORER_SYSTEM_PROMPT = """
-You are a master Islamic historian — deeply knowledgeable, warm, and thorough. You NEVER make the user ask follow-up questions to get information you already have. Give everything relevant upfront.
+You are a master storyteller of Islamic history.
+Your job is to make the past feel alive — not to
+lecture, but to transport. Think Fall of
+Civilizations podcast meets a scholar who has
+read every primary source.
 
-CORPUS: 72,000+ chunks from 136 authenticated Islamic sources spanning 632–1900 CE.
-
-═══════════════════════════════════════
-FORMATTING — MANDATORY
-═══════════════════════════════════════
-
-ALWAYS structure your response with:
-
-**[Figure/Topic Name]**
-*[One-line description — who they were]*
-
-**Background**
-- Era, origin, family, social context
-- The world they were born into
-
-**Life & Key Moments**
-- Bullet each major event or phase
-- Include specific details, dates where known
-- Every bullet cites its source inline: [Ibn Sa\'d]
-
-**Character & Personality**
-- What contemporaries said about them
-- Their defining traits with source citations
-
-**Scholarly Positions**
-- ✅ Majority view: what most scholars hold
-- 🔄 Minority view: where scholars disagree
-- Name the specific scholarly traditions
-
-**Legacy & Impact**
-- What changed because of this person
-- How later generations remembered them
-
-**What History Doesn\'t Tell Us**
-- Honest gaps — what sources are silent on
-
-*And Allah knows best (wa Allahu a\'lam).*
-
----
-
-USE THIS FORMAT FOR EVERY RESPONSE.
-Never write a wall of prose without headers.
-Never make the user ask follow-up questions
-for information you already have.
+CORPUS: 72,000+ chunks from 136 authenticated
+Islamic sources spanning 632–1900 CE.
 
 ═══════════════════════════════════════
-DEPTH RULES
+THE EXPLORER VOICE
 ═══════════════════════════════════════
 
-PROACTIVE DEPTH — include all of these without being asked:
-- Full name, kunya, laqab, honorifics
-- Birth/death dates and locations
-- Family background and lineage
-- Teachers and students
-- Key events in chronological order
-- Notable sayings or actions with citations
-- Scholarly debates about them
-- Their relationship to major historical events
-- How different Islamic traditions view them
+Write like the story is happening now.
+Present tense where it lands harder.
+Short sentences for impact. Longer ones
+for texture. The reader should feel like
+they are standing there.
 
-CITATION FORMAT in bullets:
-"Walked barefoot through Basra [Ibn Sa\'d, Tabaqat Vol VII]"
-"Refused 1,000 dinars offered by a merchant [Al-Dhahabi, Siyar]"
-
-WHEN CORPUS IS THIN:
-Use broader Islamic historiographical knowledge,
-clearly flagged:
-"The classical sources record that..." or
-"Al-Dhahabi preserves an account that..."
+BAD:  "Saladin implemented a ransom system."
+GOOD: "Rather than slaughter, Saladin does
+       something that shocks everyone —
+       he sets a price. Ten dinars for a man.
+       Five for a woman. One for a child.
+       In a city that expected massacre,
+       this feels like a miracle."
 
 ═══════════════════════════════════════
-TONE
+STRUCTURE — ALWAYS USE THIS
 ═══════════════════════════════════════
 
-- Warm and authoritative
-- Bullets for facts, prose for meaning
-- Short paragraphs between sections
-- Never preachy
-- Human complexity always present
+**[Hook — one sentence that pulls them in]**
+The most dramatic or surprising truth about
+this topic. No preamble. Start with impact.
+
+**The World They Lived In**
+- 2-3 bullets on context
+- What was happening politically,
+  religiously, humanly
+- Make the stakes clear
+
+**The Story**
+Narrative prose. Present tense.
+Cite sources inline but naturally:
+"Baha ad-Din, who was there, records that..."
+Not: "According to [Source]..."
+Every major claim has a source woven in.
+
+**The Human at the Center**
+- What was this person actually like?
+- What drove them? What did they fear?
+- What do sources record they said
+  or felt in this moment?
+- Make them real, not heroic cardboard
+
+**What Scholars Say**
+- ✅ Majority view — one clear sentence
+- 🔄 Where scholars disagree — one sentence
+- No academic jargon
+
+**Lessons & Reflections**
+- What did classical scholars explicitly
+  draw from this story?
+  "Ibn al-Qayyim in Madarij writes that..."
+  "Al-Ghazali uses this to illustrate..."
+- 2-3 bullets maximum — each grounded
+  in a specific recorded moment
+- One warm, direct sentence to the reader —
+  what this means for a life being lived now
+
+*And Allah knows best (wa Allahu a'lam).*
+
+═══════════════════════════════════════
+TONE RULES
+═══════════════════════════════════════
+
+✓ Vivid and immediate
+✓ Warm but serious
+✓ Citations feel like part of the story
+✓ The reader is drawn forward
+✗ No academic hedging
+✗ No bullet-heavy summaries
+✗ No "it is worth noting that"
+✗ No walls of unformatted prose
 
 ═══════════════════════════════════════
 HARD RULES
 ═══════════════════════════════════════
 
-- NEVER write walls of unformatted prose
-- NEVER make user ask for info you have
-- NEVER invent facts or sources
+- NEVER invent facts, quotes, or sources
+- General knowledge: flag clearly
 - NEVER take theological sides
+- NEVER depict the Prophet ﷺ beyond
+  authenticated sources
 - ALWAYS end with:
-
-*And Allah knows best (wa Allahu a\'lam).*
+  *And Allah knows best (wa Allahu a'lam).*
 """
 
 
@@ -1512,14 +1624,32 @@ async def chat(request: Request, body: ChatRequest):
         print(f"Orchestrator error: {e}")
         context = {}
 
-    try:
-        direct = run_vector_search(
-            query  = message,
-            n      = 8,
-        )
-    except Exception as e:
-        print(f"Vector search error: {e}")
-        direct = []
+    era_hint = _detect_era(message)
+    direct = []
+    if _hybrid_query_rag is not None:
+        try:
+            direct = _hybrid_query_rag(
+                topic       = message,
+                n_results   = 20,
+                era         = era_hint,
+                hybrid      = True,
+            )
+            if era_hint:
+                print(f"[chat] era_hint={era_hint} "
+                      f"hybrid_results={len(direct)}")
+        except Exception as e:
+            print(f"Hybrid RRF error: {e}")
+            direct = []
+    if not direct:
+        try:
+            direct = run_vector_search(
+                query = message,
+                era   = era_hint,
+                n     = 20,
+            )
+        except Exception as e:
+            print(f"Vector search error: {e}")
+            direct = []
 
     primary   = context.get("primary_accounts", [])
     character = context.get("character_context", [])
@@ -1586,21 +1716,51 @@ system to the user):
 {conflict_block}
 
 INSTRUCTIONS:
-- Use the primary-source material above as your
-  PRIMARY basis. Cite every claim drawn from it
-  precisely (author + work).
-- If the material is thin or misses the question,
-  answer from your broad knowledge of authenticated
-  Islamic historiography and flag it naturally —
-  e.g. "The primary sources I can cite directly are
-  silent on this, but Al-Tabari records..." — WITHOUT
-  using the words "corpus," "retrieved chunks," or
-  "the retrieved context."
-- NEVER present general knowledge as if it came from
-  a cited primary source.
+ANSWER FIRST. ALWAYS. Never open with what you
+cannot do or what sources are missing. The user
+asked a question — answer it.
+
+PRIORITY ORDER:
+1. Use the primary-source material above and cite
+   precisely (author + work).
+2. If that material is thin or off-topic, answer
+   from your broad knowledge of authenticated
+   Islamic historiography. Name sources naturally
+   inline — "Ibn Battuta, in his Rihla, records
+   that..." — NOT as a disclaimer about what is
+   or isn't in the retrieved context.
+3. NEVER open with a refusal or limitation.
+4. NEVER lead with what is missing.
+5. NEVER use the words "corpus," "retrieved
+   chunks," or "the retrieved context."
+
+WHEN THE MATERIAL IS WRONG ERA / TOPIC:
+Ignore the irrelevant passages entirely. Do not
+mention them. Do not explain why they are
+irrelevant. Just answer the question from general
+Islamic historiographical knowledge, citing real
+sources naturally in the prose.
+
+BAD OPENING:
+"I cannot answer this using the primary sources
+available to me because..."
+
+GOOD OPENING:
+"Mansa Musa's hajj of 1324 CE stands as one of
+the most economically dramatic acts of devotion
+in Islamic history. Ibn Battuta, writing from
+Cairo a generation later, records..."
+
+CITATION RULES:
+- Material above: cite [Source Name] precisely.
+- General knowledge: name the author and work
+  naturally in the sentence — same format, no
+  disclaimer needed.
 - NEVER invent facts, dates, quotes, or sources.
-- Present BOTH majority and minority scholarly
-  positions where they exist.
+- NEVER present fabricated sources as real.
+
+Present BOTH majority and minority scholarly
+positions where they exist — always.
 
 FORMAT:
 - Open with a direct 1–2 sentence lead.
