@@ -3,26 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat — Islamic Historical Corpus</title>
+    <title>Chat — Islamic Corpus</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --ink: #0a1a0e; --ink-2: #1a2a1e; --ink-soft: #3a4f40;
-            --muted: #6a8a74; --line: #e3ece6; --line-2: #d0e0d4;
-            --bg: #fafcfb; --bg-soft: #f4f8f5; --card: #ffffff;
-            --green: #2e8b57; --green-d: #1e6a3e; --green-l: #5cbf80;
-            --green-tint: #eef6f0;
-            --radius: 14px; --radius-lg: 22px; --radius-pill: 999px;
-            --shadow-sm: 0 1px 2px rgba(10,26,14,.04), 0 1px 1px rgba(10,26,14,.03);
-            --shadow: 0 6px 24px rgba(10,26,14,.06), 0 2px 6px rgba(10,26,14,.04);
-            --shadow-lg: 0 24px 60px rgba(10,26,14,.12);
+            /* Surfaces */
+            --color-bg:              #F5F1E8;
+            --color-surface:         #FDFCFA;
+            --color-surface-hover:   #F0EEE8;
+            --color-surface-raised:  #FFFFFF;
+
+            /* Text */
+            --color-text:            #1A1A1A;
+            --color-text-muted:      #5A5750;
+            --color-text-subtle:     #8F8878;
+
+            /* Borders & ornament */
+            --color-border:          #D8D5CC;
+            --color-border-strong:   #B8AF96;
+
+            /* Accents */
+            --color-accent:          #8B6F3F;
+            --color-accent-bright:   #C9A961;
+            --color-accent-ink:      #5A4726;
+
+            /* Semantic — states only, reserved for SAHIH / verify / da'if */
+            --color-success:         #4A6741;
+            --color-success-bg:      #E8EBDF;
+            --color-warning:         #A8721A;
+            --color-warning-bg:      #F5ECD9;
+            --color-danger:          #8B3A2E;
+            --color-danger-bg:       #F2E0DB;
+
+            /* Radii & sizing */
+            --radius-sm: 4px;
+            --radius-md: 6px;
+            --radius-lg: 10px;
+            --radius-pill: 999px;
+            --border-hairline: 0.5px;
+            --border-normal:   1px;
+
+            /* Legacy radius aliases kept for minimal-churn rename */
+            --radius: var(--radius-md);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--bg); color: var(--ink);
+            background: var(--color-bg); color: var(--color-text);
             height: 100vh; display: flex; flex-direction: column;
             overflow: hidden; -webkit-font-smoothing: antialiased;
         }
@@ -30,10 +59,10 @@
 
         /* ─── Nav ─── */
         nav.site-nav {
-            background: rgba(250,252,251,.92);
+            background: rgba(245, 241, 232,.92);
             backdrop-filter: saturate(140%) blur(14px);
             -webkit-backdrop-filter: saturate(140%) blur(14px);
-            border-bottom: 1px solid var(--line);
+            border-bottom: 1px solid var(--color-border);
             padding: 12px 28px;
             display: flex; justify-content: space-between; align-items: center;
             flex-shrink: 0; z-index: 50; position: relative;
@@ -41,45 +70,44 @@
         .nav-left { display: flex; align-items: center; gap: 24px; }
         .nav-logo {
             display: flex; align-items: center; gap: 10px;
-            font-weight: 700; font-size: 15px; letter-spacing: -.01em; color: var(--ink);
+            font-weight: 500; font-size: 15px; letter-spacing: -.01em; color: var(--color-text);
         }
         .nav-logo .mark {
             width: 28px; height: 28px; border-radius: 8px;
-            background: linear-gradient(135deg, var(--green), var(--green-d));
-            display: grid; place-items: center; color: #fff;
-            font-size: 14px; font-weight: 800; box-shadow: var(--shadow-sm);
+            background: var(--color-accent);
+            display: grid; place-items: center; color: var(--color-bg);
+            font-size: 14px; font-weight: 500;
         }
         .nav-links { display: flex; align-items: center; gap: 4px; }
         .nav-links a {
-            color: var(--ink-soft); font-size: 14px; font-weight: 500;
+            color: var(--color-text-muted); font-size: 14px; font-weight: 500;
             padding: 7px 12px; border-radius: var(--radius-pill);
             transition: background .15s, color .15s;
         }
-        .nav-links a:hover { background: var(--bg-soft); color: var(--ink); }
-        .nav-links a.active { color: var(--green-d); }
+        .nav-links a:hover { background: var(--color-surface); color: var(--color-text); }
+        .nav-links a.active { color: var(--color-accent-ink); }
 
         /* Mode toggle — segmented pill */
         .mode-toggle {
-            display: flex; background: var(--bg-soft);
-            border: 1px solid var(--line);
+            display: flex; background: var(--color-surface);
+            border: 1px solid var(--color-border);
             border-radius: var(--radius-pill); padding: 4px; gap: 2px;
         }
         .mode-btn {
             padding: 7px 16px; font-family: inherit; font-size: 13px; font-weight: 600;
             cursor: pointer; border: none; background: transparent;
-            color: var(--ink-soft); border-radius: var(--radius-pill);
+            color: var(--color-text-muted); border-radius: var(--radius-pill);
             transition: all .15s;
         }
-        .mode-btn:hover { color: var(--ink); }
+        .mode-btn:hover { color: var(--color-text); }
         .mode-btn.active {
-            background: var(--ink); color: #fff;
-            box-shadow: var(--shadow-sm);
+            background: var(--color-text); color: #fff;
         }
 
         .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
         .hamburger span {
             display: block; width: 22px; height: 2px;
-            background: var(--ink); margin: 5px 0; border-radius: 2px;
+            background: var(--color-text); margin: 5px 0; border-radius: 2px;
             transition: all .3s;
         }
         .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
@@ -87,56 +115,56 @@
         .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
 
         /* ─── Layout ─── */
-        .chat-layout { display: flex; flex: 1; overflow: hidden; background: var(--bg); }
+        .chat-layout { display: flex; flex: 1; overflow: hidden; background: var(--color-bg); }
 
         /* ─── Sidebar ─── */
         .sidebar {
             width: 280px; background: #fff;
-            border-right: 1px solid var(--line);
+            border-right: 1px solid var(--color-border);
             display: flex; flex-direction: column; flex-shrink: 0;
         }
         .sidebar-header {
             padding: 22px 18px 14px;
-            border-bottom: 1px solid var(--line);
+            border-bottom: 1px solid var(--color-border);
         }
         .sidebar-title {
             font-size: 11px; letter-spacing: .08em;
-            text-transform: uppercase; color: var(--muted);
+            text-transform: uppercase; color: var(--color-text-subtle);
             margin-bottom: 12px; font-weight: 600;
         }
         .new-chat-btn {
             width: 100%; padding: 10px 14px;
-            background: var(--ink); color: #fff;
+            background: var(--color-text); color: #fff;
             border: none; border-radius: var(--radius-pill);
             font-family: inherit; font-size: 13.5px; font-weight: 600;
             cursor: pointer; transition: background .15s;
             text-align: center;
         }
-        .new-chat-btn:hover { background: var(--green-d); }
+        .new-chat-btn:hover { background: var(--color-accent-ink); }
 
         .convo-list {
             padding: 8px 10px 16px; flex: 1; overflow-y: auto;
         }
         .convo-section-label {
             font-size: 10px; letter-spacing: .1em;
-            text-transform: uppercase; color: var(--muted);
+            text-transform: uppercase; color: var(--color-text-subtle);
             margin: 12px 6px 6px; font-weight: 600;
         }
         .convo-empty {
-            font-size: 12.5px; color: var(--muted);
+            font-size: 12.5px; color: var(--color-text-subtle);
             padding: 14px 10px; text-align: center;
             line-height: 1.55;
         }
         .convo-item {
             display: flex; align-items: center; gap: 6px;
             padding: 9px 10px; border-radius: 10px;
-            font-size: 13px; color: var(--ink-soft); cursor: pointer;
+            font-size: 13px; color: var(--color-text-muted); cursor: pointer;
             transition: background .12s, color .12s;
             line-height: 1.4; position: relative;
         }
-        .convo-item:hover { background: var(--bg-soft); color: var(--ink); }
+        .convo-item:hover { background: var(--color-surface); color: var(--color-text); }
         .convo-item.active {
-            background: var(--ink); color: #fff;
+            background: var(--color-text); color: #fff;
         }
         .convo-item.active .convo-del { color: rgba(255,255,255,.6); }
         .convo-item.active .convo-del:hover { color: #fff; background: rgba(255,255,255,.12); }
@@ -148,7 +176,7 @@
             opacity: 0; flex-shrink: 0;
             width: 22px; height: 22px;
             border: none; background: transparent;
-            color: var(--muted);
+            color: var(--color-text-subtle);
             border-radius: 6px; cursor: pointer;
             display: grid; place-items: center;
             font-size: 14px; line-height: 1;
@@ -160,34 +188,33 @@
         .convo-suggestions { margin-top: 8px; }
         .suggested-q {
             padding: 9px 10px; border-radius: 10px;
-            font-size: 12.5px; color: var(--ink-soft); cursor: pointer;
+            font-size: 12.5px; color: var(--color-text-muted); cursor: pointer;
             transition: background .12s, color .12s;
             line-height: 1.45;
         }
-        .suggested-q:hover { background: var(--bg-soft); color: var(--ink); }
+        .suggested-q:hover { background: var(--color-surface); color: var(--color-text); }
 
         .sidebar-footer {
-            padding: 16px 18px; border-top: 1px solid var(--line);
-            background: var(--bg-soft);
+            padding: 16px 18px; border-top: 1px solid var(--color-border);
+            background: var(--color-surface);
         }
         .key-input-wrap label {
-            font-size: 11px; color: var(--muted);
+            font-size: 11px; color: var(--color-text-subtle);
             letter-spacing: .06em; text-transform: uppercase;
             display: block; margin-bottom: 8px; font-weight: 600;
         }
         .key-input {
             width: 100%; padding: 9px 12px;
-            background: #fff; border: 1px solid var(--line-2);
-            border-radius: 8px; color: var(--ink);
+            background: #fff; border: 1px solid var(--color-border-strong);
+            border-radius: 8px; color: var(--color-text);
             font-size: 12px; font-family: 'JetBrains Mono', monospace; outline: none;
             transition: border-color .15s, box-shadow .15s;
         }
         .key-input:focus {
-            border-color: var(--green);
-            box-shadow: 0 0 0 3px rgba(46,139,87,.12);
+            border-color: var(--color-accent);
         }
         .key-status { font-size: 11px; margin-top: 6px; height: 14px; font-weight: 500; }
-        .key-ok  { color: var(--green-d); }
+        .key-ok  { color: var(--color-accent-ink); }
         .key-bad { color: #b53030; }
 
         /* ─── Chat area ─── */
@@ -210,16 +237,16 @@
         .welcome-icon {
             font-size: 44px; margin-bottom: 18px; opacity: .8;
             display: inline-block;
-            background: var(--green-tint); width: 72px; height: 72px;
+            background: var(--color-success-bg); width: 72px; height: 72px;
             border-radius: 22px; display: grid; place-items: center;
         }
         .welcome h2 {
-            font-size: clamp(28px, 3.6vw, 36px); font-weight: 700;
+            font-size: clamp(28px, 3.6vw, 36px); font-weight: 500;
             letter-spacing: -.025em; line-height: 1.1;
-            color: var(--ink); margin: 0 auto 14px;
+            color: var(--color-text); margin: 0 auto 14px;
         }
         .welcome p {
-            font-size: 15.5px; color: var(--ink-soft);
+            font-size: 15.5px; color: var(--color-text-muted);
             line-height: 1.55; margin-bottom: 28px;
             max-width: 520px; margin-left: auto; margin-right: auto;
         }
@@ -227,15 +254,14 @@
             display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
         }
         .chip {
-            padding: 9px 16px; border: 1px solid var(--line);
+            padding: 9px 16px; border: 1px solid var(--color-border);
             border-radius: var(--radius-pill);
             font-size: 13px; font-weight: 500;
-            color: var(--ink); cursor: pointer;
+            color: var(--color-text); cursor: pointer;
             transition: all .15s; background: #fff;
         }
         .chip:hover {
-            border-color: var(--green); transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
+            border-color: var(--color-accent); transform: translateY(-1px);
         }
 
         /* Bubbles */
@@ -248,14 +274,14 @@
         .avatar {
             width: 34px; height: 34px; border-radius: 10px;
             flex-shrink: 0; display: grid; place-items: center;
-            font-size: 12px; font-weight: 700; letter-spacing: -.01em;
+            font-size: 12px; font-weight: 500; letter-spacing: -.01em;
         }
         .avatar-ai {
-            background: linear-gradient(135deg, var(--green), var(--green-d));
-            color: #fff; box-shadow: var(--shadow-sm);
+            background: var(--color-accent);
+            color: #fff;
         }
         .avatar-user {
-            background: linear-gradient(135deg, #2a3a4a, #18242e);
+            background: var(--color-surface);
             color: #aac8e0;
         }
 
@@ -264,24 +290,23 @@
             font-size: 14.5px; line-height: 1.65; max-width: 700px;
         }
         .bubble-ai {
-            background: #fff; border: 1px solid var(--line);
-            color: var(--ink); border-radius: 4px 14px 14px 14px;
-            box-shadow: var(--shadow-sm);
+            background: #fff; border: 1px solid var(--color-border);
+            color: var(--color-text); border-radius: 4px 14px 14px 14px;
         }
         .bubble-user {
-            background: var(--ink); color: #e8f0ea;
+            background: var(--color-text); color: #e8f0ea;
             border-radius: 14px 4px 14px 14px;
         }
 
         .source-pills {
             display: flex; flex-wrap: wrap; gap: 5px;
             margin-top: 12px; padding-top: 12px;
-            border-top: 1px solid var(--line);
+            border-top: 1px solid var(--color-border);
         }
         .source-pill {
             font-size: 11px; padding: 3px 10px;
             border-radius: var(--radius-pill);
-            background: var(--green-tint); color: var(--green-d);
+            background: var(--color-success-bg); color: var(--color-accent-ink);
             border: 1px solid #c4e0cf; font-weight: 600;
         }
 
@@ -289,7 +314,7 @@
         .typing { display: flex; gap: 4px; padding: 6px 0; }
         .typing span {
             width: 7px; height: 7px;
-            background: var(--green); border-radius: 50%;
+            background: var(--color-accent); border-radius: 50%;
             animation: bounce 1.2s infinite;
         }
         .typing span:nth-child(2) { animation-delay: .2s; }
@@ -302,42 +327,40 @@
         /* ─── Input bar ─── */
         .input-bar {
             padding: 18px 28px 22px;
-            background: rgba(250,252,251,.95);
+            background: rgba(245, 241, 232,.95);
             backdrop-filter: blur(10px);
-            border-top: 1px solid var(--line);
+            border-top: 1px solid var(--color-border);
             flex-shrink: 0;
         }
         .input-wrap {
             display: flex; gap: 10px; align-items: flex-end;
             max-width: 820px; margin: 0 auto;
-            background: #fff; border: 1px solid var(--line-2);
+            background: #fff; border: 1px solid var(--color-border-strong);
             border-radius: 18px; padding: 8px 8px 8px 18px;
-            box-shadow: var(--shadow-sm);
             transition: border-color .15s, box-shadow .15s;
         }
         .input-wrap:focus-within {
-            border-color: var(--green);
-            box-shadow: 0 0 0 4px rgba(46,139,87,.10);
+            border-color: var(--color-accent);
         }
         .msg-input {
             flex: 1; padding: 10px 0;
             border: none; background: transparent;
-            color: var(--ink); font-size: 15px;
+            color: var(--color-text); font-size: 15px;
             resize: none; outline: none;
             max-height: 140px; min-height: 28px;
             line-height: 1.5; font-family: inherit;
         }
-        .msg-input::placeholder { color: var(--muted); }
+        .msg-input::placeholder { color: var(--color-text-subtle); }
         .send-btn {
             width: 40px; height: 40px;
-            background: var(--ink); color: #fff;
+            background: var(--color-text); color: #fff;
             border: none; border-radius: 12px;
             cursor: pointer; display: grid; place-items: center;
             flex-shrink: 0; transition: background .15s, transform .12s;
         }
-        .send-btn:hover { background: var(--green-d); }
+        .send-btn:hover { background: var(--color-accent-ink); }
         .send-btn:active { transform: scale(.95); }
-        .send-btn:disabled { background: var(--line-2); cursor: not-allowed; }
+        .send-btn:disabled { background: var(--color-border-strong); cursor: not-allowed; }
         .send-btn svg { width: 18px; height: 18px; fill: currentColor; }
 
         .input-footer {
@@ -346,47 +369,45 @@
             margin-left: auto; margin-right: auto;
             font-size: 12px;
         }
-        .char-count { color: var(--muted); font-variant-numeric: tabular-nums; }
+        .char-count { color: var(--color-text-subtle); font-variant-numeric: tabular-nums; }
         .mode-indicator {
-            color: var(--ink-soft); display: flex;
+            color: var(--color-text-muted); display: flex;
             align-items: center; gap: 6px; font-weight: 500;
         }
         .mode-dot {
             width: 7px; height: 7px; border-radius: 50%;
-            background: var(--green);
-            box-shadow: 0 0 0 3px rgba(46,139,87,.15);
+            background: var(--color-accent);
         }
 
         /* ─── Limit banner ─── */
         .limit-banner {
-            background: linear-gradient(180deg, #fff, var(--green-tint));
+            background: var(--color-accent);
             border: 1px solid #c4e0cf;
             border-radius: var(--radius-lg);
             padding: 18px 22px;
             display: flex; justify-content: space-between; align-items: center;
             gap: 16px; flex-wrap: wrap;
             margin: 0 28px 16px; flex-shrink: 0;
-            box-shadow: var(--shadow-sm);
         }
-        .limit-banner p { font-size: 14px; color: var(--ink-soft); }
-        .limit-banner p strong { color: var(--green-d); font-weight: 700; }
+        .limit-banner p { font-size: 14px; color: var(--color-text-muted); }
+        .limit-banner p strong { color: var(--color-accent-ink); font-weight: 500; }
         .limit-banner-btns { display: flex; gap: 8px; }
         .btn-sm {
             padding: 8px 16px; border-radius: var(--radius-pill);
             font-family: inherit; font-size: 13px; font-weight: 600;
             cursor: pointer; border: none; transition: all .15s;
         }
-        .btn-gold-sm { background: var(--ink); color: #fff; }
-        .btn-gold-sm:hover { background: var(--green-d); }
+        .btn-gold-sm { background: var(--color-text); color: #fff; }
+        .btn-gold-sm:hover { background: var(--color-accent-ink); }
         .btn-outline-sm {
-            background: #fff; border: 1px solid var(--line-2); color: var(--ink);
+            background: #fff; border: 1px solid var(--color-border-strong); color: var(--color-text);
         }
-        .btn-outline-sm:hover { border-color: var(--ink); }
+        .btn-outline-sm:hover { border-color: var(--color-text); }
 
         /* ─── Paywall ─── */
         .paywall {
             display: none; position: fixed; inset: 0;
-            background: rgba(10,26,14,.55);
+            background: rgba(42, 40, 36,.55);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             z-index: 200;
@@ -396,22 +417,21 @@
         .paywall-card {
             background: #fff; border-radius: var(--radius-lg);
             padding: 44px; max-width: 460px; width: 100%;
-            text-align: center; border: 1px solid var(--line);
-            box-shadow: var(--shadow-lg);
+            text-align: center; border: 1px solid var(--color-border);
         }
         .paywall-icon {
             font-size: 36px; margin-bottom: 18px;
             display: inline-block;
-            background: var(--green-tint); width: 64px; height: 64px;
+            background: var(--color-success-bg); width: 64px; height: 64px;
             border-radius: 18px; display: grid; place-items: center;
             margin: 0 auto 18px;
         }
         .paywall-card h2 {
-            font-size: 26px; font-weight: 700;
-            letter-spacing: -.025em; margin-bottom: 12px; color: var(--ink);
+            font-size: 26px; font-weight: 500;
+            letter-spacing: -.025em; margin-bottom: 12px; color: var(--color-text);
         }
         .paywall-card p {
-            font-size: 15px; color: var(--ink-soft);
+            font-size: 15px; color: var(--color-text-muted);
             line-height: 1.55; margin-bottom: 26px;
         }
         .paywall-options {
@@ -426,16 +446,15 @@
             transition: all .15s;
         }
         .paywall-btn-gold {
-            background: var(--green); color: #fff;
-            box-shadow: 0 6px 20px rgba(46,139,87,.25);
+            background: var(--color-accent); color: #fff;
         }
-        .paywall-btn-gold:hover { background: var(--green-d); }
+        .paywall-btn-gold:hover { background: var(--color-accent-ink); }
         .paywall-btn-outline {
-            background: #fff; border-color: var(--line-2); color: var(--ink);
+            background: #fff; border-color: var(--color-border-strong); color: var(--color-text);
         }
-        .paywall-btn-outline:hover { border-color: var(--ink); }
-        .paywall-free { font-size: 13px; color: var(--muted); }
-        .paywall-free a { color: var(--green-d); font-weight: 600; }
+        .paywall-btn-outline:hover { border-color: var(--color-text); }
+        .paywall-free { font-size: 13px; color: var(--color-text-subtle); }
+        .paywall-free a { color: var(--color-accent-ink); font-weight: 600; }
 
         /* ─── Responsive ─── */
         @media (max-width: 820px) {
@@ -445,7 +464,7 @@
             .nav-links {
                 display: none; position: absolute;
                 top: 100%; left: 0; right: 0;
-                background: #fff; border-bottom: 1px solid var(--line);
+                background: #fff; border-bottom: 1px solid var(--color-border);
                 flex-direction: column; padding: 12px 0; gap: 0;
             }
             .nav-links.open { display: flex; }
@@ -460,9 +479,9 @@
         .bubble-text h2,
         .bubble-text h3 {
             margin: 1.1em 0 0.45em;
-            font-weight: 700;
+            font-weight: 500;
             line-height: 1.25;
-            color: #1a1a1a;
+            color: var(--color-text);
         }
         .bubble-text h1:first-child,
         .bubble-text h2:first-child,
@@ -473,7 +492,7 @@
         .bubble-text h3 { font-size: 1.05em; }
         .bubble-text p { margin: 0 0 0.75em; line-height: 1.6; }
         .bubble-text p:last-child { margin-bottom: 0; }
-        .bubble-text strong { font-weight: 700; color: #0f0f0f; }
+        .bubble-text strong { font-weight: 500; color: var(--color-text); }
         .bubble-text em { font-style: italic; }
         .bubble-text ul,
         .bubble-text ol {
@@ -485,8 +504,8 @@
             margin: 0.6em 0 0.85em;
             padding: 0.45em 0.9em;
             border-left: 3px solid #c9a961;
-            background: rgba(201, 169, 97, 0.08);
-            color: #333;
+            background: var(--color-success-bg);
+            color: var(--color-text);
             font-style: italic;
         }
         .bubble-text code {
@@ -497,10 +516,58 @@
         }
         .bubble-text hr {
             border: none;
-            border-top: 1px solid #e4e4e4;
+            border-top: 1px solid var(--color-border);
             margin: 1em 0;
         }
-        .bubble-text a { color: #8a6a2b; text-decoration: underline; }
+        .bubble-text a { color: var(--color-accent); text-decoration: underline; }
+    
+        /* ─── Nav dropdown ─────────────────────────────── */
+        .nav-dropdown { position: relative; }
+        .nav-dropdown-trigger {
+            background: none; border: none; cursor: pointer;
+            font-family: inherit;
+            color: var(--color-text-muted);
+            font-size: 14px; font-weight: 500;
+            padding: 8px 14px; border-radius: var(--radius-pill);
+            display: inline-flex; align-items: center; gap: 6px;
+            transition: background .15s, color .15s;
+        }
+        .nav-dropdown-trigger:hover { background: var(--color-surface); color: var(--color-text); }
+        .nav-dropdown-trigger .caret { font-size: 10px; opacity: 0.6; }
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px); right: 0;
+            min-width: 180px;
+            background: var(--color-surface-raised);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 6px;
+            z-index: 200;
+        }
+        .nav-dropdown.open .nav-dropdown-menu { display: block; }
+        .nav-dropdown-menu a {
+            display: block;
+            padding: 8px 12px;
+            font-size: 13.5px;
+            color: var(--color-text);
+            border-radius: var(--radius-sm);
+        }
+        .nav-dropdown-menu a:hover {
+            background: var(--color-surface);
+            color: var(--color-accent-ink);
+        }
+        @media (max-width: 820px) {
+            .nav-dropdown-menu {
+                position: static; border: none; padding: 0;
+                background: transparent; min-width: 0;
+            }
+            .nav-dropdown-menu a { padding: 12px 36px; font-size: 14px; border-radius: 0; }
+            .nav-dropdown-trigger {
+                width: 100%; justify-content: space-between;
+                padding: 14px 24px; border-radius: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -509,7 +576,7 @@
     <div class="nav-left">
         <a href="/" class="nav-logo">
             <span class="mark">ع</span>
-            <span>Islamic Historical Corpus</span>
+            <span>Islamic Corpus</span>
         </a>
         <button class="hamburger" id="hamburger"
                 onclick="document.getElementById('hamburger').classList.toggle('open');document.getElementById('nav-links').classList.toggle('open')"
@@ -521,14 +588,22 @@
             <a href="/sources">Sources</a>
             <a href="/docs">API Docs</a>
             <a href="/chat" class="active">Chat</a>
-            <a href="https://github.com/izzy19852/Islamic-Historical-Corpus" target="_blank">GitHub</a>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-trigger" onclick="toggleNavDropdown(event, this)" aria-haspopup="true" aria-expanded="false">Dataset <span class="caret">▾</span></button>
+                <div class="nav-dropdown-menu" role="menu">
+                    <a href="https://huggingface.co/datasets/izzy19852/islamic-historical-corpus" target="_blank" role="menuitem">Hugging Face</a>
+                    <a href="https://github.com/izzy19852/Islamic-Historical-Corpus" target="_blank" role="menuitem">GitHub</a>
+                </div>
+            </div>
             <a href="/account">Account</a>
         </div>
     </div>
 
-    <div class="mode-toggle">
-        <button class="mode-btn active" id="btn-explorer" onclick="setMode('explorer')">Explorer</button>
-        <button class="mode-btn" id="btn-research" onclick="setMode('research')">Research</button>
+    <div class="mode-toggle" style="position:relative">
+        <button class="mode-btn active" id="btn-explorer" onclick="setMode('explorer')"
+                title="Story-first — vivid narrative with citations. Best for learning and discovery.">Explorer</button>
+        <button class="mode-btn" id="btn-research" onclick="setMode('research')"
+                title="Source-critical analysis — primary sources evaluated, scholars named, chains assessed. Best for deep study.">Research</button>
     </div>
 </nav>
 
@@ -557,11 +632,15 @@
     </div>
 
     <div class="chat-area">
+        <div id="mode-description"
+             style="text-align:center;padding:6px 20px;font-size:12px;color:var(--color-text-muted);border-bottom:1px solid var(--color-border);background:var(--color-surface);letter-spacing:0.3px">
+            ✦ Explorer — vivid narrative, citations woven into the story
+        </div>
         <div class="messages" id="messages">
             <div class="welcome" id="welcome">
                 <div class="welcome-icon">📜</div>
                 <h2>Ask about Islamic history</h2>
-                <p>Grounded in 128,356 chunks from 216 authenticated sources — Al-Tabari, Ibn Kathir, the hadith collections, and more. Every answer cites its source.</p>
+                <p>128,000+ passages from 216 classical sources — Tabari, Ibn Kathir, Bukhari, Ibn Sa'd, and more. Every answer returns the chain back to the scholar.</p>
                 <div class="welcome-chips">
                     <span class="chip" onclick="askChip(this)">Battle of Yarmouk</span>
                     <span class="chip" onclick="askChip(this)">Saladin & Jerusalem</span>
@@ -607,7 +686,7 @@
     <div class="paywall-card">
         <div class="paywall-icon">📚</div>
         <h2>Continue your research</h2>
-        <p>You've used your 5 free questions. Get an API key to keep exploring 1,400 years of authenticated Islamic history.</p>
+        <p>You've used your 5 free questions. Get an API key to keep querying 1,400 years of classical Islamic sources.</p>
         <div class="paywall-options">
             <button class="paywall-btn paywall-btn-gold" onclick="paywallSignup()">
                 Get free key — 100 queries / month
@@ -707,6 +786,12 @@ function setMode(m) {
     document.getElementById('btn-research').classList.toggle('active', m === 'research');
     document.getElementById('mode-label').textContent =
         m === 'research' ? 'Research mode — full citations' : 'Explorer mode — narrative';
+    const descriptions = {
+        'explorer': '✦ Explorer — vivid narrative, citations woven into the story',
+        'research': '⊛ Research — source-critical analysis, scholars named, chains assessed',
+    };
+    const bar = document.getElementById('mode-description');
+    if (bar && descriptions[m]) bar.textContent = descriptions[m];
 }
 
 function validateKey(val) {
@@ -750,6 +835,7 @@ async function sendMessage() {
     input.value = '';
     input.style.height = 'auto';
     updateCharCount(0);
+    forceScrollBottom();
 
     // Persist the user turn immediately (so a refresh mid-stream
     // doesn't lose the question).
@@ -912,9 +998,30 @@ function renderSources(bubble, text) {
     bubble.querySelector('.bubble-ai').appendChild(pills);
 }
 
+/* Claude-style sticky-bottom scroll: only auto-scroll while the user
+ * is already pinned to the bottom. The moment they scroll up to read,
+ * we stop chasing them. A fresh send() re-pins them via forceScrollBottom(). */
+let _stickToBottom = true;
+function _nearBottom(el, slack = 80) {
+    return (el.scrollHeight - el.scrollTop - el.clientHeight) < slack;
+}
+(function attachScrollGuard() {
+    const msgs = document.getElementById('messages');
+    if (!msgs) { window.addEventListener('DOMContentLoaded', attachScrollGuard); return; }
+    msgs.addEventListener('scroll', () => {
+        _stickToBottom = _nearBottom(msgs);
+    }, { passive: true });
+})();
 function scrollBottom() {
     const msgs = document.getElementById('messages');
+    if (!msgs) return;
+    if (_stickToBottom) msgs.scrollTop = msgs.scrollHeight;
+}
+function forceScrollBottom() {
+    const msgs = document.getElementById('messages');
+    if (!msgs) return;
     msgs.scrollTop = msgs.scrollHeight;
+    _stickToBottom = true;
 }
 
 function updateLimitBanner(rem) {
@@ -980,7 +1087,7 @@ function newChat() {
         <div class="welcome" id="welcome">
             <div class="welcome-icon">📜</div>
             <h2>Ask about Islamic history</h2>
-            <p>Grounded in 128,356 chunks from 216 authenticated sources — Al-Tabari, Ibn Kathir, the hadith collections, and more. Every answer cites its source.</p>
+            <p>128,000+ passages from 216 classical sources — Tabari, Ibn Kathir, Bukhari, Ibn Sa'd, and more. Every answer returns the chain back to the scholar.</p>
             <div class="welcome-chips">
                 <span class="chip" onclick="askChip(this)">Battle of Yarmouk</span>
                 <span class="chip" onclick="askChip(this)">Saladin & Jerusalem</span>
@@ -1102,15 +1209,15 @@ function renderMarkdown(text) {
         .replace(/\*([^*]+?)\*/g, '<em>$1</em>')
 
         .replace(/^### (.+)$/gm,
-            '<h4 style="color:#c9a84c;margin:14px 0 6px;font-size:14px;letter-spacing:0.5px">$1</h4>')
+            '<h4 style="color:var(--color-accent);margin:14px 0 6px;font-size:14px;letter-spacing:0.5px">$1</h4>')
         .replace(/^## (.+)$/gm,
-            '<h3 style="color:#c9a84c;margin:16px 0 8px;font-size:15px">$1</h3>')
+            '<h3 style="color:var(--color-accent);margin:16px 0 8px;font-size:15px">$1</h3>')
         .replace(/^# (.+)$/gm,
-            '<h2 style="color:#c9a84c;margin:18px 0 10px;font-size:17px">$1</h2>')
+            '<h2 style="color:var(--color-accent);margin:18px 0 10px;font-size:17px">$1</h2>')
 
         .replace(/^[\-•] (.+)$/gm,
             '<div style="display:flex;gap:8px;margin:4px 0;padding-left:4px">'
-            + '<span style="color:#c9a84c;margin-top:2px;flex-shrink:0">•</span>'
+            + '<span style="color:var(--color-accent);margin-top:2px;flex-shrink:0">•</span>'
             + '<span>$1</span></div>')
 
         .replace(/^✅ (.+)$/gm,
@@ -1119,13 +1226,13 @@ function renderMarkdown(text) {
             '<div style="display:flex;gap:8px;margin:4px 0"><span>🔄</span><span>$1</span></div>')
 
         .replace(/^---+$/gm,
-            '<hr style="border:none;border-top:1px solid #e8e0d0;margin:16px 0">')
+            '<hr style="border:none;border-top:1px solid var(--color-border);margin:16px 0">')
 
         .replace(/^> (.+)$/gm,
-            '<blockquote style="border-left:3px solid #c9a84c;padding:4px 12px;margin:8px 0;color:#6a5a40;font-style:italic">$1</blockquote>')
+            '<blockquote style="border-left:3px solid var(--color-accent);padding:4px 12px;margin:8px 0;color:var(--color-text-muted);font-style:italic">$1</blockquote>')
 
         .replace(/^\*([^*]+)\*$/gm,
-            '<p style="font-style:italic;color:#8a7a60;margin:12px 0 4px">$1</p>')
+            '<p style="font-style:italic;color:var(--color-text-muted);margin:12px 0 4px">$1</p>')
 
         .replace(/\n\n/g, '</p><p style="margin:8px 0">')
         .replace(/\n/g, '<br>');
@@ -1133,6 +1240,30 @@ function renderMarkdown(text) {
     html = '<p style="margin:0">' + html + '</p>';
     return html;
 }
+</script>
+
+<script>
+function toggleNavDropdown(e, btn) {
+    e.stopPropagation();
+    const dd = btn.closest('.nav-dropdown');
+    const wasOpen = dd.classList.contains('open');
+    document.querySelectorAll('.nav-dropdown.open').forEach(el => el.classList.remove('open'));
+    if (!wasOpen) {
+        dd.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+    } else {
+        btn.setAttribute('aria-expanded', 'false');
+    }
+}
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-dropdown')) {
+        document.querySelectorAll('.nav-dropdown.open').forEach(el => {
+            el.classList.remove('open');
+            const t = el.querySelector('.nav-dropdown-trigger');
+            if (t) t.setAttribute('aria-expanded', 'false');
+        });
+    }
+});
 </script>
 </body>
 </html>
