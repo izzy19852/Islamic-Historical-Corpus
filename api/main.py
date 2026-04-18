@@ -1346,9 +1346,9 @@ def cancel_account(request: Request,
 # ── Tier configuration ────────────────────────────────
 TIER_CONFIG = {
     "free": {"model":"claude-haiku-4-5-20251001","chat_limit":50,"api_limit":100,"max_tokens":1500,"label":"Free"},
-    "researcher": {"model":"claude-haiku-4-5-20251001","chat_limit":500,"api_limit":5000,"max_tokens":2000,"label":"Researcher"},
-    "developer": {"model":"claude-haiku-4-5-20251001","chat_limit":2000,"api_limit":20000,"max_tokens":2000,"label":"Developer"},
-    "institutional": {"model":"claude-sonnet-4-20250514","chat_limit":5000,"api_limit":-1,"max_tokens":3500,"label":"Institutional"},
+    "researcher": {"model":"claude-haiku-4-5-20251001","chat_limit":500,"api_limit":5000,"max_tokens":2500,"label":"Researcher"},
+    "developer": {"model":"claude-haiku-4-5-20251001","chat_limit":2000,"api_limit":20000,"max_tokens":2500,"label":"Developer"},
+    "institutional": {"model":"claude-sonnet-4-20250514","chat_limit":5000,"api_limit":-1,"max_tokens":4500,"label":"Institutional"},
 }
 
 def get_tier_config(api_key_record: dict) -> dict:
@@ -1795,9 +1795,11 @@ End with "And Allah knows best (wa Allahu a'lam)."
 
         full_reply_chars: list = []
         try:
+            max_tokens = 4000 if body.mode == "research" \
+                         else 2500
             with _claude.messages.stream(
                 model      = tier_cfg["model"],
-                max_tokens = tier_cfg["max_tokens"],
+                max_tokens = max_tokens,
                 system     = system,
                 messages   = claude_messages,
             ) as stream:
