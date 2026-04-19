@@ -3,8 +3,8 @@
 > 🕌 **Don't want to run this yourself?**
 > The full corpus is live at
 > **[islamiccorpus.com](https://islamiccorpus.com)**
-> — free tier, no setup required.
-> [Get an API key →](https://islamiccorpus.com/#get-key)
+> — free chat tier, no setup required.
+> [Get an API key →](https://islamiccorpus.com/account)
 > | [Try the chat →](https://islamiccorpus.com/chat)
 
 ---
@@ -74,7 +74,7 @@ curl -X POST https://islamiccorpus.com/query \
   -H "Content-Type: application/json" \
   -d '{"q": "Khalid ibn Walid Battle of Yarmouk", "n": 5}'
 ```
-Get a free API key at **islamiccorpus.com**
+API access starts at the Researcher tier ($19/mo, 100 queries/month). Sign up at **[islamiccorpus.com/account](https://islamiccorpus.com/account)**. Free chat access (50 queries/month) is available without an API key at **[islamiccorpus.com/chat](https://islamiccorpus.com/chat)**.
 
 ### Option 2: Run it yourself
 

@@ -3,9 +3,10 @@ Islamic Historical Corpus API
 Authenticated RAG access to 128K+ chunks of classical Islamic sources.
 
 Tiers:
-  free:        100 queries/month
-  developer:   5,000 queries/month  ($15/mo)
-  institutional: unlimited          ($75/mo)
+  free:          chat only, no API access ($0)
+  researcher:    100 API queries/month    ($19/mo)
+  developer:     10,000 API queries/month ($49/mo)
+  institutional: unlimited API queries    ($149/mo)
 """
 
 import os
@@ -92,9 +93,29 @@ source-attributed, and chain-strength classified.
 The classical scholarship belongs to the scholars.
     """,
     version="1.0.0",
-    docs_url="/docs",
+    docs_url=None,
     redoc_url="/redoc",
 )
+
+
+_DOCS_PATH = os.path.expanduser("~/islam-stories/landing/docs.html")
+_PRICING_PATH = os.path.expanduser("~/islam-stories/landing/pricing.html")
+
+@app.get("/docs", include_in_schema=False)
+def custom_docs():
+    try:
+        with open(_DOCS_PATH, "r", encoding="utf-8") as f:
+            return HTMLResponse(f.read())
+    except FileNotFoundError:
+        raise HTTPException(500, "Docs template missing")
+
+@app.get("/pricing", include_in_schema=False)
+def pricing_page():
+    try:
+        with open(_PRICING_PATH, "r", encoding="utf-8") as f:
+            return HTMLResponse(f.read())
+    except FileNotFoundError:
+        raise HTTPException(500, "Pricing template missing")
 
 app.add_middleware(
     CORSMiddleware,
@@ -110,8 +131,9 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 vo = voyageai.Client(api_key=os.getenv('VOYAGE_AI_API_KEY'))
 
 TIER_LIMITS = {
-    "free":          100,
-    "developer":     5000,
+    "free":          0,       # chat only, no API access
+    "researcher":    100,
+    "developer":     10000,
     "institutional": 999999,
 }
 
@@ -623,7 +645,7 @@ def request_free_key(request: Request, body: KeyRequest):
     conn.commit()
     conn.close()
 
-    return {"key": raw, "tier": "free", "limit": 100}
+    return {"key": raw, "tier": "free", "limit": 0}
 
 
 # ── Stripe: create checkout session ───────────────────────────
@@ -856,10 +878,11 @@ def _generate_and_store_key(email: str, tier: str) -> str | None:
 def _send_key_email(email: str, api_key: str, tier: str):
     """Send API key to customer via Resend."""
     limits = {
-        'developer':     '5,000 queries/month',
-        'institutional': 'Unlimited queries',
+        'researcher':    '100 API queries/month',
+        'developer':     '10,000 API queries/month',
+        'institutional': 'Unlimited API queries',
     }
-    limit = limits.get(tier, '5,000 queries/month')
+    limit = limits.get(tier, '10,000 API queries/month')
 
     try:
         resend.Emails.send({
@@ -1389,6 +1412,90 @@ def log_usage(api_key: str, endpoint: str, model: str, tokens_in: int = 0, token
         pass
 
 
+# ── Anonymous query telemetry ────────────────────────────────────
+# No user/session/IP is ever stored. query_text is nulled by the
+# nightly sweep if the question is unique after 90 days, and
+# unconditionally after 18 months.
+
+import re as _re_pii
+import hashlib as _hashlib_pii
+
+_PII_PATTERNS = [
+    _re_pii.compile(r"\bmy (grand)?(father|mother|uncle|aunt|family|ancestor|parent|sibling|brother|sister)s?\b", _re_pii.I),
+    _re_pii.compile(r"\bmy (village|hometown|tribe|lineage|nasab|clan)\b", _re_pii.I),
+    _re_pii.compile(r"\b(i am|i'm|im)\s+(a|an|from|the)\b", _re_pii.I),
+    _re_pii.compile(r"\b[A-Z][a-z]+\s+(ibn|bint|bin)\s+[A-Z][a-z]+\b.{0,60}\b(my|our|village|family|grandfather|ancestor)\b", _re_pii.I),
+    _re_pii.compile(r"\b\+?\d[\d\s\-]{8,}\d\b"),              # phone-ish
+    _re_pii.compile(r"\b[\w.+-]+@[\w-]+\.[\w.-]+\b"),          # email
+]
+
+def _looks_personal(q: str) -> bool:
+    return any(p.search(q) for p in _PII_PATTERNS)
+
+def _hash_query(q: str) -> bytes:
+    norm = _re_pii.sub(r"\s+", " ", q.strip().lower())
+    return _hashlib_pii.sha256(norm.encode("utf-8")).digest()
+
+def log_query_telemetry(
+    *,
+    query_text: str,
+    turn_index: int,
+    retrieval_mode: str,
+    candidates_fts: int | None,
+    candidates_vec: int | None,
+    top_chunks: list,
+    answered: bool,
+    refusal_reason: str | None,
+    citations_count: int | None,
+    latency_ms: int,
+    tokens_in: int,
+    tokens_out: int,
+    model: str,
+):
+    try:
+        pii_flag = _looks_personal(query_text)
+        stored_text = None if pii_flag else query_text
+
+        top_ids      = [int(c["id"]) for c in top_chunks if c.get("id") is not None][:20]
+        top_scores   = [float(c.get("score", c.get("similarity_score", 0.0))) for c in top_chunks[:20]]
+        top_sources  = list({c.get("source") for c in top_chunks if c.get("source")})[:20]
+        figure_ids: set = set()
+        for c in top_chunks[:20]:
+            for fid in (c.get("figures") or []):
+                try:
+                    figure_ids.add(int(fid))
+                except (TypeError, ValueError):
+                    continue
+
+        conn = get_db()
+        cur  = conn.cursor()
+        cur.execute("""
+            INSERT INTO query_telemetry (
+                query_text, query_hash, turn_index,
+                retrieval_mode, candidates_fts, candidates_vec,
+                rrf_top_ids, rrf_top_scores, top_figure_ids, top_sources,
+                answered, refusal_reason, citations_count,
+                latency_ms, tokens_in, tokens_out, model, pii_flagged
+            ) VALUES (
+                %s, %s, %s,
+                %s, %s, %s,
+                %s, %s, %s, %s,
+                %s, %s, %s,
+                %s, %s, %s, %s, %s
+            )
+        """, (
+            stored_text, _hash_query(query_text), turn_index,
+            retrieval_mode, candidates_fts, candidates_vec,
+            top_ids, top_scores, sorted(figure_ids), top_sources,
+            answered, refusal_reason, citations_count,
+            latency_ms, tokens_in, tokens_out, model, pii_flag,
+        ))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"telemetry error: {e}")
+
+
 
 # ── Chat endpoint ─────────────────────────────────────────────
 
@@ -1626,6 +1733,7 @@ async def chat(request: Request, body: ChatRequest):
 
     era_hint = _detect_era(message)
     direct = []
+    retrieval_mode = "none"
     if _hybrid_query_rag is not None:
         try:
             direct = _hybrid_query_rag(
@@ -1634,6 +1742,7 @@ async def chat(request: Request, body: ChatRequest):
                 era         = era_hint,
                 hybrid      = True,
             )
+            retrieval_mode = "hybrid"
             if era_hint:
                 print(f"[chat] era_hint={era_hint} "
                       f"hybrid_results={len(direct)}")
@@ -1647,6 +1756,7 @@ async def chat(request: Request, body: ChatRequest):
                 era   = era_hint,
                 n     = 20,
             )
+            retrieval_mode = "vector"
         except Exception as e:
             print(f"Vector search error: {e}")
             direct = []
@@ -1789,16 +1899,24 @@ End with "And Allah knows best (wa Allahu a'lam)."
     claude_messages.append({"role": "user", "content": user_prompt})
 
     # ── Stream response ───────────────────────────────
+    import time as _time_chat
+    _t0 = _time_chat.monotonic()
+    turn_index = len(history)
+    model_used = tier_cfg["model"]
+
     def generate():
         # No meta event — there is no per-session limit anymore,
         # and the legacy client treats remaining<=0 as "show paywall".
 
         full_reply_chars: list = []
+        tokens_in = 0
+        tokens_out = 0
+        gen_error = False
         try:
             max_tokens = 4000 if body.mode == "research" \
                          else 2500
             with _claude.messages.stream(
-                model      = tier_cfg["model"],
+                model      = model_used,
                 max_tokens = max_tokens,
                 system     = system,
                 messages   = claude_messages,
@@ -1813,17 +1931,50 @@ End with "And Allah knows best (wa Allahu a'lam)."
                         f'"text":"{escaped}"}}'
                         f"\n\n"
                     )
+                try:
+                    final = stream.get_final_message()
+                    tokens_in  = getattr(final.usage, "input_tokens", 0) or 0
+                    tokens_out = getattr(final.usage, "output_tokens", 0) or 0
+                except Exception:
+                    pass
 
             # Conversation history is client-supplied via body.history,
             # so no server-side session persistence is needed.
             yield 'data: {"type":"done"}\n\n'
 
         except Exception as e:
+            gen_error = True
             yield (
                 f'data: {{"type":"error",'
                 f'"text":"Generation error: '
                 f'{str(e)[:100]}"}}\n\n'
             )
+
+        # Telemetry runs inline (not in finally): Starlette's threadpool
+        # wrapper around sync generators does not reliably invoke .close().
+        reply_text = "".join(full_reply_chars)
+        answered = (not gen_error) and bool(reply_text.strip())
+        refusal_reason = None
+        if gen_error:
+            refusal_reason = "generation_error"
+        elif not top_chunks:
+            refusal_reason = "no_sources"
+        citations_count = reply_text.count("**") // 2 if answered else 0
+        log_query_telemetry(
+            query_text     = message,
+            turn_index     = turn_index,
+            retrieval_mode = retrieval_mode,
+            candidates_fts = None,
+            candidates_vec = len(direct) if retrieval_mode else 0,
+            top_chunks     = top_chunks,
+            answered       = answered,
+            refusal_reason = refusal_reason,
+            citations_count= citations_count,
+            latency_ms     = int((_time_chat.monotonic() - _t0) * 1000),
+            tokens_in      = tokens_in,
+            tokens_out     = tokens_out,
+            model          = model_used,
+        )
 
     return StreamingResponse(
         generate(),

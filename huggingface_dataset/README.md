@@ -103,7 +103,7 @@ The full corpus is queryable right now at:
 **[islamiccorpus.com](https://islamiccorpus.com)**
 
 ```bash
-# Get a free key at islamiccorpus.com
+# Get an API key at islamiccorpus.com/account (Researcher tier and up)
 # then query instantly:
 
 curl -X POST https://islamiccorpus.com/query \
@@ -119,11 +119,12 @@ curl -X POST https://islamiccorpus.com/research \
 ```
 
 ### Pricing
-| Tier | Queries/month | Price |
+| Tier | API queries/month | Price |
 |---|---|---|
-| Free | 100 | $0 |
-| Developer | 5,000 | $15/mo |
-| Institutional | Unlimited | $75/mo |
+| Free | — (chat only, 50 queries/month) | $0 |
+| Researcher | 100 | $19/mo |
+| Developer | 10,000 | $49/mo |
+| Institutional | Unlimited | $149/mo |
 
 ### Try the Chat Interface
 Ask questions in natural language at

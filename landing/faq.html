@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Islamic Corpus — The canon, made easy.</title>
+    <title>FAQ — Islamic Corpus</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -1323,7 +1323,7 @@
         <span></span><span></span><span></span>
     </button>
     <div class="nav-links" id="nav-links">
-        <a href="/" class="active">Home</a>
+        <a href="/">Home</a>
         <a href="/sources">Sources</a>
         <a href="/docs">API Docs</a>
         <a href="/chat">Chat</a>
@@ -1335,457 +1335,152 @@
                     <a href="https://github.com/izzy19852/Islamic-Historical-Corpus" target="_blank" role="menuitem">GitHub</a>
                 </div>
             </div>
-        <a href="/faq">FAQ</a>
+        <a href="/faq" class="active">FAQ</a>
         <a href="/account">Account</a>
         <a href="/account" class="nav-cta">Get API Key</a>
     </div>
 </nav>
 
-<!-- ═══ HERO ═══════════════════════════════════════════ -->
-<section class="hero">
+<!-- ═══ PAGE HEADER ════════════════════════════════════ -->
+<section style="padding: 72px 0 16px;">
     <div class="container">
-        <div class="hero-inner">
-            <div>
-                <span class="eyebrow">●  The canon, made easy.</span>
-                <h1 class="display">
-                    ChatGPT will make up a citation.
-                    <br>
-                    We'll show you the passage.
-                </h1>
-                <p class="lead hero-sub">
-                    Islamic Corpus retrieves from the actual text of <span class="scholar">Tabari</span>, <span class="scholar">Ibn Kathir</span>, <span class="scholar">Bukhari</span>, and 200+ other classical sources. Every answer comes with the named scholar, the volume, and the passage itself — so you can verify it, quote it, and cite it.
-                </p>
-                <p class="hero-tagline">
-                    No hallucinated hadith. No invented volume numbers. Just the canon.
-                </p>
-                <form class="hero-composer" onsubmit="return goChat(event)" role="search" aria-label="Ask the corpus">
-                    <span class="composer-mark" aria-hidden="true">ع</span>
-                    <input type="text" id="hero-ask" name="q"
-                           placeholder="Ask the corpus — e.g., What did Ibn Kathir say about Yarmouk?"
-                           autocomplete="off" enterkeyhint="send" />
-                    <button type="submit" class="composer-send" aria-label="Send question to chat">
-                        <span class="composer-send-label">Chat now</span>
-                        <span class="arr">→</span>
-                    </button>
-                </form>
-                <div class="hero-sub-row">
-                    <span class="hero-hint">Press enter — the chat opens and starts answering immediately. No signup.</span>
-                    <a href="#for-developers" class="hero-devlink">For developers →</a>
-                </div>
-                <div class="hero-stats">
-                    <div class="hero-stat"><span class="n" data-stat="sources">216</span><span class="l">Sources</span></div>
-                    <div class="hero-stat"><span class="n" data-stat="passages">128K+</span><span class="l">Passages</span></div>
-                    <div class="hero-stat"><span class="n" data-stat="figures">738</span><span class="l">Figures</span></div>
-                    <div class="hero-stat"><span class="n" data-stat="eras">22</span><span class="l">Eras</span></div>
-                    <div class="hero-stat"><span class="n">1,400</span><span class="l">Years</span></div>
-                    <div class="hero-stat"><span class="n">Free</span><span class="l">To Use</span></div>
-                </div>
-            </div>
-
-            <div style="position: relative;">
-                <div class="floating-chip chip-tl">
-                    <span class="pill">SCORE 0.847</span>
-                    Al-Tabari · Vol 12
-                </div>
-                <div class="mockup">
-                    <div class="mockup-bar">
-                        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-                        <span class="url">POST islamiccorpus.com/research</span>
-                    </div>
-                    <div class="mockup-body"><span class="ln-comment"># Research brief: Saladin at the Fall of Jerusalem</span>
-{
-  <span class="ln-key">"figure"</span>: <span class="ln-str">"Saladin"</span>,
-  <span class="ln-key">"event"</span>: <span class="ln-str">"Fall of Jerusalem"</span>,
-  <span class="ln-key">"era"</span>:    <span class="ln-str">"crusades"</span>
-}
-
-<span class="ln-comment">→ 12 chunks across 4 sources</span>
-<span class="ln-comment">→ chain_strength: eyewitness</span>
-<span class="ln-comment">→ 2 source conflicts pre-flagged</span>
-
-<span class="ln-meta">Ibn al-Athir · Al-Kamil   ▓▓▓▓▓▓▓▓▒▒  0.91
-Imad al-Din · Al-Fath    ▓▓▓▓▓▓▓▒▒▒  0.83
-Baha al-Din Ibn Shaddad  ▓▓▓▓▓▓▒▒▒▒  0.78
-Ibn Kathir · Bidaya      ▓▓▓▓▓▒▒▒▒▒  0.71</span></div>
-                </div>
-                <div class="floating-chip chip-br">
-                    <span class="pill">EYEWITNESS</span>
-                    chain verified
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ═══ HOW THIS IS DIFFERENT ══════════════════════════ -->
-<section class="differentiation" style="padding: 72px 0 48px;">
-    <div class="container">
-        <span class="eyebrow">How this is different</span>
-        <h2 class="section-title">Every other way of finding this information is broken.</h2>
-
-        <div class="diff-grid">
-
-            <div class="diff-item">
-                <h3>ChatGPT will make up citations.</h3>
-                <p>General-purpose AI hallucinates volume numbers, invents hadith, and confidently attributes quotes to scholars who never said them. We retrieve from the actual text. If <span class="scholar">Tabari</span> didn't write it, we can't claim he did — because we show you the passage.</p>
-            </div>
-
-            <div class="diff-item">
-                <h3>Wikipedia is a summary of a summary.</h3>
-                <p>Wikipedia articles about Islamic history cite 20th-century Western academic works, which themselves cite <span class="scholar">Tabari</span> and <span class="scholar">Ibn Kathir</span>. We skip both layers. You're reading the primary source directly.</p>
-            </div>
-
-            <div class="diff-item">
-                <h3>Existing databases are category-specific.</h3>
-                <p>Sunnah.com is hadith only. Altafsir.com is tafsir only. Academic databases are paywalled and in Arabic. We index the full classical canon — sira, hadith, histories, tafsir, regional chronicles — in one search, in plain English.</p>
-            </div>
-
-            <div class="diff-item">
-                <h3>Most tools pick a sect. We include both.</h3>
-                <p>Classical Islamic scholarship was never monolithic. Sunni and Shi'a scholars disagreed with each other, agreed with each other, and built on each other's work for 1,400 years. We include primary sources from both traditions and return majority and minority opinions in the same result — with each side's reasoning. The scholars speak for themselves.</p>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-<!-- ═══ COMPARISON TABLE ═══════════════════════════════ -->
-<section class="comparison" style="padding: 24px 0 48px;">
-    <div class="container">
-        <span class="eyebrow">At a glance</span>
-        <h2 class="section-title">How we compare.</h2>
-
-        <div class="compare-table-wrap">
-            <table class="compare-table">
-                <thead>
-                    <tr>
-                        <th scope="col"></th>
-                        <th scope="col" class="us">Islamic Corpus</th>
-                        <th scope="col">ChatGPT / Claude</th>
-                        <th scope="col">Wikipedia</th>
-                        <th scope="col">Category DBs</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">Returns the actual passage</th>
-                        <td class="us yes">Yes</td>
-                        <td class="no">No</td>
-                        <td class="partial">Summary only</td>
-                        <td class="yes">Yes</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Grounded, no hallucination</th>
-                        <td class="us yes">Yes</td>
-                        <td class="no">No</td>
-                        <td class="yes">Yes</td>
-                        <td class="yes">Yes</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Primary sources, not summaries</th>
-                        <td class="us yes">Yes</td>
-                        <td class="partial">Mixed</td>
-                        <td class="no">No</td>
-                        <td class="yes">Yes</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Full classical canon in one search</th>
-                        <td class="us yes">Yes</td>
-                        <td class="partial">Attempts to</td>
-                        <td class="no">No</td>
-                        <td class="no">Category-limited</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Plain English in</th>
-                        <td class="us yes">Yes</td>
-                        <td class="yes">Yes</td>
-                        <td class="yes">Yes</td>
-                        <td class="no">Arabic keywords</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Named scholar and volume cited</th>
-                        <td class="us yes">Yes</td>
-                        <td class="no">Sometimes fabricated</td>
-                        <td class="partial">Via footnotes</td>
-                        <td class="yes">Yes</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <p class="compare-note">Category DBs: Sunnah.com (hadith), Altafsir.com (tafsir), al-Islam.org (Shi'i-focused), etc. Excellent within their scope — but you need all of them open at once to cover what one query here returns.</p>
-    </div>
-</section>
-
-<!-- ═══ MISSION ════════════════════════════════════════ -->
-<section class="mission" style="padding: 72px 0 48px;">
-    <div class="container">
-        <span class="eyebrow">Our aim</span>
-
-        <h2 class="section-title">Data integrity. Fact-based learning. For everyone.</h2>
-
-        <p class="mission-body">
-            The classical Islamic tradition belongs to everyone who studies it. <span class="scholar">Tabari</span>, <span class="scholar">Ibn Kathir</span>, <span class="scholar">Bukhari</span>, and hundreds of other scholars wrote their works to be read, argued with, and learned from for centuries. We built the infrastructure that makes them findable in plain English, with the original passage attached.
-        </p>
-
-        <p class="mission-body">
-            Our aim is straightforward: anyone researching Islamic history — Muslim or not, Sunni or Shi'a, student or scholar or curious reader — should be able to verify what they learn with the actual source in front of them. Claims about the Prophet&nbsp;ﷺ, the Sahaba, and 1,400 years of Islamic civilization should trace to a named scholar and a specific passage, not to algorithmic guesses or second-hand summaries.
-        </p>
-
-        <p class="mission-body">
-            We take this seriously enough to include the disagreements. Where Sunni and Shi'a scholars differ, we return both positions with both sides' reasoning. Where majority and minority opinions exist within a tradition, we surface both. Flattening the canon into a single "Islamic view" would be less accurate than the scholars themselves were. We'd rather show you the real texture and trust you to read it.
+        <span class="eyebrow">Frequently asked</span>
+        <h1 class="display" style="font-size: clamp(36px, 5vw, 60px); margin-bottom: 18px;">Questions you might be asking.</h1>
+        <p class="lead" style="max-width: 680px;">
+            Short answers to the questions readers, researchers, and developers ask most. If something isn't here, <a href="mailto:hello@islamiccorpus.com" style="color: var(--color-accent-ink); border-bottom: 1px solid currentColor;">email us</a>.
         </p>
     </div>
 </section>
 
-<!-- Section divider: 8-point hairline star -->
-<div class="container" aria-hidden="true">
-    <div class="ornament-divider">
-        <svg class="ornament-star" width="16" height="16" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
-            <path d="M20 2 L24 16 L38 20 L24 24 L20 38 L16 24 L2 20 L16 16 Z M20 2 L26 14 L38 20 L26 26 L20 38 L14 26 L2 20 L14 14 Z"
-                  fill="none" stroke="currentColor" stroke-width="0.8" stroke-linejoin="miter"/>
-        </svg>
-    </div>
-</div>
-
-<!-- ═══ HOW IT WORKS (researcher questions) ════════════ -->
-<section style="padding-top: 48px;">
+<!-- ═══ FAQ ════════════════════════════════════════════ -->
+<section class="faq" id="faq" style="padding: 24px 0 96px;">
     <div class="container">
-        <span class="eyebrow">How it works</span>
-        <h2 class="section-title">Ask a question. Get the source.</h2>
-        <p class="section-sub">Every answer returns the passage itself, the scholar who wrote it, the volume and chapter where possible, the strength of the chain of narration, and pre-flagged disagreements between scholars on contested points.</p>
-        <p class="qs-label" style="text-align: left; margin-bottom: 14px;">Try a question</p>
-        <div class="qs-chips" style="justify-content: flex-start;">
-            <a class="qs-chip" href="/chat?q=What+did+Ibn+Kathir+write+about+the+Fall+of+Jerusalem"><span class="ico">◈</span> What did Ibn Kathir write about the Fall of Jerusalem?</a>
-            <a class="qs-chip" href="/chat?q=Where+does+Ibn+Sa%27d+describe+Khalid+ibn+al-Walid%27s+conversion"><span class="ico">⚔</span> Where does Ibn Sa'd describe Khalid ibn al-Walid's conversion?</a>
-            <a class="qs-chip" href="/chat?q=Bukhari+methodology+for+accepting+a+hadith"><span class="ico">❖</span> Bukhari's methodology for accepting a hadith</a>
-            <a class="qs-chip" href="/chat?q=Ibn+Khaldun+on+why+civilizations+collapse"><span class="ico">◉</span> Ibn Khaldun on why civilizations collapse</a>
-            <a class="qs-chip" href="/chat?q=The+scholarly+debate+over+who+succeeded+the+Prophet"><span class="ico">✦</span> The scholarly debate over who succeeded the Prophet&nbsp;ﷺ</a>
-        </div>
-    </div>
-</section>
-
-<!-- ═══ ETHICS (moved up, load-bearing brand copy) ═════ -->
-<section style="padding: 72px 0;">
-    <div class="container">
-        <div class="ethics-card corner-marks">
-            <svg class="cm tl" viewBox="0 0 14 14" aria-hidden="true"><path d="M0 0 L10 0 M0 0 L0 10" stroke="currentColor" stroke-width="1" fill="none"/></svg>
-            <svg class="cm tr" viewBox="0 0 14 14" aria-hidden="true"><path d="M14 0 L4 0 M14 0 L14 10" stroke="currentColor" stroke-width="1" fill="none"/></svg>
-            <svg class="cm bl" viewBox="0 0 14 14" aria-hidden="true"><path d="M0 14 L10 14 M0 14 L0 4" stroke="currentColor" stroke-width="1" fill="none"/></svg>
-            <svg class="cm br" viewBox="0 0 14 14" aria-hidden="true"><path d="M14 14 L4 14 M14 14 L14 4" stroke="currentColor" stroke-width="1" fill="none"/></svg>
-            <span class="eyebrow">Ethics</span>
-            <blockquote>
-                "The words of <span class="scholar">Al-Tabari</span>, <span class="scholar">Ibn Kathir</span>, and Imam <span class="scholar">Bukhari</span> belong to the scholars
-                and to Islamic civilization. We built the infrastructure that makes them
-                queryable at scale. The scholarship itself remains freely available at its
-                original sources."
-            </blockquote>
-            <p class="ethics-foot">
-                All sources are public domain or open access. Modern copyrighted translations
-                are never redistributed. Knowledge graph metadata is original work, CC-BY.
-                Pipeline code <a href="https://github.com/izzy19852/Islamic-Historical-Corpus" target="_blank">on GitHub</a>, MIT.
-            </p>
-        </div>
-    </div>
-</section>
-
-<!-- ═══ FOR DEVELOPERS ═════════════════════════════════ -->
-<section class="slider-section" id="for-developers">
-    <div class="container">
-        <span class="eyebrow">For developers</span>
-        <h2 class="section-title">Building an Islamic app? There's an API.</h2>
-        <p class="section-sub">Four endpoints. Research briefs, semantic search, a knowledge graph of <span data-stat="figures">738</span> figures, and the full source manifest. Free tier, no card.</p>
-
-        <div class="slider" id="slider">
-            <div class="slide active" data-slide="1">
-                <div>
-                    <div class="slide-num">01 / 02</div>
-                    <h3>Semantic search across the full classical canon.</h3>
-                    <p>One request returns ranked passages with source attribution, era tagging, chain strength, and pre-flagged scholarly conflicts. No more stitching together translations by hand.</p>
-                    <ul class="slide-bullets">
-                        <li>Embedding-based retrieval, tuned for Arabic-derived corpora</li>
-                        <li>Chain-of-narration scoring built into every result</li>
-                        <li>Conflict detection across competing primary accounts</li>
-                    </ul>
-                </div>
-                <div class="slide-visual dark">
-<code><span class="cm"># Semantic search across the full corpus</span>
-curl -X POST https://islamiccorpus.com/query \
-  -H <span class="st">"X-API-Key: your_key"</span> \
-  -H <span class="st">"Content-Type: application/json"</span> \
-  -d <span class="st">'{"q": "Khalid ibn Walid at Yarmouk", "n": 5}'</span>
-
-<span class="cm"># → ranked chunks, source, era, chain_strength, score</span>
-<span class="cm"># Top result: Al-Tabari Vol 12 (0.847) — eyewitness</span></code>
-                </div>
-            </div>
-
-            <div class="slide" data-slide="2">
-                <div>
-                    <div class="slide-num">02 / 02</div>
-                    <h3>Structured research briefs in one call.</h3>
-                    <p>The /research endpoint composes a multi-query context packet — primary accounts, character context, religious context, and source conflicts — for any figure × event × era combination.</p>
-                    <ul class="slide-bullets">
-                        <li>One endpoint replaces six separate retrieval calls</li>
-                        <li><span data-stat="figures">738</span> figures pre-mapped in the knowledge graph</li>
-                        <li>Sensitivity tiers and scholarly debates surfaced automatically</li>
-                    </ul>
-                </div>
-                <div class="slide-visual dark">
-<code><span class="cm"># Full research brief for a figure + event</span>
-curl -X POST https://islamiccorpus.com/research \
-  -H <span class="st">"X-API-Key: your_key"</span> \
-  -H <span class="st">"Content-Type: application/json"</span> \
-  -d <span class="st">'{"figure": "Saladin",
-       "event":  "Fall of Jerusalem",
-       "era":    "crusades"}'</span>
-
-<span class="cm"># → primary accounts + character context</span>
-<span class="cm"># → religious context + pre-flagged conflicts</span></code>
-                </div>
-            </div>
-
-            <div class="slider-controls">
-                <span class="slider-pager" id="slider-pager">01 / 02</span>
-                <div class="slider-arrows">
-                    <button class="slider-arrow" id="slider-prev" aria-label="Previous">←</button>
-                    <button class="slider-arrow" id="slider-next" aria-label="Next">→</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ═══ ENDPOINTS ═════════════════════════════════════ -->
-<section>
-    <div class="container">
-        <span class="eyebrow">Endpoints</span>
-        <h2 class="section-title">Four ways to query the corpus.</h2>
-        <p class="section-sub">A small, sharp API surface — semantic, structured, graph, and manifest.</p>
-
-        <div class="endpoints-grid">
-            <div class="endpoint-card">
-                <div class="ep-head">
-                    <span class="ep-method">POST</span>
-                    <span class="ep-path">/query</span>
-                </div>
-                <p class="ep-desc">Semantic search. Returns ranked chunks with source attribution, chain strength, and conflict flags.</p>
-            </div>
-            <div class="endpoint-card">
-                <div class="ep-head">
-                    <span class="ep-method">POST</span>
-                    <span class="ep-path">/research</span>
-                </div>
-                <p class="ep-desc">Structured research brief. Multi-query context packet for a figure + event — primary accounts, character context, pre-flagged conflicts. The power endpoint.</p>
-            </div>
-            <div class="endpoint-card">
-                <div class="ep-head">
-                    <span class="ep-method get">GET</span>
-                    <span class="ep-path">/figure/{name}</span>
-                </div>
-                <p class="ep-desc">Knowledge graph entry. Sensitivity tier, relationships, scholarly debates, lineage, source coverage count.</p>
-            </div>
-            <div class="endpoint-card">
-                <div class="ep-head">
-                    <span class="ep-method get">GET</span>
-                    <span class="ep-path">/sources</span>
-                </div>
-                <p class="ep-desc">Full source manifest. <span data-stat="sources">216</span> sources with chunk counts, authentication tier, and chain strength.</p>
-            </div>
-        </div>
-        <p style="text-align:center; margin-top: 32px;">
-            <a href="/docs" class="btn btn-ghost">Interactive docs at /docs <span class="arr">→</span></a>
-        </p>
-    </div>
-</section>
-
-<!-- ═══ SOURCES ═══════════════════════════════════════ -->
-<section style="background: var(--color-surface); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
-    <div class="container">
-        <span class="eyebrow">Sources</span>
-        <h2 class="section-title">The canon, structured.</h2>
-        <p class="section-sub">Sira. Hadith. Classical histories. Regional chronicles from al-Andalus to Southeast Asia. Every source tagged by era, by authentication tier, and by chain strength.</p>
-
-        <div class="sources-grid">
-            <div class="source-card corner-marks">
-                <svg class="cm tl" viewBox="0 0 14 14" aria-hidden="true"><path d="M0 0 L10 0 M0 0 L0 10" stroke="currentColor" stroke-width="1" fill="none"/></svg>
-                <svg class="cm tr" viewBox="0 0 14 14" aria-hidden="true"><path d="M14 0 L4 0 M14 0 L14 10" stroke="currentColor" stroke-width="1" fill="none"/></svg>
-                <svg class="cm bl" viewBox="0 0 14 14" aria-hidden="true"><path d="M0 14 L10 14 M0 14 L0 4" stroke="currentColor" stroke-width="1" fill="none"/></svg>
-                <svg class="cm br" viewBox="0 0 14 14" aria-hidden="true"><path d="M14 14 L4 14 M14 14 L14 4" stroke="currentColor" stroke-width="1" fill="none"/></svg>
-                <div class="source-name"><span class="scholar">Al-Tabari</span> — Tarikh al-Rusul</div>
-                <div class="source-meta">Rashidun → Abbasid · Vols 10–38</div>
-                <span class="auth-badge">classical_islamic</span>
-            </div>
-            <div class="source-card">
-                <div class="source-name"><span class="scholar">Ibn Kathir</span> — Al-Bidaya wa'l-Nihaya</div>
-                <div class="source-meta">All eras · Key volumes</div>
-                <span class="auth-badge">classical_islamic</span>
-            </div>
-            <div class="source-card">
-                <div class="source-name"><span class="scholar">Ibn Sa'd</span> — Tabaqat al-Kabir</div>
-                <div class="source-meta">Rashidun · Vols I–VIII · 265 companions</div>
-                <span class="auth-badge">classical_islamic</span>
-            </div>
-            <div class="source-card">
-                <div class="source-name">Sahih <span class="scholar">Bukhari</span> + <span class="scholar">Muslim</span></div>
-                <div class="source-meta">Hadith · 15,000+ narrations</div>
-                <span class="auth-badge">classical_islamic</span>
-            </div>
-            <div class="source-card">
-                <div class="source-name"><span class="scholar">Ibn Khaldun</span> — Muqaddimah</div>
-                <div class="source-meta">All eras · 3 volumes</div>
-                <span class="auth-badge">classical_islamic</span>
-            </div>
-            <div class="source-card">
-                <div class="source-name"><span class="scholar">Al-Masudi</span> — Muruj al-Dhahab</div>
-                <div class="source-meta">Abbasid · Geography + court culture</div>
-                <span class="auth-badge">classical_islamic</span>
-            </div>
-            <div class="source-card">
-                <div class="source-name"><span class="scholar">Ibn al-Athir</span> — Al-Kamil</div>
-                <div class="source-meta">Crusades + Mongol · Complete history</div>
-                <span class="auth-badge">classical_islamic</span>
-            </div>
-            <div class="source-card">
-                <div class="source-name">+ 209 more sources</div>
-                <div class="source-meta">Sira · Hadith · Ottoman · Mughal · Africa · Andalusia · SE Asia</div>
-                <span class="auth-badge">GET /sources</span>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Old pricing section removed — see <!-- PRICING SECTION --> below -->
-
-<!-- ═══ GET KEY ═══════════════════════════════════════ -->
-<section id="get-key">
-    <div class="container">
-        <div style="text-align:center; max-width: 600px; margin: 0 auto 40px;">
-            <span class="eyebrow">Get started</span>
-            <h2 class="section-title">Free chat. Instant.</h2>
-            <p style="font-size: 17px; color: var(--color-text-muted);">50 chat queries a month. No card required. API access starts at the Researcher tier.</p>
+        <div class="faq-tabs" role="tablist" aria-label="FAQ categories">
+            <button type="button" class="faq-tab active" role="tab" aria-selected="true"  aria-controls="faq-trust"     data-target="faq-trust">Trust and authenticity</button>
+            <button type="button" class="faq-tab"        role="tab" aria-selected="false" aria-controls="faq-corpus"    data-target="faq-corpus">What's in the corpus</button>
+            <button type="button" class="faq-tab"        role="tab" aria-selected="false" aria-controls="faq-using"     data-target="faq-using">Using Islamic Corpus</button>
+            <button type="button" class="faq-tab"        role="tab" aria-selected="false" aria-controls="faq-technical" data-target="faq-technical">Technical and data</button>
         </div>
 
-        <div class="key-card">
-            <p class="lead-sm">Enter your email — your key arrives in this box.<br>
-            <small style="color: var(--color-text-subtle)">Save it. Requesting again replaces the old one.</small></p>
-            <div class="form-row">
-                <input type="email" id="email-input" placeholder="you@example.com" />
-                <button onclick="requestKey()">Get key</button>
-            </div>
-            <div id="key-result"></div>
-        </div>
-    </div>
-</section>
+        <div class="faq-group active" id="faq-trust" role="tabpanel">
+            <h3 class="faq-group-label">Trust and authenticity</h3>
 
-<!-- ═══ FINAL CTA ═════════════════════════════════════ -->
-<section class="final-cta">
-    <div class="container">
-        <h2>So, <em>what are you researching?</em></h2>
-        <p>Ask in English. Get the passage, the volume, and the named scholar behind it.</p>
-        <div class="cta-row">
-            <a href="/chat" class="btn btn-green">Open the chat <span class="arr">→</span></a>
-            <a href="#for-developers" class="btn btn-ghost">For developers</a>
+            <details class="faq-item" open>
+                <summary>Is this a Sunni or Shi'a tool?</summary>
+                <div class="faq-answer">
+                    <p>Neither, and both. The corpus includes classical primary sources from both Sunni and Shi'a traditions because serious research into Islamic history requires access to both. When the two traditions agree, we show the agreement. When they disagree, we return both positions with each side's reasoning. We don't flatten disagreements, and we don't pick a side for you.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>Who built this?</summary>
+                <div class="faq-answer">
+                    <p>An independent developer, not a scholar. This is infrastructure work — the same category as a library catalog or a search index — built by someone passionate about making the classical Islamic canon accessible. Religious authority belongs to qualified scholars, not to software.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>Does the AI issue fatwas or religious opinions?</summary>
+                <div class="faq-answer">
+                    <p>No. Islamic Corpus is a research tool. It retrieves passages from classical sources and summarizes what those sources say. It does not issue rulings, give religious advice, or speak on behalf of Islam. For fiqh questions, personal religious matters, and the application of Islamic teaching to your life, consult a qualified living scholar.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>How do I know the answers aren't hallucinated?</summary>
+                <div class="faq-answer">
+                    <p>Because the system is retrieval-grounded. Every answer is built from passages that already exist in the corpus — we don't generate claims out of the model's training data. Each response shows you the source it's drawing from: the named scholar, the volume, and the passage text. If <span class="scholar">Tabari</span> didn't write it, we can't claim he did, because the passage itself has to come from somewhere in the indexed text.</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="faq-group" id="faq-corpus" role="tabpanel">
+            <h3 class="faq-group-label">What's in the corpus</h3>
+
+            <details class="faq-item">
+                <summary>What sources are included?</summary>
+                <div class="faq-answer">
+                    <p>Over 200 classical primary sources spanning sira, hadith collections, classical histories, tafsir, geography, and regional chronicles from al-Andalus to Southeast Asia. The full list is on the <a href="/sources">sources page</a>, with each source tagged by era, tradition, and chain strength. New sources are added regularly.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>Is the Qur'an itself indexed?</summary>
+                <div class="faq-answer">
+                    <p>The corpus focuses on the classical scholarly tradition surrounding the Qur'an — tafsir, hadith, sira, and history — rather than the Qur'anic text itself. Excellent tools already exist for searching the Qur'an directly (Quran.com, Tanzil.net, and others). We index what the scholars wrote about it.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>Are modern scholars included?</summary>
+                <div class="faq-answer">
+                    <p>Not currently. The corpus is the classical canon — broadly, works from the early Islamic period through roughly the 16th century, with some extension into later classical commentaries. Modern scholarship (20th–21st century) is a different project and is outside our scope.</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="faq-group" id="faq-using" role="tabpanel">
+            <h3 class="faq-group-label">Using Islamic Corpus</h3>
+
+            <details class="faq-item">
+                <summary>Do I need to know Arabic?</summary>
+                <div class="faq-answer">
+                    <p>No. Ask questions in plain English and receive answers in English. Original Arabic terms and names are preserved where they matter — technical vocabulary, proper nouns, and titles of works — so you can trace terminology back to the source if needed.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>Can I cite Islamic Corpus in academic or published work?</summary>
+                <div class="faq-answer">
+                    <p>Cite the primary source, not the tool. Islamic Corpus surfaces the citation — the named scholar, the work, and the volume — but the scholarly authority belongs to the original author. We're the index; <span class="scholar">Ibn Kathir</span> is the source.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>Is my data used to train AI models?</summary>
+                <div class="faq-answer">
+                    <p>No. Queries and API usage are not used to train any AI models. The corpus itself is the knowledge base; your questions are processed to retrieve from it and are not retained for model improvement.</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="faq-group" id="faq-technical" role="tabpanel">
+            <h3 class="faq-group-label">Technical and data</h3>
+
+            <details class="faq-item">
+                <summary>Are my queries or conversations logged?</summary>
+                <div class="faq-answer">
+                    <p>Your query text is not stored in a way that is tied to your identity or shared outside the system. We do retain anonymized signals about how the corpus performs — which passages were retrieved, how often queries could not be answered, which figures and eras are well or poorly covered — and we keep those signals indefinitely. They're what we use to improve retrieval quality and identify gaps in the corpus. No personal content, no conversation history linked to you, no data sold to third parties.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>How does the retrieval actually work?</summary>
+                <div class="faq-answer">
+                    <p>Each source in the corpus is split into passages and indexed as semantic embeddings. When you ask a question, the system converts your query into the same embedding space, retrieves the most relevant passages across all indexed sources, and passes them to a large language model for synthesis into a readable answer. The model does not generate claims from its training data — it summarizes from the retrieved passages only. Every answer includes the named scholar, the work, and the volume the passage came from, so you can verify directly.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>What are the API rate limits?</summary>
+                <div class="faq-answer">
+                    <p>Each tier includes a monthly quota of API and chat queries, shown on the <a href="/pricing">pricing page</a>. Within a tier, short bursts of requests are allowed; sustained usage beyond the monthly quota returns a clear error rather than silently degrading. Institutional tier queries are unmetered on the API side. If you need higher limits or a custom arrangement, <a href="mailto:hello@islamiccorpus.com">get in touch</a>.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>Can I use Islamic Corpus commercially?</summary>
+                <div class="faq-answer">
+                    <p>Commercial use is covered by the Institutional tier. That includes apps, products, and services that are charging users, resellers, or any deployment where Islamic Corpus is part of a paid offering. Individual research, academic work, personal projects, and non-commercial community tools are covered by the Free, Researcher, and Developer tiers. If you're unsure which category you fall into, <a href="mailto:hello@islamiccorpus.com">email us</a> and we'll figure it out.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>How often is the corpus updated?</summary>
+                <div class="faq-answer">
+                    <p>New sources are added regularly as ingestion and authentication review complete. Active expansion areas include regional chronicles from al-Andalus, Ottoman and Mughal history, West and East African Islamic scholarship, and Southeast Asian traditions. The homepage stats reflect the current state of the corpus and update as the database grows.</p>
+                </div>
+            </details>
         </div>
     </div>
 </section>
@@ -1863,6 +1558,7 @@ function goChat(e) {
     const pager  = document.getElementById('slider-pager');
     const prev   = document.getElementById('slider-prev');
     const next   = document.getElementById('slider-next');
+    if (!slides.length || !pager || !prev || !next) return;
     let i = 0;
     function show(n) {
         i = (n + slides.length) % slides.length;
@@ -1947,6 +1643,66 @@ if (params.get('checkout') === 'success') {
     window.history.replaceState({}, '', window.location.pathname);
 }
 </script>
+
+<!-- PRICING SECTION -->
+<section id="pricing" style="padding:80px 40px;text-align:center;background:var(--color-surface);border-top:1px solid var(--color-border);border-bottom:1px solid var(--color-border)">
+    <h2 style="color:var(--color-text);font-size:28px;font-weight:500;margin-bottom:12px;letter-spacing:-0.02em">Pricing</h2>
+    <p style="color:var(--color-text-muted);margin-bottom:48px;max-width:560px;margin-left:auto;margin-right:auto">
+        Every tier includes the full corpus. The free tier is designed to actually be used — not to frustrate you into paying.
+    </p>
+    <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;max-width:1000px;margin:0 auto">
+        <div style="background:var(--color-bg);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:32px 28px;width:220px">
+            <div style="color:var(--color-text-muted);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;margin-bottom:16px">FREE</div>
+            <div style="color:var(--color-text);font-size:36px;font-weight:500;margin-bottom:4px">$0</div>
+            <div style="color:var(--color-text-subtle);font-size:12px;margin-bottom:24px">forever</div>
+            <ul style="list-style:none;padding:0;text-align:left;color:var(--color-text-muted);font-size:13px;line-height:2">
+                <li>✓ 50 chat queries/month</li>
+                <li>✓ No API access</li>
+                <li>✓ Full corpus access</li>
+                <li>✓ No credit card</li>
+            </ul>
+            <a href="/api/request-key" style="display:block;margin-top:24px;padding:10px;border:1px solid var(--color-border-strong);border-radius:var(--radius-md);color:var(--color-text);text-decoration:none;font-size:13px">Get Free Key</a>
+        </div>
+        <div style="background:var(--color-bg);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:32px 28px;width:220px">
+            <div style="color:var(--color-text-muted);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;margin-bottom:16px">RESEARCHER</div>
+            <div style="color:var(--color-text);font-size:36px;font-weight:500;margin-bottom:4px">$19</div>
+            <div style="color:var(--color-text-subtle);font-size:12px;margin-bottom:24px">per month</div>
+            <ul style="list-style:none;padding:0;text-align:left;color:var(--color-text-muted);font-size:13px;line-height:2">
+                <li>✓ 500 chat queries/month</li>
+                <li>✓ 100 API queries/month</li>
+                <li>✓ Full corpus access</li>
+                <li>✓ Email support</li>
+            </ul>
+            <button onclick="checkout('price_1TNQ8hHl7vtwwE0JUpBNHoB3','researcher')" style="display:block;width:100%;margin-top:24px;padding:10px;background:var(--color-accent);border:none;border-radius:var(--radius-md);color:var(--color-bg);font-size:13px;font-weight:500;cursor:pointer">Subscribe</button>
+        </div>
+        <div style="background:var(--color-bg);border:1px solid var(--color-accent);border-radius:var(--radius-lg);padding:32px 28px;width:220px;position:relative">
+            <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--color-accent);color:var(--color-bg);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:3px 12px;border-radius:var(--radius-pill)">MOST POPULAR</div>
+            <div style="color:var(--color-accent-ink);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;margin-bottom:16px">DEVELOPER</div>
+            <div style="color:var(--color-text);font-size:36px;font-weight:500;margin-bottom:4px">$49</div>
+            <div style="color:var(--color-text-subtle);font-size:12px;margin-bottom:24px">per month</div>
+            <ul style="list-style:none;padding:0;text-align:left;color:var(--color-text-muted);font-size:13px;line-height:2">
+                <li>✓ 2,000 chat queries/month</li>
+                <li>✓ 10,000 API queries/month</li>
+                <li>✓ Full corpus access</li>
+                <li>✓ Priority support</li>
+            </ul>
+            <button onclick="checkout('price_1TNQ8iHl7vtwwE0JqEu5dVBV','developer')" style="display:block;width:100%;margin-top:24px;padding:10px;background:var(--color-accent);border:none;border-radius:var(--radius-md);color:var(--color-bg);font-size:13px;font-weight:500;cursor:pointer">Subscribe</button>
+        </div>
+        <div style="background:var(--color-bg);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:32px 28px;width:220px">
+            <div style="color:var(--color-text-muted);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;margin-bottom:16px">INSTITUTIONAL</div>
+            <div style="color:var(--color-text);font-size:36px;font-weight:500;margin-bottom:4px">$149</div>
+            <div style="color:var(--color-text-subtle);font-size:12px;margin-bottom:24px">per month</div>
+            <ul style="list-style:none;padding:0;text-align:left;color:var(--color-text-muted);font-size:13px;line-height:2">
+                <li>✓ 5,000 chat queries</li>
+                <li>✓ Unlimited API queries</li>
+                <li>✓ Claude Sonnet (best model)</li>
+                <li>✓ Dedicated support</li>
+                <li>✓ Usage dashboard</li>
+            </ul>
+            <button onclick="checkout('price_1TNQ8iHl7vtwwE0J1KDNrIKv','institutional')" style="display:block;width:100%;margin-top:24px;padding:10px;background:var(--color-accent);border:none;border-radius:var(--radius-md);color:var(--color-bg);font-size:13px;font-weight:500;cursor:pointer">Subscribe</button>
+        </div>
+    </div>
+</section>
 
 <script>
 (function () {
