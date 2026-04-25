@@ -35,6 +35,8 @@ sys.path.insert(0, os.path.expanduser('~/islam-stories'))
 
 load_dotenv(os.path.expanduser('~/islam-stories/.env'))
 
+from api.account_routes import router as account_router  # noqa: E402
+
 try:
     from rag.embeddings.query import query_rag as _hybrid_query_rag
 except Exception as _hybrid_err:
@@ -71,6 +73,7 @@ resend.api_key      = os.getenv('RESEND_API_KEY')
 FROM_EMAIL           = os.getenv('FROM_EMAIL', 'salam@islamiccorpus.com')
 DEVELOPER_PRICE      = os.getenv('DEVELOPER_PRICE_ID', '')
 INSTITUTIONAL_PRICE  = os.getenv('INSTITUTIONAL_PRICE_ID', '')
+RESEARCHER_PRICE     = os.getenv('STRIPE_RESEARCHER_PRICE_ID', '')
 WEBHOOK_SECRET       = os.getenv('STRIPE_WEBHOOK_SECRET', '')
 
 # ── Setup ─────────────────────────────────────────────────────────
@@ -81,7 +84,7 @@ app = FastAPI(
 Authenticated access to the world's first structured,
 classified Islamic historical corpus.
 
-128,000+ chunks across 216 sources spanning 1,400 years —
+140,000+ chunks across 250+ sources spanning 1,400 years —
 Al-Tabari, Ibn Kathir, Ibn Sa'd, all major hadith collections,
 and the full classical Islamic canon. Every chunk is era-tagged,
 source-attributed, and chain-strength classified.
@@ -124,18 +127,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(account_router)
+
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 vo = voyageai.Client(api_key=os.getenv('VOYAGE_AI_API_KEY'))
 
-TIER_LIMITS = {
-    "free":          0,       # chat only, no API access
-    "researcher":    100,
-    "developer":     10000,
-    "institutional": 999999,
-}
+# Tier API quotas — derived from api/tier_limits.py (single source of truth).
+# Unlimited tiers map to 999999 here so integer comparisons in
+# verify_api_key continue to work with no further changes.
+from api.tier_limits import TIER_LIMITS_LEGACY as TIER_LIMITS
 
 # ── Auth ──────────────────────────────────────────────────────────
 
@@ -152,7 +155,7 @@ def verify_api_key(x_api_key: str = Header(..., alias="X-API-Key")):
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT id, tier, month_count, month_reset, active
+        SELECT id, tier, month_count, month_reset, active, user_id
         FROM api_keys WHERE key_hash = %s
     """, (key_hash,))
     row = cur.fetchone()
@@ -161,7 +164,7 @@ def verify_api_key(x_api_key: str = Header(..., alias="X-API-Key")):
         conn.close()
         raise HTTPException(401, "Invalid API key")
 
-    key_id, tier, month_count, month_reset, active = row
+    key_id, tier, month_count, month_reset, active, row_user_id = row
 
     if not active:
         conn.close()
@@ -186,6 +189,11 @@ def verify_api_key(x_api_key: str = Header(..., alias="X-API-Key")):
         UPDATE api_keys SET query_count=query_count+1, month_count=month_count+1
         WHERE id=%s
     """, (key_id,))
+    # Also log to api_usage so the Account page's usage view surfaces the count.
+    cur.execute("""
+        INSERT INTO api_usage (api_key, endpoint, model, user_id)
+        VALUES (%s, 'api', NULL, %s)
+    """, (key_hash, row_user_id))
     conn.commit()
     conn.close()
 
@@ -336,42 +344,52 @@ def _format_passages(n: int) -> str:
 _STATS_CACHE: dict = {"data": None, "expires": 0.0}
 _STATS_TTL = 300  # 5 minutes
 
-@app.get("/stats")
-def get_stats():
-    """
-    Live corpus statistics for the homepage.
-    Cached for 5 minutes to keep load off the DB.
-    """
+
+def _corpus_stats() -> dict:
+    """Live corpus stats with TTL cache. Falls back to last known values
+    or conservative defaults if the DB is unreachable. Single source of
+    truth for any prompt/page that wants 'N chunks across M sources'."""
     import time as _time
     now = _time.time()
-    if _STATS_CACHE["data"] and _STATS_CACHE["expires"] > now:
-        return _STATS_CACHE["data"]
+    cached = _STATS_CACHE.get("data")
+    if cached and _STATS_CACHE["expires"] > now:
+        return cached
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT
+              (SELECT COUNT(DISTINCT source)           FROM documents)                     AS sources,
+              (SELECT COUNT(*)                         FROM documents)                     AS passages,
+              (SELECT COUNT(*)                         FROM figures)                       AS figures,
+              (SELECT COUNT(DISTINCT era)              FROM documents WHERE era IS NOT NULL) AS eras,
+              (SELECT MAX(created_at)                  FROM documents)                     AS last_updated
+        """)
+        row = cur.fetchone()
+        conn.close()
+        sources, passages, figures, eras, last_updated = row
+        payload = {
+            "sources":       sources or 0,
+            "passages":      passages or 0,
+            "figures":       figures or 0,
+            "eras":          eras or 0,
+            "years_covered": 1400,
+            "last_updated":  last_updated.isoformat() if last_updated else None,
+        }
+        _STATS_CACHE["data"] = payload
+        _STATS_CACHE["expires"] = now + _STATS_TTL
+        return payload
+    except Exception as e:
+        print(f"_corpus_stats DB error: {e}")
+        return cached or {
+            "sources": 0, "passages": 0, "figures": 0,
+            "eras": 0, "years_covered": 1400, "last_updated": None,
+        }
 
-    conn = get_db()
-    cur  = conn.cursor()
-    cur.execute("""
-        SELECT
-          (SELECT COUNT(DISTINCT source)           FROM documents)                     AS sources,
-          (SELECT COUNT(*)                         FROM documents)                     AS passages,
-          (SELECT COUNT(*)                         FROM figures)                       AS figures,
-          (SELECT COUNT(DISTINCT era)              FROM documents WHERE era IS NOT NULL) AS eras,
-          (SELECT MAX(created_at)                  FROM documents)                     AS last_updated
-    """)
-    row = cur.fetchone()
-    conn.close()
-
-    sources, passages, figures, eras, last_updated = row
-    payload = {
-        "sources":       sources or 0,
-        "passages":      passages or 0,
-        "figures":       figures or 0,
-        "eras":          eras or 0,
-        "years_covered": 1400,  # editorial constant — 1,400 years of Islam
-        "last_updated":  last_updated.isoformat() if last_updated else None,
-    }
-    _STATS_CACHE["data"]    = payload
-    _STATS_CACHE["expires"] = now + _STATS_TTL
-    return payload
+@app.get("/stats")
+def get_stats():
+    """Live corpus statistics for the homepage. Cached (TTL = _STATS_TTL)."""
+    return _corpus_stats()
 
 
 @app.get("/health")
@@ -569,11 +587,11 @@ def list_sources(
     era: Optional[str] = Query(None),
     source_type: Optional[str] = Query(None),
     authenticated_only: bool = Query(False),
-    auth = Depends(verify_api_key)
 ):
     """
     List all sources in the corpus with chunk counts.
 
+    Public catalog endpoint — no API key required. Rate-limited at 20/min.
     Filter by era, source_type, or authenticated_only
     to see only classical Islamic sources.
     """
@@ -622,30 +640,41 @@ def list_sources(
 @app.post("/api/request-key")
 @limiter.limit("5/hour")
 def request_free_key(request: Request, body: KeyRequest):
-    """Generate a free tier API key. One key per email — requesting again replaces the old one."""
+    """
+    Generate a free-tier API key. The raw key is emailed to the address
+    rather than returned in the response body — this prevents anyone from
+    claiming another person's email slot.
+
+    DELETE + INSERT are wrapped in a single transaction (atomic via
+    `with conn:`): if the INSERT fails, the DELETE is rolled back and
+    the caller is not left without a key.
+    """
     email = body.email.strip().lower()
 
     if not re.match(r'^[^@]+@[^@]+\.[^@]+$', email):
         raise HTTPException(400, "Invalid email address")
 
-    conn = get_db()
-    cur = conn.cursor()
-
-    # Delete any existing key for this email
-    cur.execute("DELETE FROM api_keys WHERE name = %s", (f"free:{email}",))
-
-    # Generate new key
     raw    = "isk_" + secrets.token_urlsafe(24)
     hashed = hashlib.sha256(raw.encode()).hexdigest()
 
-    cur.execute("""
-        INSERT INTO api_keys (key_hash, name, tier)
-        VALUES (%s, %s, 'free')
-    """, (hashed, f"free:{email}"))
-    conn.commit()
-    conn.close()
+    conn = get_db()
+    try:
+        with conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "DELETE FROM api_keys WHERE name = %s",
+                    (f"free:{email}",),
+                )
+                cur.execute("""
+                    INSERT INTO api_keys (key_hash, name, tier)
+                    VALUES (%s, %s, 'free')
+                """, (hashed, f"free:{email}"))
+    finally:
+        conn.close()
 
-    return {"key": raw, "tier": "free", "limit": 0}
+    _send_key_email(email, raw, "free")
+
+    return {"status": "sent", "email": email}
 
 
 # ── Stripe: create checkout session ───────────────────────────
@@ -667,13 +696,14 @@ def create_checkout(request: Request, body: CheckoutRequest):
     if not re.match(r'^[^@]+@[^@]+\.[^@]+$', email):
         raise HTTPException(400, "Invalid email address")
 
-    if tier not in ('developer', 'institutional'):
-        raise HTTPException(400, "tier must be developer or institutional")
+    if tier not in ('researcher', 'developer', 'institutional'):
+        raise HTTPException(400, "tier must be researcher, developer, or institutional")
 
-    price_id = (
-        DEVELOPER_PRICE if tier == 'developer'
-        else INSTITUTIONAL_PRICE
-    )
+    price_id = {
+        'researcher':    RESEARCHER_PRICE,
+        'developer':     DEVELOPER_PRICE,
+        'institutional': INSTITUTIONAL_PRICE,
+    }[tier]
 
     if not price_id:
         raise HTTPException(500, "Stripe price not configured")
@@ -727,12 +757,23 @@ async def stripe_webhook(request: Request):
     except Exception as e:
         raise HTTPException(400, f"Webhook error: {str(e)}")
 
+    # StripeObject in this SDK version lacks .get(); use bracket access via helper.
+    def _g(obj, key, default=None):
+        if obj is None:
+            return default
+        try:
+            val = obj[key]
+        except (KeyError, TypeError):
+            return default
+        return default if val is None else val
+
     # Handle successful subscription
     if event['type'] == 'checkout.session.completed':
         session  = event['data']['object']
-        email    = session.get('customer_email') or \
-                   session.get('metadata', {}).get('email', '')
-        tier     = session.get('metadata', {}).get('tier', 'developer')
+        metadata = _g(session, 'metadata', {})
+        email    = _g(session, 'customer_email') or _g(metadata, 'email', '')
+        tier     = _g(metadata, 'tier', 'developer')
+        customer_id = _g(session, 'customer')
 
         # Detect tier from price ID as fallback
         try:
@@ -759,18 +800,19 @@ async def stripe_webhook(request: Request):
             api_key = _generate_and_store_key(email, db_tier)
             if api_key:
                 _send_key_email(email, api_key, db_tier)
+            _link_stripe_customer(email, customer_id)
 
     # Handle invoice paid — send receipt email
     elif event['type'] == 'invoice.paid':
         invoice = event['data']['object']
-        email   = invoice.get('customer_email', '')
+        email   = _g(invoice, 'customer_email', '')
         if email:
             _send_invoice_email(email, invoice)
 
     # Handle invoice payment failed — notify customer
     elif event['type'] == 'invoice.payment_failed':
         invoice = event['data']['object']
-        email   = invoice.get('customer_email', '')
+        email   = _g(invoice, 'customer_email', '')
         if email:
             _send_payment_failed_email(email, invoice)
 
@@ -778,7 +820,7 @@ async def stripe_webhook(request: Request):
     elif event['type'] == 'customer.subscription.deleted':
         sub      = event['data']['object']
         customer = stripe.Customer.retrieve(sub['customer'])
-        email    = customer.get('email', '')
+        email    = _g(customer, 'email', '')
         if email:
             _deactivate_key_for_email(email)
 
@@ -854,17 +896,26 @@ def _generate_and_store_key(email: str, tier: str) -> str | None:
         conn   = get_db()
         cur    = conn.cursor()
 
+        # Find any existing user_id linked to this email before deactivating
+        cur.execute("""
+            SELECT user_id FROM api_keys
+            WHERE name ILIKE %s AND user_id IS NOT NULL
+            ORDER BY created_at DESC LIMIT 1
+        """, (f"%{email}%",))
+        row = cur.fetchone()
+        existing_user_id = row[0] if row else None
+
         # Deactivate any existing key for this email
         cur.execute("""
             UPDATE api_keys SET active = FALSE
             WHERE name ILIKE %s
         """, (f"%{email}%",))
 
-        # Create new key
+        # Create new key, preserving user_id linkage if present
         cur.execute("""
-            INSERT INTO api_keys (key_hash, name, tier)
-            VALUES (%s, %s, %s)
-        """, (hashed, f"{tier}:{email}", tier))
+            INSERT INTO api_keys (key_hash, name, tier, user_id)
+            VALUES (%s, %s, %s, %s)
+        """, (hashed, f"{tier}:{email}", tier, existing_user_id))
 
         conn.commit()
         conn.close()
@@ -873,6 +924,89 @@ def _generate_and_store_key(email: str, tier: str) -> str | None:
     except Exception as e:
         print(f"Key generation error: {e}")
         return None
+
+
+def _link_stripe_customer(email: str, customer_id: str | None):
+    """
+    Record the stripe_customer_id ↔ user_id mapping for future lookups.
+    Primary path (new system): look up a Supabase user_id from an
+    api_keys row that has been linked to this email. If none is linked
+    yet (user hasn't logged into the new app), store the mapping with
+    a NULL user_id by leaving it absent — the link completes later in
+    /api/me/billing-portal via the email fallback.
+    """
+    if not (email and customer_id):
+        return
+    try:
+        conn = get_db()
+        cur  = conn.cursor()
+        cur.execute("""
+            SELECT user_id FROM api_keys
+            WHERE LOWER(name) LIKE %s AND user_id IS NOT NULL AND active = TRUE
+            ORDER BY created_at DESC LIMIT 1
+        """, (f"%:{email.lower()}",))
+        row = cur.fetchone()
+        if row and row[0]:
+            cur.execute("""
+                INSERT INTO stripe_customers (user_id, stripe_customer_id, email_at_creation)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (user_id) DO UPDATE
+                  SET stripe_customer_id = EXCLUDED.stripe_customer_id
+            """, (row[0], customer_id, email))
+            conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"Stripe customer link error: {e}")
+
+
+def _branded_email_html(title: str, body_inner_html: str,
+                        accent_hex: str = "#c9a84c") -> str:
+    """Wrap body content in the Islamic Historical Corpus branded shell.
+
+    `body_inner_html` goes inside the white content panel; the dark header
+    with eyebrow + title is rendered automatically. `accent_hex` controls
+    the divider color under the header (gold for routine emails, red for
+    payment-failure).
+    """
+    return f"""
+<!DOCTYPE html>
+<html>
+<body style="font-family:-apple-system,sans-serif;
+             background:#f8f5f0;padding:40px 20px;">
+<div style="max-width:520px;margin:0 auto;
+            background:#fff;border-radius:8px;
+            border:1px solid #e8e0d0;overflow:hidden;">
+
+  <div style="background:#1c1208;padding:32px;
+              text-align:center;
+              border-bottom:3px solid {accent_hex};">
+    <div style="color:#c9a84c;font-size:12px;
+                letter-spacing:3px;
+                text-transform:uppercase;
+                margin-bottom:8px;">
+      Islamic Historical Corpus
+    </div>
+    <h1 style="color:#fff;font-weight:300;
+               font-size:24px;margin:0;">
+      {title}
+    </h1>
+  </div>
+
+  <div style="padding:32px;">
+{body_inner_html}
+
+    <p style="color:#8a7a60;font-size:12px;
+              margin-top:24px;text-align:center;">
+      Questions? Contact
+      <a href="mailto:{FROM_EMAIL}"
+         style="color:#c9a84c;">{FROM_EMAIL}</a>
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
+"""
 
 
 def _send_key_email(email: str, api_key: str, tier: str):
@@ -884,36 +1018,7 @@ def _send_key_email(email: str, api_key: str, tier: str):
     }
     limit = limits.get(tier, '10,000 API queries/month')
 
-    try:
-        resend.Emails.send({
-            "from":    f"Islamic Historical Corpus <{FROM_EMAIL}>",
-            "to":      [email],
-            "subject": "Your Islamic Historical Corpus API Key",
-            "html":    f"""
-<!DOCTYPE html>
-<html>
-<body style="font-family:-apple-system,sans-serif;
-             background:#f8f5f0;padding:40px 20px;">
-<div style="max-width:520px;margin:0 auto;
-            background:#fff;border-radius:8px;
-            border:1px solid #e8e0d0;overflow:hidden;">
-
-  <div style="background:#1c1208;padding:32px;
-              text-align:center;
-              border-bottom:3px solid #c9a84c;">
-    <div style="color:#c9a84c;font-size:12px;
-                letter-spacing:3px;
-                text-transform:uppercase;
-                margin-bottom:8px;">
-      Islamic Historical Corpus
-    </div>
-    <h1 style="color:#fff;font-weight:300;
-               font-size:24px;margin:0;">
-      Your API Key
-    </h1>
-  </div>
-
-  <div style="padding:32px;">
+    body_inner = f"""
     <p style="color:#4a3f32;margin-bottom:24px;">
       Your <strong>{tier.title()}</strong> tier key
       is ready. {limit}.
@@ -959,19 +1064,14 @@ curl -X POST https://islamiccorpus.com/query \\<br>
         View API Docs
       </a>
     </div>
+"""
 
-    <p style="color:#8a7a60;font-size:12px;
-              margin-top:24px;text-align:center;">
-      Questions? Reply to this email or contact
-      <a href="mailto:{FROM_EMAIL}"
-         style="color:#c9a84c;">{FROM_EMAIL}</a>
-    </p>
-  </div>
-
-</div>
-</body>
-</html>
-            """,
+    try:
+        resend.Emails.send({
+            "from":    f"Islamic Historical Corpus <{FROM_EMAIL}>",
+            "to":      [email],
+            "subject": "Your Islamic Historical Corpus API Key",
+            "html":    _branded_email_html("Your API Key", body_inner),
         })
         print(f"Key email sent to {email}")
 
@@ -1002,36 +1102,7 @@ def _send_invoice_email(email: str, invoice: dict):
     pdf_url   = invoice.get('invoice_pdf', '')
     hosted    = invoice.get('hosted_invoice_url', '')
 
-    try:
-        resend.Emails.send({
-            "from":    f"Islamic Historical Corpus <{FROM_EMAIL}>",
-            "to":      [email],
-            "subject": f"Invoice {number} — Payment Received",
-            "html":    f"""
-<!DOCTYPE html>
-<html>
-<body style="font-family:-apple-system,sans-serif;
-             background:#f8f5f0;padding:40px 20px;">
-<div style="max-width:520px;margin:0 auto;
-            background:#fff;border-radius:8px;
-            border:1px solid #e8e0d0;overflow:hidden;">
-
-  <div style="background:#1c1208;padding:32px;
-              text-align:center;
-              border-bottom:3px solid #c9a84c;">
-    <div style="color:#c9a84c;font-size:12px;
-                letter-spacing:3px;
-                text-transform:uppercase;
-                margin-bottom:8px;">
-      Islamic Historical Corpus
-    </div>
-    <h1 style="color:#fff;font-weight:300;
-               font-size:24px;margin:0;">
-      Payment Receipt
-    </h1>
-  </div>
-
-  <div style="padding:32px;">
+    body_inner = f"""
     <p style="color:#4a3f32;margin-bottom:24px;">
       Your payment of <strong>{amount}</strong> has been received.
     </p>
@@ -1088,19 +1159,14 @@ def _send_invoice_email(email: str, invoice: dict):
         Download PDF
       </a>
     </div>
+"""
 
-    <p style="color:#8a7a60;font-size:12px;
-              margin-top:24px;text-align:center;">
-      Questions? Contact
-      <a href="mailto:{FROM_EMAIL}"
-         style="color:#c9a84c;">{FROM_EMAIL}</a>
-    </p>
-  </div>
-
-</div>
-</body>
-</html>
-            """,
+    try:
+        resend.Emails.send({
+            "from":    f"Islamic Historical Corpus <{FROM_EMAIL}>",
+            "to":      [email],
+            "subject": f"Invoice {number} — Payment Received",
+            "html":    _branded_email_html("Payment Receipt", body_inner),
         })
         print(f"Invoice receipt sent to {email} ({number})")
 
@@ -1114,36 +1180,7 @@ def _send_payment_failed_email(email: str, invoice: dict):
     number    = invoice.get('number', 'N/A')
     hosted    = invoice.get('hosted_invoice_url', '')
 
-    try:
-        resend.Emails.send({
-            "from":    f"Islamic Historical Corpus <{FROM_EMAIL}>",
-            "to":      [email],
-            "subject": f"Action Required — Payment Failed for Invoice {number}",
-            "html":    f"""
-<!DOCTYPE html>
-<html>
-<body style="font-family:-apple-system,sans-serif;
-             background:#f8f5f0;padding:40px 20px;">
-<div style="max-width:520px;margin:0 auto;
-            background:#fff;border-radius:8px;
-            border:1px solid #e8e0d0;overflow:hidden;">
-
-  <div style="background:#1c1208;padding:32px;
-              text-align:center;
-              border-bottom:3px solid #c44c4c;">
-    <div style="color:#c9a84c;font-size:12px;
-                letter-spacing:3px;
-                text-transform:uppercase;
-                margin-bottom:8px;">
-      Islamic Historical Corpus
-    </div>
-    <h1 style="color:#fff;font-weight:300;
-               font-size:24px;margin:0;">
-      Payment Failed
-    </h1>
-  </div>
-
-  <div style="padding:32px;">
+    body_inner = f"""
     <p style="color:#4a3f32;margin-bottom:24px;">
       We were unable to process your payment of
       <strong>{amount}</strong> for invoice <strong>{number}</strong>.
@@ -1164,19 +1201,15 @@ def _send_payment_failed_email(email: str, invoice: dict):
         Update Payment Method
       </a>
     </div>
+"""
 
-    <p style="color:#8a7a60;font-size:12px;
-              margin-top:24px;text-align:center;">
-      Questions? Contact
-      <a href="mailto:{FROM_EMAIL}"
-         style="color:#c9a84c;">{FROM_EMAIL}</a>
-    </p>
-  </div>
-
-</div>
-</body>
-</html>
-            """,
+    try:
+        resend.Emails.send({
+            "from":    f"Islamic Historical Corpus <{FROM_EMAIL}>",
+            "to":      [email],
+            "subject": f"Action Required — Payment Failed for Invoice {number}",
+            "html":    _branded_email_html("Payment Failed", body_inner,
+                                            accent_hex="#c44c4c"),
         })
         print(f"Payment failed email sent to {email} ({number})")
 
@@ -1367,11 +1400,30 @@ def cancel_account(request: Request,
 
 
 # ── Tier configuration ────────────────────────────────
+# Model / max_tokens / label are chat-specific settings kept here.
+# chat_limit and api_limit are derived from api.tier_limits (source of truth)
+# at module load; None (unlimited) collapses to -1 to preserve the sentinel
+# that check_monthly_limit already understands.
+from api.tier_limits import TIER_QUOTAS as _TIER_QUOTAS, TIER_LABELS as _TIER_LABELS
+
+_TIER_CHAT_BASE = {
+    "free":          {"model":"claude-haiku-4-5-20251001","max_tokens":1500},
+    "researcher":    {"model":"claude-haiku-4-5-20251001","max_tokens":2500},
+    "developer":     {"model":"claude-haiku-4-5-20251001","max_tokens":2500},
+    "institutional": {"model":"claude-sonnet-4-20250514","max_tokens":4500},
+    "test":          {"model":"claude-sonnet-4-20250514","max_tokens":4500},
+}
+
+def _as_sentinel(v): return -1 if v is None else v
+
 TIER_CONFIG = {
-    "free": {"model":"claude-haiku-4-5-20251001","chat_limit":50,"api_limit":100,"max_tokens":1500,"label":"Free"},
-    "researcher": {"model":"claude-haiku-4-5-20251001","chat_limit":500,"api_limit":5000,"max_tokens":2500,"label":"Researcher"},
-    "developer": {"model":"claude-haiku-4-5-20251001","chat_limit":2000,"api_limit":20000,"max_tokens":2500,"label":"Developer"},
-    "institutional": {"model":"claude-sonnet-4-20250514","chat_limit":5000,"api_limit":-1,"max_tokens":4500,"label":"Institutional"},
+    t: {
+        **_TIER_CHAT_BASE[t],
+        "chat_limit": _as_sentinel(_TIER_QUOTAS[t]["chat"]),
+        "api_limit":  _as_sentinel(_TIER_QUOTAS[t]["api"]),
+        "label":      _TIER_LABELS[t],
+    }
+    for t in _TIER_CHAT_BASE
 }
 
 def get_tier_config(api_key_record: dict) -> dict:
@@ -1394,18 +1446,27 @@ def check_monthly_limit(api_key: str, limit: int, endpoint: str = "chat"):
         count = cur.fetchone()[0]
         conn.close()
         return count < limit, count
-    except:
-        conn.close()
-        return True, 0
+    except (psycopg2.Error, KeyError) as e:
+        # Fail closed: if quota check fails we deny rather than grant free
+        # quota. The previous bare `except: return True, 0` let any error
+        # silently disable enforcement.
+        # TODO(ops): page on-call when this fires.
+        print(f"check_monthly_limit ERROR key={api_key[:8] if api_key else None} "
+              f"endpoint={endpoint}: {e}")
+        try:
+            conn.close()
+        except Exception:
+            pass
+        return False, -1
 
-def log_usage(api_key: str, endpoint: str, model: str, tokens_in: int = 0, tokens_out: int = 0):
+def log_usage(api_key: str, endpoint: str, model: str, tokens_in: int = 0, tokens_out: int = 0, user_id=None):
     try:
         conn = get_db()
         cur  = conn.cursor()
         cur.execute("""
-            INSERT INTO api_usage (api_key, endpoint, model, tokens_in, tokens_out)
-            VALUES (%s,%s,%s,%s,%s)
-        """, (api_key, endpoint, model, tokens_in, tokens_out))
+            INSERT INTO api_usage (api_key, endpoint, model, tokens_in, tokens_out, user_id)
+            VALUES (%s,%s,%s,%s,%s,%s)
+        """, (api_key, endpoint, model, tokens_in, tokens_out, user_id))
         conn.commit()
         conn.close()
     except:
@@ -1556,7 +1617,7 @@ lecture, but to transport. Think Fall of
 Civilizations podcast meets a scholar who has
 read every primary source.
 
-CORPUS: 72,000+ chunks from 136 authenticated
+CORPUS: {corpus_passages} chunks from {corpus_sources} authenticated
 Islamic sources spanning 632–1900 CE.
 
 ═══════════════════════════════════════
@@ -1695,21 +1756,56 @@ async def chat(request: Request, body: ChatRequest):
             conn_t = get_db()
             cur_t  = conn_t.cursor()
             cur_t.execute("""
-                SELECT key_hash, tier, name, active
+                SELECT key_hash, tier, name, active, user_id
                 FROM api_keys
                 WHERE key_hash = %s AND active = TRUE
             """, (khash,))
             row = cur_t.fetchone()
             if row:
-                key_record = {"key":row[0],"tier":row[1],"email":row[2],"is_active":row[3]}
+                key_record = {"key":row[0],"tier":row[1],"email":row[2],"is_active":row[3],"user_id":row[4]}
             conn_t.close()
         except Exception as e:
             print(f"Tier lookup error: {e}")
 
     tier_cfg = get_tier_config(key_record)
+    tier_name = (key_record["tier"] if key_record else "free")
 
-    if user_key:
-        allowed, count = check_monthly_limit(user_key, tier_cfg["chat_limit"], "chat")
+    # ── Resolve logged-in user (for Phase 2 history logging) ─────────
+    history_user_id = None
+    session_key_hash = None   # the user's active api_key.key_hash, used for usage counters
+    auth_header = request.headers.get("authorization")
+    if auth_header and auth_header.lower().startswith("bearer "):
+        try:
+            from api.supabase_auth import verify_supabase_token
+            _payload = verify_supabase_token(auth_header)
+            history_user_id = _payload.get("sub")
+            if history_user_id:
+                try:
+                    _c = get_db(); _cur = _c.cursor()
+                    _cur.execute(
+                        "SELECT tier, key_hash FROM api_keys WHERE user_id = %s AND active = TRUE LIMIT 1",
+                        (history_user_id,),
+                    )
+                    _row = _cur.fetchone()
+                    if _row:
+                        tier_name = _row[0]
+                        session_key_hash = _row[1]
+                        tier_cfg = TIER_CONFIG.get(tier_name, tier_cfg)
+                    _c.close()
+                except Exception as _e:
+                    print(f"[chat] session tier lookup failed: {_e}")
+        except Exception as _e:
+            # Bad/expired JWT — silently treat as anonymous for history
+            pass
+    if not history_user_id and key_record and key_record.get("user_id"):
+        history_user_id = key_record.get("user_id")
+
+    # For session-authed chats the quota/usage key is the user's stored
+    # api_key hash; for X-API-Key-in-body chats it's the raw key.
+    usage_key = session_key_hash or user_key
+
+    if usage_key:
+        allowed, count = check_monthly_limit(usage_key, tier_cfg["chat_limit"], "chat")
         if not allowed:
             raise HTTPException(
                 status_code=429,
@@ -1810,10 +1906,15 @@ async def chat(request: Request, body: ChatRequest):
             )
 
     # ── System prompt ─────────────────────────────────
+    _stats = _corpus_stats()
+    _fmt = {
+        "corpus_passages": _format_passages(_stats["passages"]),
+        "corpus_sources":  _stats["sources"],
+    }
     system = (
         RESEARCH_SYSTEM_PROMPT
         if mode == "research"
-        else EXPLORER_SYSTEM_PROMPT
+        else EXPLORER_SYSTEM_PROMPT.format(**_fmt)
     )
 
     # ── User prompt ───────────────────────────────────
@@ -1975,6 +2076,30 @@ End with "And Allah knows best (wa Allahu a'lam)."
             tokens_out     = tokens_out,
             model          = model_used,
         )
+        # Per-key chat quota counter — previously missing, which let free
+        # tier users chat unbounded (check_monthly_limit always saw 0).
+        # For session-auth'd chats we log under the user's stored key hash
+        # so the Account page's usage view (which queries api_usage by
+        # key_hash) surfaces the count.
+        if usage_key and answered:
+            log_usage(usage_key, "chat", model_used, tokens_in, tokens_out,
+                      user_id=history_user_id)
+
+        # Phase 2: server-synced chat history for logged-in users.
+        # Must never break the chat response — history.log_chat_query
+        # swallows its own exceptions.
+        if history_user_id and answered:
+            try:
+                from api.history import log_chat_query
+                log_chat_query(
+                    user_id=history_user_id,
+                    query_text=message,
+                    top_chunks=top_chunks,
+                    reply_text=reply_text,
+                    tier=tier_name,
+                )
+            except Exception as _e:
+                print(f"[chat] history hook failed: {_e}")
 
     return StreamingResponse(
         generate(),

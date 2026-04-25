@@ -4,6 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sources — Islamic Corpus</title>
+    <meta name="description" content="Browse the classical Islamic sources indexed by Islamic Corpus — Tabari, Ibn Kathir, Bukhari, Ibn Sa'd, and 200+ others, each labelled by tradition and era.">
+    <link rel="canonical" href="https://www.islamiccorpus.com/sources" />
+    <!-- Open Graph -->
+    <meta property="og:site_name" content="Islamic Corpus" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sources — Islamic Corpus" />
+    <meta property="og:description" content="Browse the classical Islamic sources indexed by Islamic Corpus — Tabari, Ibn Kathir, Bukhari, Ibn Sa'd, and 200+ others, each labelled by tradition and era." />
+    <meta property="og:url" content="https://www.islamiccorpus.com/sources" />
+    <meta property="og:image" content="https://www.islamiccorpus.com/assets/og-default.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Sources — Islamic Corpus" />
+    <meta name="twitter:description" content="Browse the classical Islamic sources indexed by Islamic Corpus — Tabari, Ibn Kathir, Bukhari, Ibn Sa'd, and 200+ others, each labelled by tradition and era." />
+    <meta name="twitter:image" content="https://www.islamiccorpus.com/assets/og-default.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +66,7 @@
             --radius: var(--radius-md);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { overflow-x: clip; }
         html { scroll-behavior: smooth; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -389,12 +407,27 @@
                 position: static; border: none; padding: 0;
                 background: transparent; min-width: 0;
             }
-            .nav-dropdown-menu a { padding: 12px 36px; font-size: 14px; border-radius: 0; }
-            .nav-dropdown-trigger {
-                width: 100%; justify-content: space-between;
-                padding: 14px 24px; border-radius: 0;
+            .nav-dropdown { width: 100%; }
+            .nav-dropdown-menu a {
+                padding: 12px 44px; font-size: 14px; border-radius: 0;
+                color: var(--color-text-muted);
             }
+            .nav-dropdown-trigger {
+                width: 100%; justify-content: flex-start; gap: 10px;
+                padding: 14px 24px; border-radius: 0;
+                background: transparent;
+            }
+            .nav-dropdown-trigger .caret { margin-left: auto; }
         }
+
+        .footer-byline {
+            color: var(--color-text-muted);
+            font-size: 12px;
+            margin-top: 12px;
+            font-style: italic;
+        }
+        .footer-byline a { border-bottom: 1px solid var(--color-border); }
+        .footer-byline a:hover { border-bottom-color: var(--color-accent); }
     </style>
 </head>
 <body>
@@ -422,6 +455,7 @@
                     <a href="https://github.com/izzy19852/Islamic-Historical-Corpus" target="_blank" role="menuitem">GitHub</a>
                 </div>
             </div>
+        <a href="/about">About</a>
         <a href="/account">Account</a>
         <a href="/account" class="nav-cta">Get API Key</a>
     </div>
@@ -430,13 +464,13 @@
 <section class="hero">
     <div class="hero-inner">
         <span class="eyebrow">●  Live source manifest</span>
-        <h1 class="display">216 Sources. 1,400 Years. <em>The canon.</em></h1>
+        <h1 class="display"><span data-stat="sources">—</span> Sources. 1,400 Years. <em>The canon.</em></h1>
         <p class="lead">Every source era-tagged, chain-strength classified, and traceable back to the named scholar — from Sira and Hadith to Andalusian and Ottoman chronicles.</p>
         <div class="hero-stats">
             <div class="hero-stat"><span class="n" id="total-chunks">—</span><span class="l">Total Passages</span></div>
-            <div class="hero-stat"><span class="n" id="total-sources">—</span><span class="l">Sources</span></div>
-            <div class="hero-stat"><span class="n">15</span><span class="l">Eras</span></div>
-            <div class="hero-stat"><span class="n">265</span><span class="l">Figures</span></div>
+            <div class="hero-stat"><span class="n" id="total-sources" data-stat="sources">—</span><span class="l">Sources</span></div>
+            <div class="hero-stat"><span class="n" data-stat="eras">—</span><span class="l">Eras</span></div>
+            <div class="hero-stat"><span class="n" data-stat="figures">—</span><span class="l">Figures</span></div>
             <div class="hero-stat"><span class="n">1,400</span><span class="l">Years</span></div>
         </div>
     </div>
@@ -515,11 +549,12 @@
     <div class="foot-bottom">
         <span>© Islamic Corpus · islamiccorpus.com</span>
         <span>Built for scholars, students, and developers.</span>
-    </div>
+            <p class="footer-byline">Built by Islam Abdallah · <a href="mailto:hello@islamiccorpus.com">Contact</a></p>
+        </div>
 </footer>
 
 <script>
-const API_BASE   = 'https://islamiccorpus.com';
+const API_BASE   = window.location.origin;
 const PUBLIC_KEY = 'isk_pub_EfdijrLO6wZS_aFEYJ7H1I1CUyo';
 
 const ERA_META = {
@@ -670,6 +705,17 @@ function filterEra(era, btn) {
 }
 
 function searchSources(val) { currentSearch = val; renderSources(); }
+
+// Live corpus stats — same /stats endpoint the landing page uses, single source of truth.
+fetch('/stats', { cache: 'no-store' })
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(d => {
+        document.querySelectorAll('[data-stat]').forEach(el => {
+            const k = el.getAttribute('data-stat');
+            if (d[k] != null) el.textContent = Number(d[k]).toLocaleString();
+        });
+    })
+    .catch(() => {});
 
 loadSources();
 </script>
