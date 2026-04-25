@@ -99,7 +99,7 @@ EPISODE (15-20 min, hybrid visual)
 
 **Scholars and Thinkers (Tier B)**
 - Ibn Khaldun — invented sociology, wrote Muqaddimah in 5 months in exile
-- Ibn Rushd (Averroes) — commentaries sparked European Renaissance, burned his own books on Caliph's orders
+- Ibn Rushd (Averroes) — Latin translations of his commentaries shaped 13th-century Scholasticism (Aquinas, Albertus Magnus, Latin Averroist movement at Paris and Oxford); Caliph al-Mansur ordered his philosophical works burned in 1195 (medicine, mathematics, astronomy spared)
 - Ibn Sina (Avicenna) — Canon of Medicine used in Europe until 17th century, wrote while fleeing persecution
 - Al-Ghazali — Ihya Ulum al-Din, his documented crisis of faith is as raw as Augustine
 - Nizam al-Mulk — built world's first university system, assassinated by Hashashin after 30 years
@@ -122,7 +122,7 @@ EPISODE (15-20 min, hybrid visual)
 - Nana Asma'u (1793–1864) — 60+ scholarly works, built women's teacher network across Sokoto
 - Rabi'a al-Adawiyya (714–801) — Sufi mystic, born enslaved, transformed Islamic spirituality
 - Sitt al-Wuzara — Female vizier in Fatimid Egypt, ran the government
-- Shajarat al-Durr — slave to Sultana of Egypt, defeated the Crusaders, ruled briefly after Baybars' predecessor
+- Shajarat al-Durr — slave to Sultana of Egypt, defeated the Crusaders (captured Louis IX at Mansura), ruled ~80 days in 1250 then was forced to marry Aybak; assassinated April 1257, three years before Baybars took power in 1260 (Aybak → al-Mansur Ali → Qutuz → Baybars between them)
 
 ### Pilot Episode
 **"Khalid ibn Walid — The Sword of God (Part 1)"**
