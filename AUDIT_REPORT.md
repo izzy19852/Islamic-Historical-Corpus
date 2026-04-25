@@ -166,8 +166,34 @@ items + 2 architectural items.
 
 ## Next steps you may want
 
-- D6 HNSW retune — say the word, schedule for off-hours.
-- C5 sweep follow-up — pick which of the ~21 flagged factoids to fix.
-- E1 backfill — decide whether to backfill `documents.figures` from
-  `chunk_metadata.figure_ids` or deprecate the text array.
-- D5 leftover — fix `events.id=12854 date_ce='53'` manually.
+- D6 HNSW retune — schedule when the corpus crosses ~250K vectors or
+  retrieval quality dips in spot tests, whichever comes first. At
+  141K with default params, recall degradation is real but not
+  catastrophic.
+- C5 sweep follow-up — clear flagged factoids opportunistically the
+  day they become load-bearing (e.g., resolve "first university in
+  the world" the day you start the Fatima al-Fihri / al-Qarawiyyin
+  episode, not before). Trying to clear all 21 in one session will
+  fail — they'll rot for three months in a backlog.
+- E1 — **deprecate, don't backfill.** chunk_metadata.figure_ids covers
+  ~2× more docs than documents.figures, so chunk_metadata is the live
+  system and documents.figures is the stale one. Either drop the
+  text column entirely (query chunk_metadata directly), or rebuild
+  it nightly as a denormalized read cache. Backfilling into the
+  dying system is the wrong direction.
+- D5 leftover — ✅ done. `UPDATE events SET date_ce_year = 53 WHERE
+  id = 12854` applied; 0 rows now have populated `date_ce` and NULL
+  `date_ce_year`. If the regex is reused for future ingestion,
+  tighten to `-?\d{1,4}` to catch 2-digit years and BCE negatives.
+
+## Next audit checklist
+
+- [ ] Re-verify A1 lives in shipping `rag/` after next deploy. The
+  orchestrator fix is the most consequential change in this pass —
+  every script generation gets richer context — and it's currently
+  sitting on one machine's disk because `rag/` is gitignored.
+  Bringing `rag/` into version control (gitignoring just the `.env`
+  / credentials, not the whole folder) is a one-evening cleanup that
+  pays off forever. Do this before the next deploy.
+- [ ] Drop or rebuild `documents.figures` per E1 follow-up.
+- [ ] C5 review queue: clear opportunistically per-script.
