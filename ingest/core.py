@@ -110,8 +110,31 @@ def detect_repeated_headers(lines, threshold=30, max_len=100):
     return {line for line, count in counts.items() if count >= threshold}
 
 
+def _normalize_whitespace(text: str) -> str:
+    """Collapse runs of blank lines / horizontal whitespace at the tail."""
+    text = re.sub(r'\n{3,}', '\n\n', text)
+    text = re.sub(r'[ \t]{3,}', '  ', text)
+    return text.strip()
+
+
+def _is_noise_line(stripped: str, repeated: set) -> bool:
+    """Lines too short or matching repeated headers/Roman page numbers."""
+    if stripped in repeated:
+        return True
+    if re.match(r'^[ivxlcdm]+$', stripped, re.IGNORECASE) and len(stripped) < 10:
+        return True
+    if len(stripped) < 15:
+        return True
+    return False
+
+
 def clean_djvu_text(text, alpha_threshold=0.40, multilingual=False):
-    """Clean DjVu-extracted text: strip page numbers, OCR noise, form-feeds."""
+    """Clean DjVu-extracted text: strip page numbers, OCR noise, form-feeds.
+
+    DjVu OCR adds form-feeds and frequently miscaptures lines as low-alpha
+    glyph soup, so we strip those eagerly. Original whitespace is preserved
+    on retained lines (paragraphs in DjVu carry meaningful indentation).
+    """
     text = re.sub(r'\x0c', '\n', text)
     text = re.sub(r'(?m)^\s*\d{1,4}\s*$', '', text)
 
@@ -125,15 +148,8 @@ def clean_djvu_text(text, alpha_threshold=0.40, multilingual=False):
             if cleaned and cleaned[-1] != '':
                 cleaned.append('')
             continue
-        if s in repeated:
+        if _is_noise_line(s, repeated):
             continue
-        # Roman numeral page numbers
-        if re.match(r'^[ivxlcdm]+$', s, re.IGNORECASE) and len(s) < 10:
-            continue
-        # Very short lines (headers/footers/noise)
-        if len(s) < 15:
-            continue
-        # Alpha ratio check
         if multilingual:
             alpha = sum(c.isalpha() or c in _ARABIC_CHARS for c in s)
         else:
@@ -141,14 +157,16 @@ def clean_djvu_text(text, alpha_threshold=0.40, multilingual=False):
         if alpha / max(len(s), 1) > alpha_threshold:
             cleaned.append(line)
 
-    text = '\n'.join(cleaned)
-    text = re.sub(r'\n{3,}', '\n\n', text)
-    text = re.sub(r'[ \t]{3,}', '  ', text)
-    return text.strip()
+    return _normalize_whitespace('\n'.join(cleaned))
 
 
 def clean_pdf_text(raw_text):
-    """Clean extracted PDF text: remove headers, footers, page numbers, noise."""
+    """Clean extracted PDF text: remove headers, footers, page numbers, noise.
+
+    PDF text generally already passes alpha-density checks, so unlike the
+    DjVu path there is no per-line ratio gate. Lines are stored stripped
+    because PDF extractors emit unreliable horizontal whitespace.
+    """
     lines = raw_text.split('\n')
     repeated = detect_repeated_headers(lines)
     cleaned = []
@@ -161,18 +179,11 @@ def clean_pdf_text(raw_text):
             continue
         if re.match(r'^\d+$', stripped):
             continue
-        if re.match(r'^[ivxlcdm]+$', stripped, re.IGNORECASE) and len(stripped) < 10:
-            continue
-        if len(stripped) < 15:
-            continue
-        if stripped in repeated:
+        if _is_noise_line(stripped, repeated):
             continue
         cleaned.append(stripped)
 
-    text = '\n'.join(cleaned)
-    text = re.sub(r'\n{3,}', '\n\n', text)
-    text = re.sub(r'[ \t]{3,}', '  ', text)
-    return text.strip()
+    return _normalize_whitespace('\n'.join(cleaned))
 
 
 def strip_gutenberg(text):
