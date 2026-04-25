@@ -179,7 +179,8 @@ def verify_api_key(x_api_key: str = Header(..., alias="X-API-Key")):
         month_count = 0
 
     # Check quota
-    limit = TIER_LIMITS.get(tier, 100)
+    # Unknown tier falls back to free tier's limit (which is 0 for API access).
+    limit = TIER_LIMITS.get(tier, TIER_LIMITS["free"])
     if month_count >= limit:
         conn.close()
         raise HTTPException(429, f"Monthly quota exceeded ({limit} queries). Upgrade at islamiccorpus.com")
@@ -1253,7 +1254,8 @@ def account_lookup(request: Request, body: AccountLookupRequest):
             "Check your email or sign up below.")
 
     name, tier, total, month, reset, active, created = row
-    limit = TIER_LIMITS.get(tier, 100)
+    # Unknown tier falls back to free tier's limit (which is 0 for API access).
+    limit = TIER_LIMITS.get(tier, TIER_LIMITS["free"])
 
     return {
         "email":        email,
